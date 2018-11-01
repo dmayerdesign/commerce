@@ -3,7 +3,7 @@ const path = require('path');
 const nodeExternals = require('webpack-node-externals');
 
 module.exports = {
-  entry: ['webpack/hot/poll?1000', './src/main.hmr.ts'],
+  entry: ['webpack/hot/poll?1000', './server/src/main.hmr.ts'],
   watch: true,
   target: 'node',
   externals: [
@@ -17,6 +17,9 @@ module.exports = {
         test: /\.tsx?$/,
         use: 'ts-loader',
         exclude: /node_modules/,
+        options: {
+          configFile: 'server/tsconfig.server.json'
+        }
       },
     ],
   },
