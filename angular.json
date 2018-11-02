@@ -85,6 +85,24 @@
             }
           }
         },
+        "server": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "dist/web-ssr",
+            "main": "ui/web/src/main.ssr.ts",
+            "tsConfig": "ui/web/tsconfig.ssr.json"
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "ui/web/src/environments/environment.ts",
+                  "with": "ui/web/src/environments/environment.production.ts"
+                }
+              ]
+            }
+          }
+        },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {

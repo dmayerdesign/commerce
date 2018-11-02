@@ -1,0 +1,15 @@
+{
+    "extends": "./tsconfig.app.json",
+    "compilerOptions": {
+        "module": "commonjs"
+    },
+    "exclude": [
+        "**/*.spec.ts"
+    ],
+    // Add "angularCompilerOptions" with the AppServerModule you wrote
+    // set as the "entryModule".
+    "angularCompilerOptions": {
+        "entryModule": "src/app/app.ssr.module#AppServerModule",
+        "strictMetadataEmit": false
+    }
+}
