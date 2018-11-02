@@ -15,18 +15,6 @@
             "tsConfig": "ui/common/tsconfig.lib.json",
             "project": "ui/common/ng-package.json"
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "ui/common/tsconfig.lib.json",
-              "ui/common/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
         }
       }
     },
@@ -64,7 +52,7 @@
               "fileReplacements": [
                 {
                   "replace": "ui/web/src/environments/environment.ts",
-                  "with": "ui/web/src/environments/environment.prod.ts"
+                  "with": "ui/web/src/environments/environment.production.ts"
                 }
               ],
               "optimization": true,
@@ -102,18 +90,6 @@
           "options": {
             "browserTarget": "web:build"
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "ui/web/tsconfig.app.json",
-              "ui/web/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
         }
       }
     },
@@ -132,15 +108,6 @@
             "production": {
               "devServerTarget": "web:serve:production"
             }
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": "ui/web-e2e/tsconfig.e2e.json",
-            "exclude": [
-              "**/node_modules/**"
-            ]
           }
         }
       }
