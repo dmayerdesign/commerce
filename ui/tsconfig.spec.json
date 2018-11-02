@@ -1,0 +1,7 @@
+{
+    "extends": "./tsconfig.ui.json",
+    "compilerOptions": {
+        "module": "commonjs",
+        "types": [ "jest" ]
+    }
+}
