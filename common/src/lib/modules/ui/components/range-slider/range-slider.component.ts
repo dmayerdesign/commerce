@@ -3,9 +3,9 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { cloneDeep } from 'lodash'
 import { fromEvent, merge, BehaviorSubject, Observable } from 'rxjs'
 import { delay, filter, map, scan } from 'rxjs/operators'
-import { RangeLimit } from '../../../../../constants/enums/range-limit'
-import { HeartbeatComponent } from '../../../../heartbeat/heartbeat.component'
-import { Heartbeat } from '../../../../heartbeat/heartbeat.decorator'
+import { RangeLimit } from '@qb/common/constants/enums/range-limit'
+import { HeartbeatComponent } from '@qb/common/heartbeat/heartbeat.component'
+import { Heartbeat } from '@qb/common/heartbeat/heartbeat.decorator'
 
 @Component({
     selector: 'qb-range-slider',
@@ -78,13 +78,13 @@ import { Heartbeat } from '../../../../heartbeat/heartbeat.decorator'
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => MteRangeSliderComponent),
+            useExisting: forwardRef(() => QbRangeSliderComponent),
             multi: true,
         },
     ],
 })
 @Heartbeat()
-export class MteRangeSliderComponent extends HeartbeatComponent implements ControlValueAccessor, AfterViewInit, OnInit, OnDestroy {
+export class QbRangeSliderComponent extends HeartbeatComponent implements ControlValueAccessor, AfterViewInit, OnInit, OnDestroy {
     @Input() public step = 5
     @Input() public decimalPlaces: number
     @Input() public minLimit = 0

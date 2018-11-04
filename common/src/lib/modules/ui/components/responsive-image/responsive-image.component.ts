@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core'
-import { bootstrapBreakpointKeys } from '../../../../../constants/bootstrap/bootstrap-breakpoint-keys'
-import { BootstrapBreakpoint } from '../../../../../constants/enums/bootstrap-breakpoint'
+import { bootstrapBreakpointKeys } from '@b/common/constants/bootstrap/bootstrap-breakpoint-keys'
+import { BootstrapBreakpoint } from '@b/common/constants/enums/bootstrap-breakpoint'
 import { WindowRefService } from '../../services/window-ref.service'
 
 @Component({
@@ -23,7 +23,7 @@ import { WindowRefService } from '../../services/window-ref.service'
     `,
     styleUrls: [ './qb-responsive-image.component.scss' ]
 })
-export class MteResponsiveImageComponent {
+export class QbResponsiveImageComponent {
     @Input() public src: string
     @Input() public alt: string
     @Input() public width = '100%'

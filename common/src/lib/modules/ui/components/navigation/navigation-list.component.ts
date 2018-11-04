@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core'
-import { ArrayHelper } from '../../../../../helpers/array.helper'
-import { TreeHelper } from '../../../../../helpers/tree.helper'
-import { NavigationItem } from '../../../../../api/entities/navigation-item'
-import { BootstrapBreakpointKey } from '../../../../../constants/enums/bootstrap-breakpoint-key'
+import { ArrayHelper } from '@qb/common/helpers/array.helper'
+import { TreeHelper } from '@qb/common/helpers/tree.helper'
+import { NavigationItem } from '@qb/common/api/entities/navigation-item'
+import { BootstrapBreakpointKey } from '@qb/common/constants/enums/bootstrap-breakpoint-key'
 import { WindowRefService } from '../../services/window-ref.service'
 
 export interface NavigationListContext {
@@ -91,7 +91,7 @@ export interface NavigationListContext {
         }"></ng-container>
     `,
 })
-export class MteNavigationListComponent {
+export class QbNavigationListComponent {
     @Input() public items: NavigationItem[]
     @Input() public id: string
     public navItemsShowingChildren: NavigationItem[] = []

@@ -11,7 +11,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 </div>`,
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MteTooltipComponent {
+export class QbTooltipComponent {
     public isShowing: boolean
     public fadeIn: boolean
     @Output() public showChange = new EventEmitter<boolean>()

@@ -1,8 +1,8 @@
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'
 import { ModuleWithProviders, NgModule } from '@angular/core'
-import { MteHttpRequestInterceptor } from './http-request.interceptor'
-import { MteHttpResponseInterceptor } from './http-response.interceptor'
-import { MteHttpService } from './http.service'
+import { QbHttpRequestInterceptor } from './http-request.interceptor'
+import { QbHttpResponseInterceptor } from './http-response.interceptor'
+import { QbHttpService } from './http.service'
 
 @NgModule({
     imports: [
@@ -12,20 +12,20 @@ import { MteHttpService } from './http.service'
         HttpClientModule,
     ],
 })
-export class MteHttpModule {
+export class QbHttpModule {
     public static forRoot(): ModuleWithProviders {
         return {
-            ngModule: MteHttpModule,
+            ngModule: QbHttpModule,
             providers: [
-                MteHttpService,
+                QbHttpService,
                 {
                     provide: HTTP_INTERCEPTORS,
-                    useClass: MteHttpRequestInterceptor,
+                    useClass: QbHttpRequestInterceptor,
                     multi: true,
                 },
                 {
                     provide: HTTP_INTERCEPTORS,
-                    useClass: MteHttpResponseInterceptor,
+                    useClass: QbHttpResponseInterceptor,
                     multi: true,
                 },
             ],
@@ -34,7 +34,7 @@ export class MteHttpModule {
 
     public static forChild(): ModuleWithProviders {
         return {
-            ngModule: MteHttpModule
+            ngModule: QbHttpModule
         }
     }
 }

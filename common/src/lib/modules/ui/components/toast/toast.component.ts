@@ -31,7 +31,7 @@ import { timeout } from '../../utils/timeout'
     styleUrls: [ './qb-toast.component.scss' ],
 })
 @Heartbeat()
-export class MteToastComponent extends HeartbeatComponent implements OnInit, OnDestroy {
+export class QbToastComponent extends HeartbeatComponent implements OnInit, OnDestroy {
     @Input() public toasts: Observable<Toast>
 
     public queue: Toast[] = []

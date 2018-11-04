@@ -5,11 +5,11 @@ import {
     HttpRequest,
 } from '@angular/common/http'
 import { Injectable } from '@angular/core'
+import { AppConfig } from '@qb/app-config'
 import { Observable } from 'rxjs'
-import { AppConfig } from '../../../../app-config'
 
 @Injectable()
-export class MteHttpRequestInterceptor implements HttpInterceptor {
+export class QbHttpRequestInterceptor implements HttpInterceptor {
 
     public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         let newRequest = request

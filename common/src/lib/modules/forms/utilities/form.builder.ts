@@ -2,7 +2,7 @@ import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms'
 import { MteFormFieldOptions } from '../models/form-field-options'
 import { MteFormGroupOptions } from '../models/form-group-options'
 
-export class MteFormBuilder<DataType = any> {
+export class QbFormBuilder<DataType = any> {
     public data?: DataType
     private _formGroup: FormGroup
     private _controls: AbstractControl[]

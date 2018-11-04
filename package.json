@@ -10,7 +10,7 @@
     "dev:ui": "ng serve",
     "dev:server": "nodemon --config nodemon.json",
     "start": "node dist/main.js",
-    "prebuild:common": "export ENVIRONMENT=development; npm run generate:app_config; npm run generate:public_api",
+    "prebuild:common": "export ENVIRONMENT=development; npm run generate:all",
     "prebuild:ui:development": "export ENVIRONMENT=development; npm run generate:app_config",
     "prebuild:server:development": "export ENVIRONMENT=development; npm run generate:app_config",
     "prebuild:ui:production": "export ENVIRONMENT=production; npm run generate:app_config; npm run test:ui",
@@ -32,6 +32,7 @@
     "test": "npm run test:ui && npm run test:server",
     "generate:app_config": "ts-node common/src/code-gen/generate-app-config.ts",
     "generate:public_api": "ts-node common/src/code-gen/generate-public_api.ts",
+    "generate:all": "export ENVIRONMENT=development; npm run generate:app_config; npm run generate:public_api",
     "lint": "tslint -p tsconfig.json -c tslint.json",
     "format": "prettier --write \"src/**/*.ts\"",
     "ng": "ng"

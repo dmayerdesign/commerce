@@ -20,7 +20,7 @@ import { Observable } from 'rxjs'
         </div>
     `
 })
-export class MteInstagramFeedComponent implements OnInit {
+export class QbInstagramFeedComponent implements OnInit {
     @Input() public apiEndpoint: string
     public postss: Observable<InstagramPost[]>
 

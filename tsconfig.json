@@ -4,7 +4,8 @@
         "target": "es5",
         "baseUrl": ".",
         "paths": {
-            "@qb/common/*": [ "./common/src/lib/*" ]
+            "@qb/common/*": [ "./common/src/lib/*" ],
+            "@qb/app-config": [ "./common/src/lib/config/app-config.generated" ]
         },
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,

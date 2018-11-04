@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common'
-import { AppConfig } from '@qb/common/config/app.config'
+import { AppConfig } from '@qb/app-config'
 
 @Controller('api')
 export class ExampleController {

@@ -8,17 +8,16 @@ import {
 import { Inject, Injectable } from '@angular/core'
 import { of, throwError, Observable } from 'rxjs'
 import { catchError, switchMap } from 'rxjs/operators'
-
-import { HttpStatus } from '../../../constants'
+import { HttpStatus } from '../../constants'
 import { HttpInjectionTokens } from './http.injection-tokens'
 import { IHttpSettings, SimpleError } from './http.models'
-import { MteHttpService } from './http.service'
+import { QbHttpService } from './http.service'
 
 @Injectable()
-export class MteHttpResponseInterceptor implements HttpInterceptor {
+export class QbHttpResponseInterceptor implements HttpInterceptor {
 
     constructor(
-        private mteHttpService: MteHttpService,
+        private mteHttpService: QbHttpService,
         @Inject(HttpInjectionTokens.HttpSettings) private httpSettings: typeof IHttpSettings,
     ) {}
 
@@ -35,7 +34,7 @@ export class MteHttpResponseInterceptor implements HttpInterceptor {
 
         return of(request)
             .pipe(
-                switchMap<HttpRequest<any>, HttpErrorResponse>((req) => next.handle(req)),
+                switchMap<HttpRequest<any>, HttpEvent<any>>((req) => next.handle(req)),
                 catchError((errorResponse) => {
                     // console.log('[MteHttpResponseInterceptor#intercept] Error response', errorResponse)
                     const error = new SimpleError(errorResponse)

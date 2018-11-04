@@ -1,10 +1,10 @@
 import { Component, ElementRef, Input, OnDestroy, OnInit, Output, Renderer2, ViewChild } from '@angular/core'
 import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms'
 import { AppConfig } from '@qb/app-config'
+import { Copy } from '@qb/common/constants'
+import { ModalType } from '@qb/common/constants/enums/modal-type'
+import { ModalData } from '@qb/common/models/ui/modal-data'
 import { Observable, Subscription } from 'rxjs'
-import { Copy } from '../../../../../constants'
-import { ModalType } from '../../../../../constants/enums/modal-type'
-import { ModalData } from '../../../../../models/ui/modal-data'
 import { WindowRefService } from '../../services/window-ref.service'
 import { platform } from '../../utils/platform'
 import { timeout } from '../../utils/timeout'
@@ -71,9 +71,9 @@ import { timeout } from '../../utils/timeout'
             </div>
         </div>
     `,
-    styleUrls: [ './qb-modal.component.scss' ]
+    styleUrls: [ './modal.component.scss' ]
 })
-export class MteModalComponent implements OnInit, OnDestroy {
+export class QbModalComponent implements OnInit, OnDestroy {
     @Input() public datas: Observable<ModalData>
     @Input() public closeCallback?: () => void
 

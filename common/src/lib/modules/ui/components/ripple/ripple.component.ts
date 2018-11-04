@@ -12,7 +12,7 @@ import { platform } from '../../utils/platform'
     `,
     styleUrls: [ './ripple.component.scss' ],
 })
-export class MteRippleComponent {
+export class QbRippleComponent {
     public ripples = []
 
     constructor() {
