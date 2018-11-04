@@ -1,0 +1,69 @@
+$outer-width: 8rem;
+$inner-width: 2rem;
+$inner-offset: ($outer-width - $inner-width) / 2;
+
+@keyframes inner-ripple {
+    0% {
+        opacity: 0;
+    }
+    30% {
+        opacity: 0.1;
+    }
+    60% {
+        opacity: 0;
+    }
+}
+
+@keyframes outer-ripple {
+    0% {
+        opacity: 0;
+        transform: scale(0);
+    }
+    50% {
+        opacity: 0.1;
+    }
+    100% {
+        opacity: 0;
+        transform: scale(1);
+    }
+}
+
+.ripple {
+    pointer-events: none;
+    position: absolute;
+    z-index: 2000;
+    top: 0;
+    left: 0;
+    width: $outer-width;
+    height: $outer-width;
+    margin-left: -($outer-width / 2);
+    margin-top: -($outer-width / 2);
+    
+    .inner-ripple, .outer-ripple {
+        pointer-events: none;
+        border-radius: 10rem;
+        display: block;
+        position: absolute;
+        opacity: 0;
+        animation-duration: 0.7s;
+        animation-timing-function: cubic-bezier(.4,.13,0,.62);
+        background: rgba(255, 255, 255, 0.7);
+        transform-origin: center;
+    }
+    
+    .inner-ripple {
+        top: $inner-offset;
+        left: $inner-offset;
+        width: $inner-width;
+        height: $inner-width;
+        animation-name: inner-ripple;
+        animation-timing-function: cubic-bezier(.4,.13,0,.62);
+    }
+    
+    .outer-ripple {
+        width: $outer-width;
+        height: $outer-width;
+        animation-name: outer-ripple;
+    }
+}
+

@@ -1,0 +1,37 @@
+.toast-container {
+    &.toast-type {
+        &-success {
+            .toast-inner {
+                background: green;
+            }
+        }
+        &-error {
+            .toast-inner {
+                background: red;
+            }
+        }
+        &-warning {
+            .toast-inner {
+                background: yellow;
+            }
+        }
+        &-info {
+            .toast-inner {
+                background: blue;
+            }
+        }
+    }
+    
+    .toast-inner {
+        transition: all 0.2s ease-out;
+        opacity: 0;
+    
+        &.is-faded-in {
+            opacity: 1;
+        }
+        
+        &.is-fading-out {
+            opacity: 0;
+        }
+    }
+}

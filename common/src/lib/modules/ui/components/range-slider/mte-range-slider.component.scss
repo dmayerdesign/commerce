@@ -1,0 +1,66 @@
+$track-height: 0.5rem;
+$knob-width: 2rem;
+
+.range-slider {
+    &-container {
+        width: 100%;
+
+        &, & * {
+            user-select: none;
+        }
+    }
+
+    &-inputs {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &-input {
+        width: 6rem;
+    }
+
+    &-track {
+        width: 100%;
+        height: $track-height;
+    }
+
+    &-knobs {
+        position: relative;
+        top: -($track-height / 2);
+        margin-top: -($knob-width / 2);
+    }
+
+    &-knob {
+        position: absolute;
+        width: 0;
+        height: $knob-width;
+        cursor: pointer;
+
+        &::after {
+            position: absolute;
+            top: 50%;
+            left: -($knob-width / 2);
+            z-index: 2;
+            display: block;
+            content: ' ';
+            margin-top: -($knob-width / 2);
+            width: $knob-width;
+            height: $knob-width;
+            background-color: inherit;
+            border-radius: $knob-width / 2;
+            border-width: ($knob-width / 2) - 0.2rem;
+            border-style: solid;
+            border-color: inherit;
+        }
+
+        &-clicked {
+            position: absolute;
+            z-index: 1;
+            cursor: pointer;
+            top: -($knob-width * 6 / 2);
+            left: -($knob-width * 6 / 2);
+            width: $knob-width * 6;
+            height: $knob-width * 6;
+        }
+    }
+}

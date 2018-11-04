@@ -1,0 +1,22 @@
+mixin msoTable
+	<!--[if (gte mso 9)|(IE)]>
+	<table align="center" border="0" cellspacing="0" cellpadding="0" width="600">
+	<tr>
+	<td align="center" valign="top" width="600">
+	<![endif]-->
+
+mixin endMsoTable
+	<!--[if (gte mso 9)|(IE)]>
+	</td></tr></table>
+	<![endif]-->
+
+mixin cell(fontFam, percentWidth, align, vPadding, vAlign)
+	td(width=percentWidth + "%", align=align, valign=(vAlign || 'middle'), style=`font-family: ${fontFam}, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 20px; padding: ${vPadding || '5'}px 0px ${vPadding || '5'}px 0px; vertical-align: ${vAlign || 'middle'}`)
+		if block
+			block
+
+mixin currencySymbol(priceObject)
+	if (priceObject.currency.toUpperCase() === "USD")
+		= '$'
+	if block
+		block

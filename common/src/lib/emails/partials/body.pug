@@ -1,0 +1,87 @@
+//- options.subject
+//- options.preheader
+//- options.organization {Organization}
+//- options.bgColor
+//- options.accentColor
+//- options.innerBgColor
+//- options.mastheadBgColor
+//- options.fontFamily
+//- options.heading1
+//- options.subHeading
+include mixins.pug
+doctype html
+html
+	head
+		meta(charset="utf-8")
+		meta(http-equiv="Content-Type" content="text/html; charset=utf-8")
+		meta(name="viewport" content="width=device-width, initial-scale=1")
+		meta(http-equiv="X-UA-Compatible" content="IE=edge")
+		link(href=`https://fonts.googleapis.com/css?family=${fontFamily}:300,400,700` rel="stylesheet")
+		style(type="text/css").
+			/* CLIENT-SPECIFIC STYLES */
+			body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+			table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+			img { -ms-interpolation-mode: bicubic; }
+			/* RESET STYLES */
+			img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; }
+			table { border-collapse: collapse !important; }
+			body { height: 100% !important; margin: 0 !important; padding: 0 !important; width: 100% !important; }
+			/* iOS BLUE LINKS */
+			a[x-apple-data-detectors] {
+				color: inherit !important;
+				text-decoration: none !important;
+				font-size: inherit !important;
+				font-family: inherit !important;
+				font-weight: inherit !important;
+				line-height: inherit !important;
+			}
+			/* MEDIA QUERIES */
+			@media screen and (max-width: 480px) {
+				.mobile-hide {
+					display: none !important;
+				}
+				.mobile-center {
+					text-align: center !important;
+				}
+			}
+			/* ANDROID CENTER FIX */
+			div[style*="margin: 16px 0;"] { margin: 0 !important; }
+		title #{subject}
+
+	body(style=`margin: 0 !important; padding: 0 !important; background-color: ${bgColor || '#ecebec'}`, bgcolor=(bgColor || '#ecebec'))
+		table(border="0" cellpadding="0" cellspacing="0" width="100%")
+			tr
+				td(align="center" style=`background-color: ${bgColor || '#ecebec'}; padding: 10px 0; font-size: 11px; color: #777777; line-height: 16px; font-family: Helvetica, Arial, sans-serif;` bgcolor=`${bgColor || '#ecebec'}`)= preheader
+			tr
+				td(align="center" style=`background-color: ${bgColor || '#ecebec'};` bgcolor=`${bgColor || '#ecebec'}`)
+					+msoTable
+					table(align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:600px;")
+						tr
+							//- Banner
+							td(align="center" valign="top" style="font-size:0; padding: 30px;" bgcolor=(mastheadBgColor || organization.branding.colors.primary))
+								+msoTable
+								div(style="display:inline-block; max-width:50%; min-width:100px; vertical-align:top; width:100%;")
+									table(align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:300px;")
+										tr
+											td(align="center" valign="top" style=`font-family: ${fontFamily}, Helvetica, Arial, sans-serif; font-size: 36px; font-weight: 800; line-height: 48px;` class="mobile-center")
+												a(href=organization.storeUrl, target="_blank", style="color: #ffffff; text-decoration: none;")
+													img(src=organization.branding.logo, alt=organization.name, width="160", height="auto", style="display: block; border: 0px; width: 160px; height: auto;")
+								+endMsoTable
+
+						block content
+
+						if organization.retailSettings.shippingAddress
+							tr
+								td(align="center" style="padding: 0px 30px 20px; background-color: " + bgColor, bgcolor=bgColor)
+									+msoTable
+									table(align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:600px;")
+										tr
+											td(align="center" style=`padding-top: 5px;`)
+												p(style="font-family: Helvetica, Arial, sans-serif; font-size: 11px; font-weight: normal; line-height: 16px; color: #777777;")
+													= (organization.retailSettings.shippingAddress.company || organization.retailSettings.shippingAddress.name)
+													br
+													= organization.retailSettings.shippingAddress.street1 + ' ' + organization.retailSettings.shippingAddress.street2
+													br
+													= organization.retailSettings.shippingAddress.city + ', ' + organization.retailSettings.shippingAddress.state + ' ' + organization.retailSettings.shippingAddress.zip
+									+endMsoTable
+					+endMsoTable

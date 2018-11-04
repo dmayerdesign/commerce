@@ -1,0 +1,99 @@
+extends ../partials/body.pug
+
+block content
+	- var tax = order.taxPercent ? (order.total.amount * order.taxPercent / 100) : 0;
+	- var TOTAL = (tax + order.total.amount + order.shippingCost).toFixed(2);
+	tr
+		td(align="center" style="padding: 30px 30px 20px 30px; background-color: " + innerBgColor, bgcolor=innerBgColor)
+			+msoTable
+			table(align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:600px;")
+				tr
+					td(align="center" style=`font-family: ${fontFamily}, Helvetica, Arial, sans-serif; padding-top: 5px;`)
+						h2(style="font-size: 40px; font-weight: 300; line-height: 44px; color: #666666; margin: 0;")
+							= heading1 || `Your order has shipped!`
+				tr
+					td(align="center" style=`font-family: Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding-top: 10px; padding-bottom: 10px`)
+						p(style="font-size: 14px; font-weight: normal; line-height: 20px; color: #707070; margin: 0;")
+							if subHeading
+								= subHeading
+							else if order.customer.firstName
+								= `Hi, ${order.customer.firstName}—your order is on its way. You'll find your tracking details below.`
+							else
+								= `Your order is on its way. You'll find your tracking details below.`
+				tr
+					td(align="left" style="padding-top: 0; color: #707070")
+						table(cellspacing="0" cellpadding="0" border="0" width="100%")
+							tr
+								if order.carrier && order.trackingCode
+									+cell(fontFamily, 50, 'center', 30, 'top')
+										span(style="font-size: 16px; line-height: 30px") Carrier:&nbsp;
+										strong(style="font-family: Helvetica, Arial, sans-serif; font-size: 20px; line-height: 30px")= order.carrier
+										br
+										span(style="font-size: 16px; line-height: 30px") Tracking code:&nbsp;
+										strong(style="font-family: Helvetica, Arial, sans-serif; font-size: 20px; line-height: 30px")= order.trackingCode
+						table(cellspacing="0" cellpadding="0" border="0" width="100%" style="padding-top: 20px")
+							tr
+								+cell('Helvetica', 50, 'left', 20, 'top')
+									span(style=`font-size: 15px; font-family: ${fontFamily}, Helvetica, Arial, sans-serif`) Delivering to:
+									p(style=`margin-top: 5px; line-height: 18px;`)
+										= order.customer.shippingAddress.name
+										br
+										= order.customer.shippingAddress.street1
+										if order.customer.shippingAddress.street2
+											br
+											= order.customer.shippingAddress.street2
+										br
+										= order.customer.shippingAddress.city + ', ' + (order.customer.shippingAddress.state || order.customer.shippingAddress.province) + ' ' + order.customer.shippingAddress.zip
+								+cell('Helvetica', 50, 'left', 20, 'top')
+									span(style=`font-size: 15px; font-family: ${fontFamily}, Helvetica, Arial, sans-serif`) Should arrive by:
+									br
+									strong= estArrivalDate
+				tr
+					td(align="left" style=`font-family: ${fontFamily}, Helvetica, Arial, sans-serif; padding-top: 5px; padding-bottom: 10px`)
+						h2(style="font-size: 20px; font-weight: normal; line-height: 30px; color: #666666; margin: 0;") Order details
+				tr
+					td(align="left" style="padding-top: 16px; padding-bottom: 16px; color: #707070; border-top: 3px solid #eeeeee")
+						table(cellspacing="0" cellpadding="0" border="0" width="100%")
+							each product in order.products
+								tr
+									+cell(fontFamily, 75, 'left')
+										span(style="font-size: 12px") #{product.quantity} x &nbsp;
+										= product.name
+										span(style="font-size: 11px; font-family: Helvetica, Arial, sans-serif;") &nbsp;&nbsp;&nbsp;
+											= '(SKU'
+											strong &nbsp;#{product.sku}
+											= ')'
+									+cell('Helvetica', 25, 'right')
+										strong
+											+currencySymbol(product.price)
+										strong(style="font-size: 14px")= product.totalCost.toFixed(2)
+				tr
+					td(align="left" style="padding-top: 14px; padding-bottom: 14px; color: #707070; border-top: 3px solid #ececec")
+						table(cellspacing="0" cellpadding="0" border="0" width="100%")
+							if tax
+								tr
+									+cell('Helvetica', 75, 'left', 1)
+										span Tax:&nbsp;
+									+cell('Helvetica', 25, 'right', 1)
+										strong
+											+currencySymbol(order.total)
+											= tax.toFixed(2)
+							tr
+								+cell('Helvetica', 75, 'left', 1)
+									span Shipping:&nbsp;
+								+cell('Helvetica', 25, 'right', 1)
+									strong
+										+currencySymbol(order.total)
+										= order.shippingCost.amount.toFixed(2)
+				tr
+					td(align="left" style="padding-top: 14px; padding-bottom: 20px; color: #707070; border-top: 3px solid #ececec")
+						table(cellspacing="0" cellpadding="0" border="0" width="100%")
+							tr
+								+cell('Helvetica', 75, 'left')
+								+cell('Helvetica', 25, 'right')
+									span(style="font-size: 16px") Total:&nbsp;
+										strong
+											+currencySymbol(order.total)
+										strong= TOTAL
+
+			+endMsoTable

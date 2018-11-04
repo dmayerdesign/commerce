@@ -1,0 +1,23 @@
+extends ../partials/body.pug
+
+block content
+	tr
+		td(align="center" style="padding: 30px 30px 20px 30px; background-color: " + innerBgColor, bgcolor=innerBgColor)
+			+msoTable
+			table(align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:600px;")
+				tr
+					td(align="center" style=`font-family: ${fontFamily}, Helvetica, Arial, sans-serif; padding-top: 5px;`)
+						h2(style="font-size: 40px; font-weight: 300; line-height: 44px; color: #666666; margin: 0;")
+							= heading1 || `Verify your email`
+				tr
+					td(align="center" style=`font-family: Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding-top: 10px; padding-bottom: 10px`)
+						p(style="font-size: 14px; font-weight: normal; line-height: 20px; color: #707070; margin: 0;")
+							if user.firstName
+								= `Hi, ${user.firstName}—thanks for creating an account with us. Click on the link below to verify that this email address is yours.`
+							else
+								= `Thanks for creating an account with us. Click on the link below to verify that this email address is yours.`
+				tr
+					td(align="center" style=`font-family: ${fontFamily}, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding-top: 20px; padding-bottom: 30px`)
+						a(href=verificationLink, target="_blank")
+							button(style=`width: 70%; padding: 20px; border-radius: 2px; margin: 0 auto; background-color: ${accentColor}; font-size: 14px; text-transform: uppercase; font-weight: bold; text-align: center; line-height: 14px; color: #fafafa; border: 0 none; box-shadow: 0 0 0 transparent; cursor: pointer`) Verify your email
+			+endMsoTable
