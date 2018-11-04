@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 
-import { MteFormFieldComponent } from './components/form-field/form-field.component'
-import { MteFormBuilderService } from './services/form-builder.service'
+import { QbFormFieldComponent } from './components/form-field/form-field.component'
+import { QbFormBuilderService } from './services/form-builder.service'
 
 @NgModule({
   imports: [
@@ -12,15 +12,15 @@ import { MteFormBuilderService } from './services/form-builder.service'
     ReactiveFormsModule,
   ],
   declarations: [
-    MteFormFieldComponent,
+    QbFormFieldComponent,
   ],
   exports: [
     FormsModule,
     ReactiveFormsModule,
-    MteFormFieldComponent,
+    QbFormFieldComponent,
   ],
   providers: [
-    MteFormBuilderService
+    QbFormBuilderService
   ]
 })
-export class MteFormsModule {}
+export class QbFormsModule {}

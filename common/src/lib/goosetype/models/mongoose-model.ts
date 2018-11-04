@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose'
-import { ArrayPropOptions, MongooseDocument, PropOptions, PropType } from '../interfaces'
+import { ArrayPropOptions, IMongooseDocument, PropOptions, PropType } from '../interfaces'
 
-export interface MongooseModel<T = any> extends mongoose.Model<T & MongooseDocument> {
+export interface MongooseModel<T = any> extends mongoose.Model<T & IMongooseDocument> {
     findOrCreate: (query: object) => Promise<{ doc: T; created: boolean }>
 }
 

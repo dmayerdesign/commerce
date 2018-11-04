@@ -5,7 +5,7 @@ import { MteFormGroupOptions } from '../models/form-group-options'
 import { MteFormBuilder } from '../utilities/form.builder'
 
 @Injectable()
-export class MteFormBuilderService {
+export class QbFormBuilderService {
     constructor(public formBuilder: FormBuilder) { }
 
     public create<DataType = any>(options: MteFormGroupOptions): MteFormBuilder<DataType> {

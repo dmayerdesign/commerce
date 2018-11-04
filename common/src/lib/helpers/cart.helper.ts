@@ -1,10 +1,10 @@
-import { Cart } from '@mte/common/api/interfaces/cart'
-import { CartItem } from '@mte/common/api/interfaces/cart-item'
-import { Price } from '@mte/common/api/interfaces/price'
-import { Product } from '@mte/common/api/interfaces/product'
-import { Currency } from '@mte/common/constants/enums/currency'
-import { ProductHelper } from '@mte/common/helpers/product.helper'
-import { CartDisplayItem } from '@mte/common/models/ui/cart-display-item'
+import { Cart } from '@qb/common/api/interfaces/cart'
+import { CartItem } from '@qb/common/api/interfaces/cart-item'
+import { Price } from '@qb/common/api/interfaces/price'
+import { Product } from '@qb/common/api/interfaces/product'
+import { Currency } from '@qb/common/constants/enums/currency'
+import { ProductHelper } from '@qb/common/helpers/product.helper'
+import { CartDisplayItem } from '@qb/common/models/ui/cart-display-item'
 
 export class CartHelper {
 

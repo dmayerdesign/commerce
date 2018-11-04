@@ -4,7 +4,7 @@ import { BootstrapBreakpoint } from '../../../../../constants/enums/bootstrap-br
 import { WindowRefService } from '../../services/window-ref.service'
 
 @Component({
-    selector: 'mte-responsive-image',
+    selector: 'qb-responsive-image',
     template: `
         <div class="responsive-image noselect"
              [ngStyle]="getStyles()">
@@ -21,7 +21,7 @@ import { WindowRefService } from '../../services/window-ref.service'
                  [ngStyle]="getOverlayStyles()">
         </div>
     `,
-    styleUrls: [ './mte-responsive-image.component.scss' ]
+    styleUrls: [ './qb-responsive-image.component.scss' ]
 })
 export class MteResponsiveImageComponent {
     @Input() public src: string

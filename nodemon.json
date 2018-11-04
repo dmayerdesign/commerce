@@ -1,6 +1,9 @@
 {
-  "watch": ["server/src"],
+  "watch": [
+    "server/src",
+    "app-config.development.json"
+  ],
   "ext": "ts",
   "ignore": ["src/**/*.spec.ts"],
-  "exec": "ts-node -r tsconfig-paths/register --project server/tsconfig.server.json server/src/main.ts"
+  "exec": "export ENVIRONMENT=development; ts-node common/src/code-gen/generate-app-config.ts; ts-node -r tsconfig-paths/register --project server/tsconfig.server.json server/src/main.ts"
 }

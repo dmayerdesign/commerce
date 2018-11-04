@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core'
 
 @Component({
-    selector: 'mte-tooltip',
+    selector: 'qb-tooltip',
     template: `
 <div class="tooltip"
 		*ngIf="isShowing"

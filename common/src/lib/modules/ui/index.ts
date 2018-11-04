@@ -1,1 +1,1 @@
-export * from './mte-ui.module'
+export * from './qb-ui.module'

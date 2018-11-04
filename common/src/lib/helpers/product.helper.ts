@@ -1,8 +1,8 @@
-import { Price } from '@mte/common/api/interfaces/price'
-import { Product } from '@mte/common/api/interfaces/product'
-import { TaxonomyTerm } from '@mte/common/api/interfaces/taxonomy-term'
-import { Currency } from '@mte/common/constants/enums/currency'
-import { RangeLimit } from '@mte/common/constants/enums/range-limit'
+import { Price } from '@qb/common/api/interfaces/price'
+import { Product } from '@qb/common/api/interfaces/product'
+import { TaxonomyTerm } from '@qb/common/api/interfaces/taxonomy-term'
+import { Currency } from '@qb/common/constants/enums/currency'
+import { RangeLimit } from '@qb/common/constants/enums/range-limit'
 
 export class ProductHelper {
     public static isProduct(obj: any): boolean {

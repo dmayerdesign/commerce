@@ -6,7 +6,7 @@ export type PropType = 'array' | 'object'
 
 export interface BasePropOptions extends mongoose.SchemaTypeOpts<any> { }
 
-export interface MongooseDocument extends mongoose.Document {
+export interface IMongooseDocument extends mongoose.Document {
     _id: string
     createdAt?: any
     updatedAt?: any

@@ -12,7 +12,7 @@ export interface NavigationListContext {
 }
 
 @Component({
-    selector: 'mte-navigation-list',
+    selector: 'qb-navigation-list',
     template: `
         <ng-template #navigationList let-ctx>
             <ul [ngClass]="{

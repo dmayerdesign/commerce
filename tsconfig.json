@@ -3,6 +3,9 @@
     "compilerOptions": {
         "target": "es5",
         "baseUrl": ".",
+        "paths": {
+            "@qb/common/*": [ "./common/src/lib/*" ]
+        },
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "lib": [

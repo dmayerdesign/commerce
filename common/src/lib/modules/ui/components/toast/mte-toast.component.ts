@@ -2,14 +2,14 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core'
 import { Observable } from 'rxjs'
 import { takeWhile } from 'rxjs/operators'
 
-import { AppConfig } from '@mte/app-config'
-import { HeartbeatComponent } from '@mte/common/lib/heartbeat/heartbeat.component'
-import { Heartbeat } from '@mte/common/lib/heartbeat/heartbeat.decorator'
+import { AppConfig } from '@qb/app-config'
+import { HeartbeatComponent } from '@qb/common/lib/heartbeat/heartbeat.component'
+import { Heartbeat } from '@qb/common/lib/heartbeat/heartbeat.decorator'
 import { Toast } from '../../../../../models/ui/toast'
 import { timeout } from '../../utils/timeout'
 
 @Component({
-    selector: 'mte-toast',
+    selector: 'qb-toast',
     template: `
         <div *ngIf="isShowing"
              class="toast-container toast-type-{{ toast.type }}">
@@ -28,7 +28,7 @@ import { timeout } from '../../utils/timeout'
             </div>
         </div>
     `,
-    styleUrls: [ './mte-toast.component.scss' ],
+    styleUrls: [ './qb-toast.component.scss' ],
 })
 @Heartbeat()
 export class MteToastComponent extends HeartbeatComponent implements OnInit, OnDestroy {

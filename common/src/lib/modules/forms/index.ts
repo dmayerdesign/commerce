@@ -1,1 +1,1 @@
-export { MteFormsModule } from './mte-forms.module'
+export { QbFormsModule } from './forms.module'

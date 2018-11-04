@@ -1,4 +1,4 @@
-import { AppConfig } from '@mte/app-config'
+import { AppConfig } from '@qb/app-config'
 
 export class ImageHelper {
     private static getImageType(imageUrl: string, type: 'thumbnail' | 'medium' | 'large'): string {

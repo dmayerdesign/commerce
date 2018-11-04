@@ -8,7 +8,7 @@ import { HeartbeatComponent } from '../../../../heartbeat/heartbeat.component'
 import { Heartbeat } from '../../../../heartbeat/heartbeat.decorator'
 
 @Component({
-    selector: 'mte-range-slider',
+    selector: 'qb-range-slider',
     template: `
         <div class="range-slider-container">
             <div class="range-slider-inputs">
@@ -74,7 +74,7 @@ import { Heartbeat } from '../../../../heartbeat/heartbeat.decorator'
             </div>
         </div>
     `,
-    styleUrls: [ './mte-range-slider.component.scss' ],
+    styleUrls: [ './qb-range-slider.component.scss' ],
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,

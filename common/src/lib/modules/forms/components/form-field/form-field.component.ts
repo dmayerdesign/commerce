@@ -11,13 +11,13 @@ import {
 import { fromEvent } from 'rxjs'
 import { takeWhile } from 'rxjs/operators'
 
-import { Copy } from '@mte/common/constants/copy'
-import { HeartbeatComponent } from '@mte/common/lib/heartbeat/heartbeat.component'
-import { Heartbeat } from '@mte/common/lib/heartbeat/heartbeat.decorator'
+import { Copy } from '@qb/common/constants/copy'
+import { HeartbeatComponent } from '@qb/common/heartbeat/heartbeat.component'
+import { Heartbeat } from '@qb/common/heartbeat/heartbeat.decorator'
 import { MteFormFieldOptions } from '../../models/form-field-options'
 
 @Component({
-    selector: 'mte-form-field',
+    selector: 'qb-form-field',
     template: `
         <div class="form-group">
             <label *ngIf="options?.label"
@@ -41,7 +41,7 @@ import { MteFormFieldOptions } from '../../models/form-field-options'
     `,
 })
 @Heartbeat()
-export class MteFormFieldComponent extends HeartbeatComponent implements OnInit, OnDestroy, AfterContentInit {
+export class QbFormFieldComponent extends HeartbeatComponent implements OnInit, OnDestroy, AfterContentInit {
     @Input() public options: MteFormFieldOptions = {
         label: ''
     }

@@ -1,6 +1,6 @@
 import { Component, ElementRef, Input, OnDestroy, OnInit, Output, Renderer2, ViewChild } from '@angular/core'
 import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms'
-import { AppConfig } from '@mte/app-config'
+import { AppConfig } from '@qb/app-config'
 import { Observable, Subscription } from 'rxjs'
 import { Copy } from '../../../../../constants'
 import { ModalType } from '../../../../../constants/enums/modal-type'
@@ -10,7 +10,7 @@ import { platform } from '../../utils/platform'
 import { timeout } from '../../utils/timeout'
 
 @Component({
-    selector: 'mte-modal',
+    selector: 'qb-modal',
     template: `
         <div *ngIf="isShowing && data"
              #modal
@@ -71,7 +71,7 @@ import { timeout } from '../../utils/timeout'
             </div>
         </div>
     `,
-    styleUrls: [ './mte-modal.component.scss' ]
+    styleUrls: [ './qb-modal.component.scss' ]
 })
 export class MteModalComponent implements OnInit, OnDestroy {
     @Input() public datas: Observable<ModalData>
