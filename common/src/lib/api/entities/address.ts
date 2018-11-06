@@ -1,7 +1,9 @@
-import { prop, schema, MongooseDocument } from '../../goosetype'
+import * as findOrCreate from 'mongoose-findorcreate'
+import { model, plugin, prop, MongooseDocument } from '../../goosetype'
 import { Address as IAddress } from '../interfaces/address'
 
-@schema(Address)
+@plugin(findOrCreate)
+@model(Address)
 export class Address extends MongooseDocument implements IAddress {
     @prop() public name?: string
     @prop() public company?: string

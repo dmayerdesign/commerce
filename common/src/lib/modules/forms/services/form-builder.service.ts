@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core'
 import { FormBuilder } from '@angular/forms'
 
-import { MteFormGroupOptions } from '../models/form-group-options'
-import { MteFormBuilder } from '../utilities/form.builder'
+import { QbFormGroupOptions } from '../models/form-group-options'
+import { QbFormBuilder } from '../utilities/form.builder'
 
 @Injectable()
 export class QbFormBuilderService {
     constructor(public formBuilder: FormBuilder) { }
 
-    public create<DataType = any>(options: MteFormGroupOptions): MteFormBuilder<DataType> {
-        return new MteFormBuilder<DataType>(this.formBuilder, options)
+    public create<DataType = any>(options: QbFormGroupOptions): QbFormBuilder<DataType> {
+        return new QbFormBuilder<DataType>(this.formBuilder, options)
     }
 }

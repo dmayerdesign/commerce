@@ -1,5 +1,4 @@
 import {
-    HttpErrorResponse,
     HttpEvent,
     HttpHandler,
     HttpInterceptor,
@@ -17,16 +16,16 @@ import { QbHttpService } from './http.service'
 export class QbHttpResponseInterceptor implements HttpInterceptor {
 
     constructor(
-        private mteHttpService: QbHttpService,
-        @Inject(HttpInjectionTokens.HttpSettings) private httpSettings: typeof IHttpSettings,
-    ) {}
+        private _httpService: QbHttpService,
+        @Inject(HttpInjectionTokens.HttpSettings) private _httpSettings: typeof IHttpSettings,
+    ) { }
 
     public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
         const isBlacklistedFromErrorFlash = (): boolean => {
-            return this.httpSettings &&
-                this.httpSettings.httpFlashErrorBlacklist &&
-                this.httpSettings.httpFlashErrorBlacklist.some((x) => {
+            return this._httpSettings &&
+                this._httpSettings.httpFlashErrorBlacklist &&
+                this._httpSettings.httpFlashErrorBlacklist.some((x) => {
                     return request.method.toLowerCase() === x.method.toLowerCase() &&
                         !!request.url.match(new RegExp(x.endpoint))
                 })
@@ -36,19 +35,18 @@ export class QbHttpResponseInterceptor implements HttpInterceptor {
             .pipe(
                 switchMap<HttpRequest<any>, HttpEvent<any>>((req) => next.handle(req)),
                 catchError((errorResponse) => {
-                    // console.log('[MteHttpResponseInterceptor#intercept] Error response', errorResponse)
                     const error = new SimpleError(errorResponse)
 
                     // If the error is a 401, pipe it through the `sessionInvalids` stream.
 
                     if (error.status === HttpStatus.CLIENT_ERROR_UNAUTHORIZED) {
-                        this.mteHttpService.sessionInvalids.next(error)
+                        this._httpService.sessionInvalids.next(error)
                     }
 
                     // Else, if the error is coming from a blacklisted endpoint, pipe it through the generic `errors` stream.
 
                     else if (!isBlacklistedFromErrorFlash()) {
-                        this.mteHttpService.errors.next(error)
+                        this._httpService.errors.next(error)
                     }
 
                     return throwError(error)

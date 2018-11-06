@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common'
+import { MongooseModule } from '@nestjs/mongoose'
 import { applyDomino, AngularUniversalModule } from '@nestjs/ng-universal'
 import { join } from 'path'
-import { AppController } from './app.controller'
-import { AppService } from './app.service'
-import { ExampleController } from './example/example.controller';
+import { AddressController } from './address/address.controller'
+import { AddressService } from './address/address.service'
+import { ExampleController } from './example/example.controller'
 
 const BROWSER_DIR = join(process.cwd(), 'dist/web')
 applyDomino(global, join(BROWSER_DIR, 'index.html'))
@@ -14,8 +15,14 @@ applyDomino(global, join(BROWSER_DIR, 'index.html'))
       viewsPath: BROWSER_DIR,
       bundle: require('../../dist/web-ssr/main.js'),
     }),
+    MongooseModule.forRoot(process.env.MONGODB_URI_TEST),
   ],
-  controllers: [AppController, ExampleController],
-  providers: [AppService],
+  controllers: [
+    ExampleController,
+    AddressController
+  ],
+  providers: [
+    AddressService
+  ],
 })
 export class AppModule {}

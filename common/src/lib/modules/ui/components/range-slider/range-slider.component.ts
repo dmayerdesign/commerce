@@ -1,11 +1,11 @@
 import { forwardRef, AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, Renderer2, ViewChild } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
-import { cloneDeep } from 'lodash'
-import { fromEvent, merge, BehaviorSubject, Observable } from 'rxjs'
-import { delay, filter, map, scan } from 'rxjs/operators'
 import { RangeLimit } from '@qb/common/constants/enums/range-limit'
 import { HeartbeatComponent } from '@qb/common/heartbeat/heartbeat.component'
 import { Heartbeat } from '@qb/common/heartbeat/heartbeat.decorator'
+import { cloneDeep } from 'lodash'
+import { fromEvent, merge, BehaviorSubject, Observable } from 'rxjs'
+import { delay, filter, map, scan } from 'rxjs/operators'
 
 @Component({
     selector: 'qb-range-slider',
@@ -74,7 +74,7 @@ import { Heartbeat } from '@qb/common/heartbeat/heartbeat.decorator'
             </div>
         </div>
     `,
-    styleUrls: [ './qb-range-slider.component.scss' ],
+    styleUrls: [ './range-slider.component.scss' ],
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,

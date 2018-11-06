@@ -1,6 +1,6 @@
 import { AbstractControl, FormControl } from '@angular/forms'
 
-export interface MteFormFieldOptions {
+export interface QbFormFieldOptions {
     label: string
     labelClass?: string
     hideLabel?: boolean

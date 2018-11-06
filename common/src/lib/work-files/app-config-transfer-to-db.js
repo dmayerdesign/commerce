@@ -4,7 +4,7 @@ var config = {
 	branding: {
 		logos: {
 			wordmark: {
-                white: dev_url + "/images/wordmark-white.png",
+        white: dev_url + "/images/wordmark-white.png",
 			},
 		},
 		colors: {

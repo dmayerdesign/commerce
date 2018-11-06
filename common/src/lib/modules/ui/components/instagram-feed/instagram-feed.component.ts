@@ -9,7 +9,7 @@ import { Observable } from 'rxjs'
         <h1>Instagram feed works!</h1>
         <div class="qb-instagram-feed">
             <div class="qb-instagram-feed-carousel">
-                <ng-container *ngFor="let post of postss | async">
+                <ng-container *ngFor="let post of postsStream | async">
                     <ng-container *ngIf="!!post.images">
                         <div>
                             <img [src]="post.images.low_resolution?.url">
@@ -22,13 +22,13 @@ import { Observable } from 'rxjs'
 })
 export class QbInstagramFeedComponent implements OnInit {
     @Input() public apiEndpoint: string
-    public postss: Observable<InstagramPost[]>
+    public postsStream: Observable<InstagramPost[]>
 
     constructor(
         public http: HttpClient,
     ) { }
 
     public ngOnInit(): void {
-        this.postss = this.http.get<InstagramPost[]>(this.apiEndpoint)
+        this.postsStream = this.http.get<InstagramPost[]>(this.apiEndpoint)
     }
 }

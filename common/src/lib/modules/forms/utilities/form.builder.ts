@@ -1,15 +1,15 @@
 import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms'
-import { MteFormFieldOptions } from '../models/form-field-options'
-import { MteFormGroupOptions } from '../models/form-group-options'
+import { QbFormFieldOptions } from '../models/form-field-options'
+import { QbFormGroupOptions } from '../models/form-group-options'
 
 export class QbFormBuilder<DataType = any> {
     public data?: DataType
     private _formGroup: FormGroup
     private _controls: AbstractControl[]
     private _controlNames: string[]
-    private _formFieldOptions: { [key: string]: MteFormFieldOptions } = {}
+    private _formFieldOptions: { [key: string]: QbFormFieldOptions } = {}
 
-    constructor(private formBuilder: FormBuilder, private _options: MteFormGroupOptions) {
+    constructor(private formBuilder: FormBuilder, private _options: QbFormGroupOptions) {
         this.init()
     }
 
@@ -29,7 +29,7 @@ export class QbFormBuilder<DataType = any> {
                 this._formGroup.get(controlName))
             this._controlNames.forEach((controlName) => {
                 this._formFieldOptions[controlName] = {
-                    ...this._options[controlName] as MteFormFieldOptions,
+                    ...this._options[controlName] as QbFormFieldOptions,
                     label: this._options[controlName].label,
                     control: this._formGroup.get(controlName),
                     errorMessages: this._options[controlName].errorMessages
@@ -38,7 +38,7 @@ export class QbFormBuilder<DataType = any> {
         }
     }
 
-    public getOptions(controlName: string): MteFormFieldOptions {
+    public getOptions(controlName: string): QbFormFieldOptions {
         return this._formFieldOptions[controlName]
     }
 

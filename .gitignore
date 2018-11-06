@@ -6,6 +6,9 @@
 /out-tsc
 *.generated.ts
 
+# environment variables
+.env
+
 # dependencies
 /node_modules
 

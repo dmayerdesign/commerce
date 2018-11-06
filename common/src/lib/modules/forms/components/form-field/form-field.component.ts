@@ -14,7 +14,7 @@ import { takeWhile } from 'rxjs/operators'
 import { Copy } from '@qb/common/constants/copy'
 import { HeartbeatComponent } from '@qb/common/heartbeat/heartbeat.component'
 import { Heartbeat } from '@qb/common/heartbeat/heartbeat.decorator'
-import { MteFormFieldOptions } from '../../models/form-field-options'
+import { QbFormFieldOptions } from '../../models/form-field-options'
 
 @Component({
     selector: 'qb-form-field',
@@ -42,7 +42,7 @@ import { MteFormFieldOptions } from '../../models/form-field-options'
 })
 @Heartbeat()
 export class QbFormFieldComponent extends HeartbeatComponent implements OnInit, OnDestroy, AfterContentInit {
-    @Input() public options: MteFormFieldOptions = {
+    @Input() public options: QbFormFieldOptions = {
         label: ''
     }
     @Input() public customErrorMessage: TemplateRef<any>
@@ -87,6 +87,13 @@ export class QbFormFieldComponent extends HeartbeatComponent implements OnInit, 
         if (this.input) {
             this.element = this.input
             nativeElement = this.element.nativeElement
+        } else {
+            throw new Error(`A control bound to a template local named 'input' must be passed \
+as a content child of <qb-form-field>, like so:
+
+    <qb-form-field [options]="{ label: 'Email' }">
+        <input formControlName="email">
+    </qb-form-field>\n`)
         }
 
         if (nativeElement && (!this.options || typeof this.options.formControlType === 'undefined')) {

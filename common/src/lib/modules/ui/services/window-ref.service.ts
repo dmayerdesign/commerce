@@ -1,7 +1,7 @@
+import { BootstrapBreakpoint } from '@qb/common/constants/enums/bootstrap-breakpoint'
+import { BootstrapBreakpointKey } from '@qb/common/constants/enums/bootstrap-breakpoint-key'
 import { fromEvent, of, BehaviorSubject, Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
-import { BootstrapBreakpoint } from '../../../../constants/enums/bootstrap-breakpoint'
-import { BootstrapBreakpointKey } from '../../../../constants/enums/bootstrap-breakpoint-key'
 
 export class WindowRefService {
     private _window = typeof window !== 'undefined' ? window : null

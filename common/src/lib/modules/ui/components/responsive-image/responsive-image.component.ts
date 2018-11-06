@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core'
-import { bootstrapBreakpointKeys } from '@b/common/constants/bootstrap/bootstrap-breakpoint-keys'
-import { BootstrapBreakpoint } from '@b/common/constants/enums/bootstrap-breakpoint'
+import { bootstrapBreakpointKeys } from '@qb/common/constants/bootstrap/bootstrap-breakpoint-keys'
+import { BootstrapBreakpoint } from '@qb/common/constants/enums/bootstrap-breakpoint'
 import { WindowRefService } from '../../services/window-ref.service'
 
 @Component({
@@ -21,7 +21,7 @@ import { WindowRefService } from '../../services/window-ref.service'
                  [ngStyle]="getOverlayStyles()">
         </div>
     `,
-    styleUrls: [ './qb-responsive-image.component.scss' ]
+    styleUrls: [ './responsive-image.component.scss' ]
 })
 export class QbResponsiveImageComponent {
     @Input() public src: string

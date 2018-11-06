@@ -15,7 +15,6 @@ import { FocusOnDirective } from './directives/focus-on.directive'
 import { TruncatePipe } from './pipes/truncate.pipe'
 import { WindowRefService } from './services/window-ref.service'
 
-
 @NgModule({
     imports: [
         CommonModule,

@@ -1,7 +1,7 @@
-import { MteFormFieldOptions } from './form-field-options'
+import { QbFormFieldOptions } from './form-field-options'
 
-export interface MteFormGroupOptions {
-    [key: string]: MteFormFieldOptions & {
+export interface QbFormGroupOptions {
+    [key: string]: QbFormFieldOptions & {
         defaultValue?: any
         validators?: any[]
     }

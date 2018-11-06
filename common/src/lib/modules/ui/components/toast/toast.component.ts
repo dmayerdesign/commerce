@@ -3,9 +3,9 @@ import { Observable } from 'rxjs'
 import { takeWhile } from 'rxjs/operators'
 
 import { AppConfig } from '@qb/app-config'
-import { HeartbeatComponent } from '@qb/common/lib/heartbeat/heartbeat.component'
-import { Heartbeat } from '@qb/common/lib/heartbeat/heartbeat.decorator'
-import { Toast } from '../../../../../models/ui/toast'
+import { HeartbeatComponent } from '@qb/common/heartbeat/heartbeat.component'
+import { Heartbeat } from '@qb/common/heartbeat/heartbeat.decorator'
+import { Toast } from '@qb/common/models/ui/toast'
 import { timeout } from '../../utils/timeout'
 
 @Component({
@@ -28,7 +28,7 @@ import { timeout } from '../../utils/timeout'
             </div>
         </div>
     `,
-    styleUrls: [ './qb-toast.component.scss' ],
+    styleUrls: [ './toast.component.scss' ],
 })
 @Heartbeat()
 export class QbToastComponent extends HeartbeatComponent implements OnInit, OnDestroy {
