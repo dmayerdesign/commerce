@@ -7,7 +7,7 @@ import {
 import { Inject, Injectable } from '@angular/core'
 import { of, throwError, Observable } from 'rxjs'
 import { catchError, switchMap } from 'rxjs/operators'
-import { HttpStatus } from '../../constants'
+import { HttpStatus } from '../../constants/http-status'
 import { HttpInjectionTokens } from './http.injection-tokens'
 import { IHttpSettings, SimpleError } from './http.models'
 import { QbHttpService } from './http.service'
