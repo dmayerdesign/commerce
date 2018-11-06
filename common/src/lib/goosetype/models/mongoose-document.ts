@@ -30,8 +30,13 @@ export abstract class MongooseDocument {
             return this
         }
     }
+
     public static getModel?(): MongooseModel<any> {
         return this.__model
+    }
+
+    public static getSchema?(): Schema {
+        return this.__schema
     }
 
     /** Checks if a path is set to its default. */
