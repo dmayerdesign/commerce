@@ -2,15 +2,15 @@
 
 source ./.env
 
-alias nrqb="npm run qb"
+# alias qb="npm run qb"
 
 qb() {
     if [ "$1" = "dev" ]; then
         if [ "$2" = "ui" ]; then
-            nrqb prebuild ui development;
+            qb prebuild ui development;
             ng serve;
         elif [ "$2" = "server" ]; then
-            nrqb prebuild server development;
+            qb prebuild server development;
             nodemon --config nodemon.json;
         fi
     fi
@@ -21,21 +21,21 @@ qb() {
         if [ "$2" = "ui" ]; then
             if [ "$3" = "development" ]; then
                 export ENVIRONMENT=development
-                nrqb generate app_config
+                qb generate app_config
             elif [ "$3" = "production" ]; then
                 export ENVIRONMENT=production
-                nrqb generate app_config
-                nrqb test ui
+                qb generate app_config
+                qb test ui
             fi
         fi
         if [ "$2" = "server" ]; then
             if [ "$3" = "development" ]; then
                 export ENVIRONMENT=development
-                nrqb generate app_config
+                qb generate app_config
             elif [ "$3" = "production" ]; then
                 export ENVIRONMENT=production
-                nrqb generate app_config
-                nrqb test server
+                qb generate app_config
+                qb test server
             fi
         fi
 
@@ -43,7 +43,7 @@ qb() {
         if [ "$2" = "common" ]; then
             # TODO: split into environments.
             export ENVIRONMENT=development
-            nrqb generate all
+            qb generate all
             ng build common
         fi
         if [ "$2" = "ui" ]; then
@@ -62,9 +62,9 @@ qb() {
         fi
         if [ "$2" = "all" ]; then
             if [ "$3" = "development" ]; then
-                nrqb build ui development && nrqb build server development
+                qb build ui development && qb build server development
             elif [ "$3" = "production" ]; then
-                nrqb build ui production && nrqb build server production
+                qb build ui production && qb build server production
             fi
         fi
     fi
@@ -77,7 +77,7 @@ qb() {
             elif [ "$3" = "e2e" ]; then
                 ng e2e
             else
-                nrqb test ui unit && nrqb test ui e2e
+                qb test ui unit && qb test ui e2e
             fi
         fi
         
@@ -92,7 +92,7 @@ qb() {
                 fi
             fi
             if [ "$3" != "unit" ]; then
-                nrqb test server unit
+                qb test server unit
             fi
         fi
     fi
@@ -100,12 +100,12 @@ qb() {
     if [ "$1" = "generate" ]; then
         if [ "$2" = "app_config" ]; then
             ts-node common/src/code-gen/generate-app-config.ts
-        elif [ "$2" = "public_api" ]; then
-            ts-node common/src/code-gen/generate-public_api.ts
+        # elif [ "$2" = "public_api" ]; then
+        #     ts-node common/src/code-gen/generate-public_api.ts
         elif [ "$2" = "all" ]; then
             export ENVIRONMENT=development
-            nrqb generate app_config
-            nrqb generate public_api
+            qb generate app_config
+            qb generate public_api
         else
             echo "" # Nothing.
         fi

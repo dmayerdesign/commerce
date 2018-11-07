@@ -1,5 +1,6 @@
-import { User } from '../api/entities/user'
+import { User } from '../api/interfaces/user'
 
+// @dynamic
 export class UserHelper {
     public static getFullName(user: { firstName: string, lastName: string }): string {
         if (user.firstName && !user.lastName) {

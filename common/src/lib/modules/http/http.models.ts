@@ -1,5 +1,5 @@
 import { HttpErrorResponse, HttpEvent } from '@angular/common/http'
-import { HttpStatus } from '../../../constants/http-status'
+import { HttpStatus } from '@qb/common/constants/http-status'
 
 export class SimpleError {
     public message: string
@@ -13,6 +13,7 @@ export class SimpleError {
     }
 }
 
+// @dynamic
 export abstract class IHttpSettings {
     public static httpFlashErrorBlacklist: { endpoint: string, method: string }[]
 }

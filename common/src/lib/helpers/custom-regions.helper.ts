@@ -1,6 +1,7 @@
-import { CustomRegion } from '../api/entities/custom-region'
-import { CustomRegions } from '../api/entities/custom-regions'
+import { CustomRegion } from '../api/interfaces/custom-region'
+import { CustomRegions } from '../api/interfaces/custom-regions'
 
+// @dynamic
 export class CustomRegionsHelper {
     public static hasDataForCustomRegion(customRegion: CustomRegion, data: any): boolean {
         return !!this._getCustomRegionTextValueFromArrayProperty(customRegion, data)

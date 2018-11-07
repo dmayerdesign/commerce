@@ -1,17 +1,14 @@
 import { TemplateRef } from '@angular/core'
-import { arrayProp, model, prop, MongooseDocument, MongooseSchemaOptions, Ref } from '../../goosetype'
+import { arrayProp, model, prop, MongooseDocument, Ref } from '../../goosetype'
 
 /**
  * A navigation item to be displayed in the UI
  * @description DO NOT "new up" this class from within a browser application. Default values are meant only to convey intent.
- * @export
- * @class NavigationItem
- * @extends {MongooseDocument}
  */
 @model(NavigationItem)
 export class NavigationItem extends MongooseDocument {
     @prop() public text: string
-    @prop() public isTopLevel? = true
+    @prop() public isTopLevel = true
     @prop() public className?: string
     @arrayProp({ itemsType: String }) public routerLink: string[]
     @arrayProp({ itemsRef: NavigationItem }) public children: Ref<NavigationItem>[]

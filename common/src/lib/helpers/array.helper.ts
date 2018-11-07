@@ -1,3 +1,4 @@
+// @dynamic
 export class ArrayHelper {
 
     public static pushTo<T>(arr: T[], item: T): void {

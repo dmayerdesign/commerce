@@ -1,3 +1,4 @@
+// @dynamic
 export class MongooseHelper {
     public static toArray<T = any>(arrayLikeObject: object): T[] {
         if (Array.isArray(arrayLikeObject)) {

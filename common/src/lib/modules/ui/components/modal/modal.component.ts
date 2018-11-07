@@ -22,7 +22,7 @@ import { timeout } from '../../utils/timeout'
              ]">
             <div class="modal-darken"
                  [ngStyle]="{'opacity': isFadedIn ? 1 : 0}"
-                 (click)="cancel()">
+                 (click)="cancel($event)">
             </div>
             <div class="modal-dialog" role="document">
                 <div class="modal-content"
@@ -34,7 +34,7 @@ import { timeout } from '../../utils/timeout'
                     <header class="modal-header"
                             *ngIf="data.type !== 'banner'">
                         <h2 class="modal-title">{{ data.title }}</h2>
-                        <button (click)="cancel()" class="close">
+                        <button (click)="cancel($event)" class="close">
                             <img alt="close modal" [src]="appConfig.client_url + '/images/x-dark.svg'">
                         </button>
                     </header>
@@ -52,7 +52,7 @@ import { timeout } from '../../utils/timeout'
                         </ng-container>
 
                         <ng-container *ngIf="hasCustomTemplate()">
-                            <ng-container *ngTemplateOutlet="data.content; context: data.context">
+                            <ng-container *ngTemplateOutlet="data.template; context: data.context">
                             </ng-container>
                         </ng-container>
 
@@ -60,11 +60,11 @@ import { timeout } from '../../utils/timeout'
 
                     <footer class="modal-footer"
                          *ngIf="data.type !== modalType.Banner">
-                        <button (click)="cancel()" class="btn-cancel modal-cancel">
-                            {{ data.cancelText || defaultCancelText }}
+                        <button (click)="cancel($event)" class="btn-cancel modal-cancel">
+                            {{ data.footer?.cancelText || defaultCancelText }}
                         </button>
-                        <button *ngIf="data.okText" (click)="data.okClick()" class="btn-action modal-ok">
-                            {{ data.okText }}
+                        <button *ngIf="data.footer?.okText && data.footer?.onOk" (click)="data.footer.onOk($event)" class="btn-action modal-ok">
+                            {{ data.footer?.okText }}
                         </button>
                     </footer>
                 </div>
@@ -147,8 +147,11 @@ export class QbModalComponent implements OnInit, OnDestroy {
         this.modalInner.style.top = (scrollTop / 10 + 11).toString() + 'rem'
     }
 
-    public cancel(): void {
+    public cancel(event: Event): void {
         this.show(null)
+        if (this.data.footer && this.data.footer.onCancel) {
+            this.data.footer.onCancel(event)
+        }
     }
 
     public getModalContainerClass(): string {

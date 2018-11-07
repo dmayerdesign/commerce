@@ -21,9 +21,9 @@ async function main(): Promise<void> {
     }
     else if (
       modulePath.indexOf('api/entities') === -1 &&
-      modulePath.indexOf('lib/constants') === -1 &&
-      modulePath.indexOf('lib/modules/http') === -1 &&
-      modulePath.indexOf('goosetype') === -1
+      modulePath.indexOf('lib/constants') === -1
+      // && modulePath.indexOf('lib/modules/http') === -1
+      // && modulePath.indexOf('goosetype') === -1
     ) {
       const fileContents = readFileSync(filePath, { encoding: 'utf-8' }).toString()
       const fileContentsAfter = fileContents.split('export ')[1]

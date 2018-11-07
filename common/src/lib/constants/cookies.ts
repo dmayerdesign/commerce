@@ -1,3 +1,3 @@
 export class Cookies {
-    public static jwt = "JWT"
+    public static jwt = 'JWT'
 }

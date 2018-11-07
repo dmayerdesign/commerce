@@ -4,6 +4,7 @@ import { MongooseModel } from './mongoose-model'
 
 // Base classes
 
+// @see https://github.com/angular/angular/issues/18867
 export abstract class MongooseDocument {
     // Goosetype.
     public static __model?: MongooseModel<any>

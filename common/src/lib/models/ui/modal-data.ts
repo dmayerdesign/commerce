@@ -19,6 +19,12 @@ export interface ModalData {
         }
         onSubmit?(args?: any): void
     }
+    footer?: {
+        okText?: string
+        cancelText?: string
+        onOk(event?: Event): void
+        onCancel(event?: Event): void
+    }
     template: TemplateRef<any>
     context: object
 }

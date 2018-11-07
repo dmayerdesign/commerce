@@ -1,12 +1,12 @@
 import { HttpClient, HttpParams } from '@angular/common/http'
+import { ListFromIdsRequest, ListRequest } from '@qb/common/api/requests/list.request'
 import { Observable, Subject } from 'rxjs'
-import { ListFromIdsRequest, ListRequest } from '../../../api/requests/list.request'
 import { SimpleError } from './http.models'
 
 export abstract class RestService<T> {
     public abstract endpoint: string
-    public getRequestType? = ListRequest
-    public getSomeRequestType? = ListFromIdsRequest
+    public getRequestType ? = ListRequest
+    public getSomeRequestType ? = ListFromIdsRequest
 
     public documents: T[]
     protected getPump = new Subject<T[]>()

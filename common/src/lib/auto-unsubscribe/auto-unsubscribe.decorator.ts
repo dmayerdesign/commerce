@@ -7,11 +7,8 @@ function isFunction(fn: any): boolean {
 
 /**
  * AutoUnsubscribe
- *
- * @export
- * @param {blackList: string[], includeArrays: boolean}
- * @returns
  */
+// @dynamic
 export function AutoUnsubscribe({ blackList, includeArrays }: { blackList: string[], includeArrays: boolean } = {
     blackList: [],
     includeArrays: false,

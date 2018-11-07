@@ -41,14 +41,14 @@ import { Weight } from './weight'
 @plugin(mongooseDelete)
 @model(Product, MongooseSchemaOptions.timestamped)
 export class Product extends MongooseDocument {
-	// Aesthetic.
+    // Aesthetic.
     @prop() public name: string
     @prop() public slug: string
     @prop() public description: string
     @arrayProp({ itemsType: Image }) public featuredImages: Image[]
     @arrayProp({ itemsType: Image }) public images: Image[]
 
-	// Organizational.
+    // Organizational.
     @prop({ unique: true }) public sku: string
     @prop({ enum: ProductClass }) public class: ProductClass
     @prop() public isStandalone: boolean
@@ -68,8 +68,8 @@ export class Product extends MongooseDocument {
     @prop() public isVariation: boolean
     @prop() public isDefaultVariation: boolean
 
-	// Attributes.
-	/// Own attributes.
+    // Attributes.
+    /// Own attributes.
     @arrayProp({ itemsRef: AttributeValue }) public attributeValues: Ref<AttributeValue>[]
     @arrayProp({ itemsType: SimpleAttributeValue }) public simpleAttributeValues: SimpleAttributeValue[]
     /// Variation attributes.
@@ -78,20 +78,20 @@ export class Product extends MongooseDocument {
     @arrayProp({ itemsRef: AttributeValue }) public variableAttributeValues: Ref<AttributeValue>[]
     @arrayProp({ itemsType: SimpleAttributeValue }) public variableSimpleAttributeValues: SimpleAttributeValue[]
 
-	// Taxonomy.
+    // Taxonomy.
     @arrayProp({ itemsRef: TaxonomyTerm }) public taxonomyTerms: Ref<TaxonomyTerm>[]
     @arrayProp({ itemsType: String }) public taxonomyTermSlugs: string[]
 
-	// Shipping.
+    // Shipping.
     @prop() public units: Units
     @prop() public dimensions: Dimensions
     @prop() public shippingWeight: Weight
     @prop() public netWeight: Weight
 
-	// Additional tax.
+    // Additional tax.
     @prop() public additionalTax: number
 
-	// Sales.
+    // Sales.
     @prop() public stockQuantity: number
     @prop() public totalSales: number
     @prop() public existsInStripe: boolean

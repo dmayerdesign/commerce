@@ -4,6 +4,7 @@ import { TaxonomyTerm } from '@qb/common/api/interfaces/taxonomy-term'
 import { Currency } from '@qb/common/constants/enums/currency'
 import { RangeLimit } from '@qb/common/constants/enums/range-limit'
 
+// @dynamic
 export class ProductHelper {
     public static isProduct(obj: any): boolean {
         return obj.cartItemsRefModelName === 'Product'

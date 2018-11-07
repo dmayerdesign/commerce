@@ -6,12 +6,9 @@ import { Currency } from '@qb/common/constants/enums/currency'
 import { ProductHelper } from '@qb/common/helpers/product.helper'
 import { CartDisplayItem } from '@qb/common/models/ui/cart-display-item'
 
+// @dynamic
 export class CartHelper {
 
-    /**
-     * @param {Product[]} items
-     * @returns {CartDisplayItem<Product>[]}
-     */
     public static getDisplayItems(items: Product[]): CartDisplayItem<Product>[] {
         const displayItems: CartDisplayItem<Product>[] = []
 

@@ -17,18 +17,19 @@ export class QbHttpResponseInterceptor implements HttpInterceptor {
 
     constructor(
         private _httpService: QbHttpService,
-        @Inject(HttpInjectionTokens.HttpSettings) private _httpSettings: typeof IHttpSettings,
+        // @Inject(HttpInjectionTokens.HttpSettings) private _httpSettings: typeof IHttpSettings,
     ) { }
 
     public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
         const isBlacklistedFromErrorFlash = (): boolean => {
-            return this._httpSettings &&
-                this._httpSettings.httpFlashErrorBlacklist &&
-                this._httpSettings.httpFlashErrorBlacklist.some((x) => {
-                    return request.method.toLowerCase() === x.method.toLowerCase() &&
-                        !!request.url.match(new RegExp(x.endpoint))
-                })
+            return false
+            // return this._httpSettings &&
+            //     this._httpSettings.httpFlashErrorBlacklist &&
+            //     this._httpSettings.httpFlashErrorBlacklist.some((x) => {
+            //         return request.method.toLowerCase() === x.method.toLowerCase() &&
+            //             !!request.url.match(new RegExp(x.endpoint))
+            //     })
         }
 
         return of(request)

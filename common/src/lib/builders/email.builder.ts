@@ -1,8 +1,9 @@
-import { AppConfig } from '../../app-config'
-import { Organization } from '../api/entities/organization'
+import { AppConfig } from '@qb/app-config'
 import { EmailOptions, EmailServiceOptions, EmailStyleOptions } from '../api/interfaces/email-options'
 import { Order } from '../api/interfaces/order'
+import { Organization } from '../api/interfaces/organization'
 
+// @dynamic
 export class EmailBuilder {
 
     private _options: EmailOptions = {

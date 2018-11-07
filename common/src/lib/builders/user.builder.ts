@@ -1,5 +1,6 @@
 import { Address } from '../api/interfaces/address'
 
+// @dynamic
 export class UserBuilder {
   public email: string
   public username?: string

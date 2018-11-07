@@ -1,5 +1,6 @@
 import { AppConfig } from '@qb/app-config'
 
+// @dynamic
 export class ImageHelper {
     private static getImageType(imageUrl: string, type: 'thumbnail' | 'medium' | 'large'): string {
         if (!imageUrl) {
