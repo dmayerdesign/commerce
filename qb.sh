@@ -48,9 +48,9 @@ qb() {
         fi
         if [ "$2" = "ui" ]; then
             if [ "$3" = "development" ]; then
-                ng build web --configuration=development && ng run web ssr
+                ng build web --configuration=development && ng run web:ssr:development
             elif [ "$3" = "production" ]; then
-                ng build web --configuration=production && ng run web ssr production
+                ng build web --configuration=production && ng run web:ssr:production
             fi
         fi
         if [ "$2" = "server" ]; then
@@ -69,7 +69,6 @@ qb() {
         fi
     fi
 
-    
     if [ "$1" = "test" ]; then
         if [ "$2" = "ui" ]; then
             if [ "$3" = "unit" ]; then

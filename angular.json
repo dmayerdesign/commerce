@@ -95,6 +95,7 @@
             "tsConfig": "ui/web/tsconfig.ssr.json"
           },
           "configurations": {
+            "development": {},
             "production": {
               "fileReplacements": [
                 {
