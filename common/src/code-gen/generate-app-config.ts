@@ -3,7 +3,7 @@ import { resolve } from 'path'
 
 const buildEnv = process.env.ENVIRONMENT
 const appConfig = require(`../../../app-config.${buildEnv.toLowerCase()}.json`)
-const libPathToAppConfig = resolve(__dirname, '../lib/config/app.config.ts')
+const destPath = resolve(__dirname, '../lib/config/app-config.generated.ts')
 const formatJsonValue = (value: any) => typeof value === 'string'
   ? `'${value}'`
   : value
@@ -18,4 +18,4 @@ export class AppConfig {${
   }
 }\n`
 
-writeFileSync(libPathToAppConfig, appConfigClass)
+writeFileSync(destPath, appConfigClass)

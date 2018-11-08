@@ -5,15 +5,15 @@ import * as recursiveReaddir from 'recursive-readdir'
 
 async function main(): Promise<void> {
   const libDirPath = resolve(__dirname, '../lib')
-  const formatFilePath = (filePath: string): string => filePath.substring(libDirPath.length + 1, filePath.length - 3)
+  const getFileNameSansExt = (filePath: string): string => filePath.substring(libDirPath.length + 1, filePath.length - 3)
   const allPaths = await recursiveReaddir(libDirPath)
-  const allPathsToTsModules = allPaths
+  const allFileNames = allPaths
     .filter((filePath) => !!filePath.match(/[^(index)]\.ts$/))
-    .map((filePath) => formatFilePath(filePath))
+    .map((filePath) => getFileNameSansExt(filePath))
     .sort((a, b) => a < b ? -1 : 1)
   let publicApiFile = ''
 
-  for (const modulePath of allPathsToTsModules) {
+  for (const modulePath of allFileNames) {
     const filePath = `${libDirPath}/${modulePath}.ts`
     if (modulePath.indexOf('api/interfaces') > -1) {
       const interfaceName = upperFirst(camelCase(modulePath.substring(modulePath.lastIndexOf('/') + 1)))
