@@ -5,10 +5,10 @@ import * as multer from 'multer'
 import * as path from 'path'
 import sharp from 'sharp'
 
-import { AppConfig } from '@mte/app-config'
-import { Types } from '@mte/common/constants/inversify/types'
-import { Product } from '@mte/common/api/entities/product'
-import { Revision } from '@mte/common/api/entities/revision'
+import { AppConfig } from '@qb/app-config'
+import { DomainEvent } from '@qb/common/api/entities/domain-event'
+import { Product } from '@qb/common/api/entities/product'
+import { Types } from '@qb/common/constants/inversify/types'
 import { DbClient } from '../data-access/db-client'
 
 /**
@@ -84,19 +84,9 @@ export class UploadService {
                     product[field].push(editObj[field])
                 }
                 product.markModified(field)
-
-                /**
-                 * Add to revision history
-                 */
-                const revision = new Revision({
-                    id: product._id.toString(),
-                    field: field,
-                    value: product[field],
-                })
-                revision.save(console.log)
             })
 
-            product.save()
+            this.dbClient.save(product)
                 .then(async (_product) => {
                     if (!product.isVariation) {
                         done(null, _product._doc)
@@ -112,16 +102,6 @@ export class UploadService {
                                     parent[field].push(editObj[field])
                                 }
                                 parent.markModified(field)
-
-                                /**
-                                 * Add to revision history
-                                 */
-                                const revision = new Revision({
-                                    id: parent._id.toString(),
-                                    field: field,
-                                    value: parent[field],
-                                })
-                                revision.save(console.log)
                             })
 
                             parent.save(($err, $product) => {
