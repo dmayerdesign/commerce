@@ -1,11 +1,10 @@
 import { Module } from '@nestjs/common'
-import { MongooseModule } from '@nestjs/mongoose'
 import { applyDomino, AngularUniversalModule } from '@nestjs/ng-universal'
-import { mongooseModuleConfig } from '@qb/common/config/mongoose-module-config.generated'
+import { DB_CLIENT, DB_CONNECTION } from '@qb/common/api/interfaces/db-client'
+import { connect } from 'mongoose'
 import { join } from 'path'
-import { AddressController } from './address/address.controller'
-import { AddressService } from './address/address.service'
-import { ExampleController } from './example/example.controller'
+import { DbClient } from './data-access/db-client'
+import { DomainEventController } from './domain-event/domain-event.controller'
 
 const BROWSER_DIR = join(process.cwd(), 'dist/web')
 applyDomino(global, join(BROWSER_DIR, 'index.html'))
@@ -16,15 +15,24 @@ applyDomino(global, join(BROWSER_DIR, 'index.html'))
       viewsPath: BROWSER_DIR,
       bundle: require('../../dist/web-ssr/main.js'),
     }),
-    MongooseModule.forRoot(process.env.MONGODB_URI_TEST),
-    MongooseModule.forFeature(mongooseModuleConfig)
   ],
   controllers: [
-    ExampleController,
-    AddressController
+    DomainEventController,
   ],
   providers: [
-    AddressService
+    { provide: DB_CLIENT, useClass: DbClient },
+    {
+      provide: DB_CONNECTION,
+      useFactory: () => {
+        return new Promise((resolve, reject) => {
+          const connection = connect(process.env.MONGODB_URI_TEST, (err) => {
+            console.log('connected?', err)
+            if (err) reject(err)
+            else resolve(connection)
+          })
+        })
+      },
+    },
   ],
 })
 export class AppModule {}

@@ -2,8 +2,6 @@
 
 source ./.env
 
-# alias qb="npm run qb"
-
 qb() {
     if [ "$1" = "dev" ]; then
         if [ "$2" = "ui" ]; then
@@ -12,6 +10,8 @@ qb() {
         elif [ "$2" = "server" ]; then
             qb prebuild server development;
             nodemon --config nodemon.json;
+        else
+            qb dev ui & qb dev server
         fi
     fi
 

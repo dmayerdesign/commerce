@@ -26,7 +26,6 @@
     "@angular/router": "~7.0.0",
     "@nestjs/common": "^5.1.0",
     "@nestjs/core": "^5.1.0",
-    "@nestjs/mongoose": "5.2.2",
     "@nestjs/ng-universal": "0.1.1",
     "@ng-toolkit/universal": "1.1.42",
     "@nguniversal/module-map-ngfactory-loader": "7.0.2",

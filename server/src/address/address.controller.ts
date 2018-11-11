@@ -5,6 +5,6 @@ import { Address } from '@qb/common/api/entities/address'
 export class AddressController {
   @Get('/')
   public list(): Address {
-    return 
+    return null
   }
 }

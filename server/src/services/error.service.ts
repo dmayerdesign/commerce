@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify'
 
-import { Types } from '@mte/common/constants/inversify/types'
+import { Types } from '@qb/common/constants/inversify/types'
 import { EmailService } from './email.service'
 
 @injectable()

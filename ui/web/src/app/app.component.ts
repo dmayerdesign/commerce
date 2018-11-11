@@ -36,6 +36,6 @@ export class AppComponent {
       ? 'browser'
       : 'server'
 
-    this.data = this._httpClient.get('/api')
+    this.data = this._httpClient.get('/api/domain-events')
   }
 }

@@ -1,12 +1,12 @@
 const EasypostModule = require('@easypost/api')
-import { Easypost } from '@mte/common/types/node-easypost'
+import { Easypost } from '@qb/common/types/node-easypost'
 import { inject, injectable } from 'inversify'
 
-import { Address } from '@mte/common/api/entities/address'
-import { EasypostRate } from '@mte/common/api/entities/easypost-rate'
-import { FindOrderError, Order, UpdateOrderError } from '@mte/common/api/entities/order'
-import { OrderStatus } from '@mte/common/constants/enums/order-status'
-import { Types } from '@mte/common/constants/inversify/types'
+import { Address } from '@qb/common/api/entities/address'
+import { EasypostRate } from '@qb/common/api/entities/easypost-rate'
+import { FindOrderError, Order, UpdateOrderError } from '@qb/common/api/entities/order'
+import { OrderStatus } from '@qb/common/constants/enums/order-status'
+import { Types } from '@qb/common/constants/inversify/types'
 import { OrderService } from './order.service'
 
 const easypost = new EasypostModule(process.env.EASYPOST_API_KEY) as Easypost

@@ -1,9 +1,9 @@
 import { DomainEventVerb } from '@qb/common/constants/enums/domain-event-verb'
 import { HttpVerb } from '@qb/common/modules/http/http.models'
+import { Document } from 'mongoose'
 import { Diff } from './diff'
-import { MongooseDocument } from './mongoose-document'
 
-export interface DomainEvent extends MongooseDocument {
+export interface DomainEvent extends Document {
     verb: DomainEventVerb
     httpVerb?: HttpVerb
     httpRequest?: any

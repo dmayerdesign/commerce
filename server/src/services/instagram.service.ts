@@ -3,9 +3,9 @@ import { injectable } from 'inversify'
 import * as rp from 'request-promise-native'
 
 import { AppConfig } from '@mte/app-config'
-import { ApiErrorResponse } from '@mte/common/api/responses/api-error.response'
-import { ApiResponse } from '@mte/common/api/responses/api.response'
-import { InstagramPost } from '@mte/common/models/ui/instagram-post'
+import { ApiErrorResponse } from '@qb/common/api/responses/api-error.response'
+import { ApiResponse } from '@qb/common/api/responses/api.response'
+import { InstagramPost } from '@qb/common/models/ui/instagram-post'
 
 @injectable()
 export class InstagramService {

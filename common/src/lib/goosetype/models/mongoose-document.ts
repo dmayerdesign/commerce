@@ -9,6 +9,7 @@ export abstract class MongooseDocument {
     // Goosetype.
     public static __model?: MongooseModel<any>
     public static __schema?: Schema
+    public static schemaName?: string
 
     public _doc?: this
     /** Hash containing current validation errors. */

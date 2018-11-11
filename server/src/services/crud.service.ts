@@ -1,15 +1,13 @@
-import { ListFromIdsRequest, ListFromQueryRequest, ListFromSearchRequest } from '@mte/common/api/requests/list.request'
-import { ApiErrorResponse } from '@mte/common/api/responses/api-error.response'
-import { ApiResponse } from '@mte/common/api/responses/api.response'
-import { MongooseDocument } from '@mte/common/lib/goosetype'
+import { ListFromIdsRequest, ListFromQueryRequest, ListFromSearchRequest } from '@qb/common/api/requests/list.request'
+import { ApiErrorResponse } from '@qb/common/api/responses/api-error.response'
+import { ApiResponse } from '@qb/common/api/responses/api.response'
+import { MongooseDocument } from '@qb/common/goosetype'
 import { Response } from 'express'
-import { injectable } from 'inversify'
 import { DbClient } from '../data-access/db-client'
 
 /**
  * Base class for API services requiring CRUD functionality.
  */
-@injectable()
 export abstract class CrudService<T extends MongooseDocument> {
 
     protected abstract model: typeof MongooseDocument

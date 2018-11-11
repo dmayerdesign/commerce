@@ -1,5 +1,5 @@
-import { Wishlist } from '@mte/common/api/entities/wishlist'
-import { Types } from '@mte/common/constants/inversify/types'
+import { Wishlist } from '@qb/common/api/entities/wishlist'
+import { Types } from '@qb/common/constants/inversify/types'
 import { inject, injectable } from 'inversify'
 import { DbClient } from '../data-access/db-client'
 import { CrudService } from './crud.service'

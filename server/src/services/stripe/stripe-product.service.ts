@@ -1,13 +1,13 @@
 import { inject, injectable } from 'inversify'
 import * as Stripe from 'stripe'
 
-import { Attribute } from '@mte/common/api/entities/attribute'
-import { AttributeValue } from '@mte/common/api/entities/attribute-value'
-import { Price } from '@mte/common/api/entities/price'
-import { Product } from '@mte/common/api/entities/product'
-import { SimpleAttributeValue } from '@mte/common/api/entities/simple-attribute-value'
-import { Copy } from '@mte/common/constants/copy'
-import { Types } from '@mte/common/constants/inversify/types'
+import { Attribute } from '@qb/common/api/entities/attribute'
+import { AttributeValue } from '@qb/common/api/entities/attribute-value'
+import { Price } from '@qb/common/api/entities/price'
+import { Product } from '@qb/common/api/entities/product'
+import { SimpleAttributeValue } from '@qb/common/api/entities/simple-attribute-value'
+import { Copy } from '@qb/common/constants/copy'
+import { Types } from '@qb/common/constants/inversify/types'
 import { ProductService } from '../product.service'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
