@@ -1,22 +1,21 @@
-import { Discount } from '@qb/common/api/entities/discount'
+import { Inject, Injectable } from '@nestjs/common'
 import { Order } from '@qb/common/api/entities/order'
-import { Product } from '@qb/common/api/entities/product'
-import { GetProductsFromIdsRequest } from '@qb/common/api/requests/get-products.request'
-import { ListFromIdsRequest } from '@qb/common/api/requests/list.request'
+import { Discount as IDiscount } from '@qb/common/api/interfaces/discount'
+import { Order as IOrder } from '@qb/common/api/interfaces/order'
+import { Product as IProduct } from '@qb/common/api/interfaces/product'
+import { GetProductsRequest } from '@qb/common/api/requests/get-products.request'
+import { ListRequest } from '@qb/common/api/requests/list.request'
+import { UpdateRequest } from '@qb/common/api/requests/update.request'
 import { ApiErrorResponse } from '@qb/common/api/responses/api-error.response'
 import { StripeCreateOrderResponse } from '@qb/common/api/responses/stripe/stripe-create-order.response'
 import { StripePayOrderResponse } from '@qb/common/api/responses/stripe/stripe-pay-order.response'
 import { Copy } from '@qb/common/constants/copy'
 import { OrderStatus } from '@qb/common/constants/enums/order-status'
-import { Types } from '@qb/common/constants/inversify/types'
 import { StripeOrder } from '@qb/common/stripe-shims/stripe-order'
-import { inject, injectable } from 'inversify'
 import * as Stripe from 'stripe'
 import { QbRepository } from '../../../shared/data-access/repository'
-import { OrderHelper } from '../../helpers/order.helper'
-import { DiscountService } from '../discount.service'
-import { OrganizationService } from '../organization.service'
-import { ProductService } from '../product.service'
+import { OrganizationService } from '../../organization/organization.service'
+import { getSubTotal, getTotal } from '../order.helpers'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
@@ -27,15 +26,14 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
  * @class StripeOrderService
  * @description Methods for interacting with the Stripe Orders API
  */
-@injectable()
+@Injectable()
 export class StripeOrderActionsService {
 
     constructor(
-        @inject(Types.ProductService) private productService: ProductService,
-        @inject(Types.DiscountService) private discountService: DiscountService,
-        @inject(Types.OrderHelper) private orderHelper: OrderHelper,
-        @inject(Types.OrganizationService) private organizationService: OrganizationService,
-        @inject(Types.QbRepository) private repository: QbRepository<Order>,
+        @Inject(OrganizationService) private organizationService: OrganizationService,
+        @Inject(QbRepository) private _discountRepository: QbRepository<IDiscount>,
+        @Inject(QbRepository) private _orderRepository: QbRepository<IOrder>,
+        @Inject(QbRepository) private _productRepository: QbRepository<IProduct>,
     ) { }
 
     /**
@@ -47,8 +45,8 @@ export class StripeOrderActionsService {
      * @memberof StripeService
      */
     public async createOrder(order: Order): Promise<StripeCreateOrderResponse> {
-        let orderItems: Product[]
-        let orderDiscounts: Discount[]
+        let orderItems: IProduct[]
+        let orderDiscounts: IDiscount[]
 
         if (!order.total
             || !order.total.currency
@@ -60,14 +58,12 @@ export class StripeOrderActionsService {
         order.total.amount = 0
 
         try {
-            const organizationResponse = await this.organizationService.getOrganization()
-            const organization = organizationResponse.body
-            const orderItemsRequest = new GetProductsFromIdsRequest()
+            const organization = await this.organizationService.getOrganization()
+            const orderItemsRequest = new GetProductsRequest()
             orderItemsRequest.ids = order.items as string[]
-            const orderItemsResponse = await this.productService.getIds(orderItemsRequest)
-            orderItems = orderItemsResponse.body
-            order.subTotal = this.orderHelper.getSubTotal(orderItems)
-            order.total = this.orderHelper.getTotal(
+            orderItems = await this._productRepository.list(orderItemsRequest)
+            order.subTotal = getSubTotal(orderItems)
+            order.total = getTotal(
                 order.subTotal,
                 organization.retailSettings.addSalesTax,
                 organization.retailSettings.salesTaxPercentage
@@ -78,9 +74,8 @@ export class StripeOrderActionsService {
         }
 
         try {
-            const orderDiscountsRequest = new ListFromIdsRequest({ ids: order.discounts as string[], limit: 0 })
-            const orderDiscountsResponse = await this.discountService.getIds(orderDiscountsRequest)
-            orderDiscounts = orderDiscountsResponse.body
+            const orderDiscountsRequest = new ListRequest({ ids: order.discounts as string[], limit: 0 })
+            orderDiscounts = await this._discountRepository.list(orderDiscountsRequest)
             orderDiscounts.forEach(orderDiscount => {
                 order.total.amount -= orderDiscount.total.amount
             })
@@ -180,20 +175,19 @@ export class StripeOrderActionsService {
 
         // Make the payment.
 
-        try {
-            const paidStripeOrder = await stripe.orders.pay(order.stripeOrderId, payment, {
-                idempotency_key: order._id.toString()
-            })
-            const unpaidDbOrder = await this.repository.findById(Order, order._id)
-            unpaidDbOrder.status = OrderStatus.Paid
-            const paidOrder = await this.repository.save(unpaidDbOrder)
-            return new StripePayOrderResponse({
-                paidOrder,
-                paidStripeOrder,
-            })
-        }
-        catch (error) {
-            throw new ApiErrorResponse(error)
-        }
+        const paidStripeOrder = await stripe.orders.pay(order.stripeOrderId, payment, {
+            idempotency_key: order._id.toString()
+        })
+        const unpaidDbOrder = await this._orderRepository.get(order._id)
+        const paidOrder = await this._orderRepository.update(new UpdateRequest({
+            id: unpaidDbOrder._id,
+            update: {
+                status: OrderStatus.Paid
+            }
+        }))
+        return new StripePayOrderResponse({
+            paidOrder,
+            paidStripeOrder,
+        })
     }
 }

@@ -1,12 +1,11 @@
+import { Inject, Injectable } from '@nestjs/common'
 import { Order } from '@qb/common/api/entities/order'
 import { FindProductsError, Product } from '@qb/common/api/entities/product'
-import { ListFromIdsRequest, ListFromQueryRequest } from '@qb/common/api/requests/list.request'
+import { ListRequest } from '@qb/common/api/requests/list.request'
 import { ApiErrorResponse } from '@qb/common/api/responses/api-error.response'
 import { StripeSubmitOrderResponse } from '@qb/common/api/responses/stripe/stripe-submit-order.response'
 import { Copy } from '@qb/common/constants/copy'
 import { HttpStatus } from '@qb/common/constants/http-status'
-import { Types } from '@qb/common/constants/inversify/types'
-import { inject, injectable } from 'inversify'
 import 'stripe'
 import { QbRepository } from '../../../shared/data-access/repository'
 import { StripeCustomerService } from './stripe-customer.service'
@@ -20,14 +19,14 @@ import { StripeProductService } from './stripe-product.service'
  * @class StripeService
  * @description Methods for interacting with the Stripe API
  */
-@injectable()
+@Injectable()
 export class StripeOrderService {
 
     constructor(
-        @inject(Types.QbRepository) private repository: QbRepository<any>,
-        @inject(Types.StripeCustomerService) private stripeCustomerService: StripeCustomerService,
-        @inject(Types.StripeOrderActionsService) private stripeOrderActionsService: StripeOrderActionsService,
-        @inject(Types.StripeProductService) private stripeProductService: StripeProductService,
+        @Inject(QbRepository) private _productRepository: QbRepository<any>,
+        @Inject(StripeCustomerService) private stripeCustomerService: StripeCustomerService,
+        @Inject(StripeOrderActionsService) private stripeOrderActionsService: StripeOrderActionsService,
+        @Inject(StripeProductService) private stripeProductService: StripeProductService,
     ) { }
 
     /**
@@ -44,14 +43,15 @@ export class StripeOrderService {
         })
 
         try {
-            const request = new ListFromQueryRequest({
+            const request = new ListRequest({
                 query: { sku: { $in: variationAndStandaloneSkus } },
                 limit: 0,
+                populates: [
+                    'attributeValues',
+                    'simpleAttributeValues',
+                ]
             })
-            const variationsAndStandalones = await this.repository.findQuery<Product>(Product, request, null, [
-                'attributeValues',
-                'simpleAttributeValues',
-            ])
+            const variationsAndStandalones = await this._productRepository.list(request)
             const variations = variationsAndStandalones.filter((variationOrStandalone) => variationOrStandalone.isVariation)
             const standalones = variationsAndStandalones.filter((variationOrStandalone) => !variationOrStandalone.isVariation)
 
@@ -71,14 +71,15 @@ export class StripeOrderService {
             })
             // Retrieve parent products and combine them with `variationsAndStandalones` into `products`.
             // Use the new `products` array to create the products and SKUs in Stripe, if they don't exist.
-            const findParentsRequest = new ListFromIdsRequest({
+            const findParentsRequest = new ListRequest({
                 ids: parentIds,
-                limit: 0
+                limit: 0,
+                populates: [
+                    'variableAttributes',
+                    'variableAttributeValues',
+                ]
             })
-            const parents = await this.repository.findIds<Product>(Product, findParentsRequest, [
-                'variableAttributes',
-                'variableAttributeValues',
-            ])
+            const parents = await this._productRepository.list(findParentsRequest)
 
             // Create the products and SKUs in Stripe.
             const stripeProducts = await this.stripeProductService.createProducts([ ...parents, ...standalones ])
@@ -96,7 +97,7 @@ export class StripeOrderService {
 
             // Pay the order.
             const payOrderResponse = await this.stripeOrderActionsService.payOrder(order)
-            const { paidOrder, paidStripeOrder } = payOrderResponse.body
+            const { paidOrder, paidStripeOrder } = payOrderResponse
 
             return new StripeSubmitOrderResponse({
                 order: paidOrder,

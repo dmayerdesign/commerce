@@ -22,23 +22,23 @@ import { WeightUnit } from '@qb/common/constants/enums/weight-unit'
 import * as productsJSON from '@qb/common/work-files/migration/hyzershop-products'
 import { pluralize, singularize, titleize } from 'inflection'
 import { camelCase, cloneDeep, kebabCase } from 'lodash'
-import { QbRepository } from '../../shared/data-access/repository'
+import { QbRepository } from '../data-access/repository'
 
 @Injectable()
-export class WoocommerceMigrationService {
+export class HyzershopMigrationService {
 
     constructor(
-        @Inject() private readonly _productsRepository: QbRepository<IProduct>,
-        @Inject() private readonly _attributesRepository: QbRepository<IAttribute>,
-        @Inject() private readonly _attributeValuesRepository: QbRepository<IAttributeValue>,
-        @Inject() private readonly _taxonomiesRepository: QbRepository<ITaxonomy>,
-        @Inject() private readonly _taxonomyTermsRepository: QbRepository<ITaxonomyTerm>,
+        @Inject() private readonly _productRepository: QbRepository<IProduct>,
+        @Inject() private readonly _attributeRepository: QbRepository<IAttribute>,
+        @Inject() private readonly _attributeValueRepository: QbRepository<IAttributeValue>,
+        @Inject() private readonly _taxonomyRepository: QbRepository<ITaxonomy>,
+        @Inject() private readonly _taxonomyTermRepository: QbRepository<ITaxonomyTerm>,
     ) {
-        this._productsRepository.configureForGoosetypeEntity(Product)
-        this._attributesRepository.configureForGoosetypeEntity(Attribute)
-        this._attributeValuesRepository.configureForGoosetypeEntity(AttributeValue)
-        this._taxonomiesRepository.configureForGoosetypeEntity(Taxonomy)
-        this._taxonomyTermsRepository.configureForGoosetypeEntity(TaxonomyTerm)
+        this._productRepository.configureForGoosetypeEntity(Product)
+        this._attributeRepository.configureForGoosetypeEntity(Attribute)
+        this._attributeValueRepository.configureForGoosetypeEntity(AttributeValue)
+        this._taxonomyRepository.configureForGoosetypeEntity(Taxonomy)
+        this._taxonomyTermRepository.configureForGoosetypeEntity(TaxonomyTerm)
     }
 
     public async createProductsFromExportedJSON(): Promise<ApiResponse<IProduct[]>> {

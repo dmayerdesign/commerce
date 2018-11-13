@@ -1,13 +1,13 @@
+import { Document } from 'mongoose'
 import { UserRole } from '../../constants/enums/user-role'
 import { Address } from './address'
 import { Cart } from './cart'
 import { Image } from './image'
-import { MongooseDocument } from './mongoose-document'
 import { Order } from './order'
 import { Ref } from './ref'
 import { Wishlist } from './wishlist'
 
-export interface User extends MongooseDocument {
+export interface User extends Document {
     email: string
     emailIsVerified?: boolean
     emailVerificationToken?: string

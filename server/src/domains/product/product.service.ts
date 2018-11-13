@@ -32,11 +32,11 @@ import { attributeValueFilter, propertyFilter, simpleAttributeValueFilter, taxon
 export class ProductService {
 
     constructor(
-        @Inject(QbRepository) private _productsRepository: QbRepository<IProduct>,
+        @Inject(QbRepository) private _productRepository: QbRepository<IProduct>,
         @Inject(QbRepository) private _taxonomyTermsRepository: QbRepository<ITaxonomyTerm>,
         @Inject(QbRepository) private organizationService: OrganizationService,
     ) {
-        this._productsRepository.configureForGoosetypeEntity(Product)
+        this._productRepository.configureForGoosetypeEntity(Product)
         this._taxonomyTermsRepository.configureForGoosetypeEntity(TaxonomyTerm)
     }
 
@@ -47,14 +47,14 @@ export class ProductService {
      * @return {Promise<Product>}
      */
     public getOneSlug(slug: string): Promise<IProduct> {
-        return this._productsRepository.lookup('slug', slug)
+        return this._productRepository.lookup('slug', slug)
     }
 
     /**
      * Get a fully populated product by slug.
      */
     public async getProductDetail(slug: string): Promise<IProduct> {
-        return this._productsRepository.lookup('slug', slug, [
+        return this._productRepository.lookup('slug', slug, [
             {
                 path: 'taxonomyTerms',
                 model: TaxonomyTerm.getModel(),
@@ -127,7 +127,7 @@ export class ProductService {
             'variableAttributeValues', // TODO: Might not be necessary, maybe remove.
         ]
 
-        return this._productsRepository.stream(listRequest, response)
+        return this._productRepository.stream(listRequest, response)
     }
 
     public async getPriceRangeForRequest(body: GetProductsRequest): Promise<Price[]> {
@@ -135,7 +135,7 @@ export class ProductService {
         listRequest.skip = 0
         listRequest.limit = 0
         try {
-            const products = await this._productsRepository.list(listRequest)
+            const products = await this._productRepository.list(listRequest)
             const _priceRange = products.reduce<Price[]>((priceRange, product) => {
                 const price = ProductHelper.getPrice(product)
                 if (Array.isArray(price)) {
@@ -195,7 +195,7 @@ export class ProductService {
             }
             const newTotalSales = Math.floor((product.totalSales || 0) + qty)
             productPromises.push(
-                this._productsRepository.update(
+                this._productRepository.update(
                     new UpdateRequest({
                         id: product._id,
                         update: {
@@ -217,18 +217,18 @@ export class ProductService {
                 continue
             }
             if (!parentProducts.find((_parentProduct) => _parentProduct.sku === product.parentSku)) {
-                const parentProduct = await this._productsRepository.lookup('sku', product.parentSku)
+                const parentProduct = await this._productRepository.lookup('sku', product.parentSku)
                 parentProducts.push(parentProduct)
             }
         }
         return parentProducts
     }
 
-    public async getParentProduct(product: Product): Promise<IProduct> {
+    public async getParentProduct(product: IProduct): Promise<IProduct> {
         if (!product.isVariation) {
             return null
         }
-        return this._productsRepository.lookup('sku', product.parentSku, [
+        return this._productRepository.lookup('sku', product.parentSku, [
             'variableAttributes',
             'variableAttributeValues',
         ])

@@ -1,4 +1,7 @@
-import { ApiResponse } from '../api.response'
-import { StripeCreateOrderResponseBody } from './stripe-create-order.response.body'
+import * as Stripe from 'stripe'
+import { Order } from '../../entities/order'
 
-export class StripeCreateOrderResponse extends ApiResponse<StripeCreateOrderResponseBody> { }
+export class StripeCreateOrderResponse {
+    public order: Order
+    public stripeOrder: Stripe.orders.IOrder
+}

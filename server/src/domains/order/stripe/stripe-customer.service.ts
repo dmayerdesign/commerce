@@ -1,25 +1,20 @@
-import { inject, injectable } from 'inversify'
-import * as Stripe from 'stripe'
-import { Types } from '@qb/common/constants/inversify/types'
+import { Inject, Injectable } from '@nestjs/common'
 import { Order } from '@qb/common/api/entities/order'
-import { User } from '@qb/common/api/entities/user'
+import { User } from '@qb/common/api/interfaces/user'
+import { UpdateRequest } from '@qb/common/api/requests/update.request'
 import { ApiErrorResponse } from '@qb/common/api/responses/api-error.response'
-import { ApiResponse } from '@qb/common/api/responses/api.response'
+import * as Stripe from 'stripe'
 import { QbRepository } from '../../../shared/data-access/repository'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
 /**
- * Stripe service
- *
- * @export
- * @class StripeService
- * @description Methods for interacting with the Stripe API
+ * Methods for interacting with the Stripe API
  */
-@injectable()
+@Injectable()
 export class StripeCustomerService {
 
-    @inject(Types.QbRepository) private repository: QbRepository<User>
+    @Inject(QbRepository) private _userRepository: QbRepository<User>
 
     /**
      * If the customer checked "save payment info," create a Stripe Customer
@@ -30,7 +25,7 @@ export class StripeCustomerService {
         if (order.customer.userId && order.stripeToken && order.stripeToken.card) {
             let user: User
             try {
-                user = await this.repository.findById(User, order.customer.userId)
+                user = await this._userRepository.get(order.customer.userId)
             }
             catch (findUserError) {
                 throw findUserError
@@ -58,13 +53,17 @@ console.log(customer)
                     source: order.stripeToken.id,
                     email: order.customer.email,
                 })
-                if (!customer) throw new Error('Couldn\'t create the customer in Stripe')
+                if (!customer) throw new Error(`Couldn't create the customer in Stripe`)
 
 console.log('===== New customer =====')
 console.log(customer)
 
-                user.stripeCustomerId = customer.id
-                await this.repository.save(user)
+                await this._userRepository.update(new UpdateRequest({
+                    id: user._id,
+                    update: {
+                        stripeCustomerId: customer.id
+                    }
+                }))
                 return customer
             }
             catch (error) {
@@ -81,10 +80,10 @@ console.log(customer)
      * @param {string} source - The tokenized card
      * @param {string} stripeCustomerId - The Stripe customer's `id`
      */
-    public async addCard(tokenID: string, stripeCustomerId: string): Promise<ApiResponse<Stripe.cards.ICard>> {
+    public async addCard(tokenID: string, stripeCustomerId: string): Promise<Stripe.cards.ICard> {
         try {
             const card = await stripe.customers.createSource(stripeCustomerId, { source: tokenID })
-            return new ApiResponse(<Stripe.cards.ICard>card)
+            return <Stripe.cards.ICard>card
         }
         catch (error) {
             throw new ApiErrorResponse(error)
@@ -96,13 +95,13 @@ console.log(customer)
      *
      * @param {string} stripeCustomerId - The Stripe customer's `id`
      */
-    public async getCustomer(customerId: string): Promise<ApiResponse<Stripe.customers.ICustomer>> {
+    public async getCustomer(customerId: string): Promise<Stripe.customers.ICustomer> {
         try {
             if (!customerId) {
                 throw new Error('No Stripe customer is associated with this user.')
             }
             const customer = await stripe.customers.retrieve(customerId)
-            return new ApiResponse(<Stripe.customers.ICustomer>customer)
+            return <Stripe.customers.ICustomer>customer
         }
         catch (error) {
             throw new ApiErrorResponse(error)
@@ -115,10 +114,10 @@ console.log(customer)
      * @param {string} stripeCustomerId - The Stripe customer's `id`
      * @param {object} updateObj - An object containing the values to be updated (@see https://stripe.com/docs/api/node#update_customer)
      */
-    public async updateCustomer(stripeCustomerId: string, updateObj: object): Promise<ApiResponse<Stripe.customers.ICustomer>> {
+    public async updateCustomer(stripeCustomerId: string, updateObj: object): Promise<Stripe.customers.ICustomer> {
         try {
             const customer = await stripe.customers.update(stripeCustomerId, updateObj)
-            return new ApiResponse(<Stripe.customers.ICustomer>customer)
+            return <Stripe.customers.ICustomer>customer
         }
         catch (error) {
             throw new ApiErrorResponse(error)
@@ -132,10 +131,10 @@ console.log(customer)
      * @param {string} stripeCardId - The `id` of the Stripe source, usually a card (*not* a single-use token)
      * @example `card_19rzdy2eZvKYlo2CzJQXXiuV`
      */
-    public async updateCustomerDefaultSource(stripeCustomerId: string, stripeCardId: string): Promise<ApiResponse<Stripe.customers.ICustomer>> {
+    public async updateCustomerDefaultSource(stripeCustomerId: string, stripeCardId: string): Promise<Stripe.customers.ICustomer> {
         try {
             const customer = await stripe.customers.update(stripeCustomerId, { default_source: stripeCardId })
-            return new ApiResponse(<Stripe.customers.ICustomer>customer)
+            return <Stripe.customers.ICustomer>customer
         }
         catch (error) {
             throw new ApiErrorResponse(error)

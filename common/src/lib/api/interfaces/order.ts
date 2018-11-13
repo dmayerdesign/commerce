@@ -1,14 +1,14 @@
+import { Document } from 'mongoose'
 import { OrderStatus } from '../../constants/enums/order-status'
 import { Discount } from './discount'
 import { EasypostRate } from './easypost-rate'
-import { MongooseDocument } from './mongoose-document'
 import { OrderCustomer } from './order-customer'
 import { Price } from './price'
 import { Product } from './product'
 import { Ref } from './ref'
 import { StripeCardToken } from './stripe-card-token'
 
-export interface Order extends MongooseDocument {
+export interface Order extends Document {
     items: Ref<Product>[]
     discounts: Ref<Discount>[]
     subTotal: Price

@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify'
 
 import { Types } from '@qb/common/constants/inversify/types'
-import { EmailService } from './email.service'
+import { EmailService } from '../../domains/email/email.service'
 
 @injectable()
 export class ErrorService {

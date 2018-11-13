@@ -1,10 +1,14 @@
 import * as Stripe from 'stripe'
-import { Order } from '../../entities/order'
-import { ApiResponse } from '../api.response'
+import { Order } from '../../interfaces/order'
 
-export class StripePayOrderResponseBody {
+export class StripePayOrderResponse {
     public paidOrder: Order
     public paidStripeOrder: Stripe.orders.IOrder
-}
 
-export class StripePayOrderResponse extends ApiResponse<StripePayOrderResponseBody> { }
+    constructor(stripePayOrderResponse: StripePayOrderResponse) {
+        if (stripePayOrderResponse) {
+            this.paidOrder = stripePayOrderResponse.paidOrder
+            this.paidStripeOrder = stripePayOrderResponse.paidStripeOrder
+        }
+    }
+}

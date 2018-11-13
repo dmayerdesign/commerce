@@ -1,14 +1,12 @@
-import { inject, injectable } from 'inversify'
-import * as Stripe from 'stripe'
-
-import { Attribute } from '@qb/common/api/entities/attribute'
-import { AttributeValue } from '@qb/common/api/entities/attribute-value'
+import { Inject, Injectable } from '@nestjs/common'
 import { Price } from '@qb/common/api/entities/price'
-import { Product } from '@qb/common/api/entities/product'
-import { SimpleAttributeValue } from '@qb/common/api/entities/simple-attribute-value'
+import { Attribute } from '@qb/common/api/interfaces/attribute'
+import { AttributeValue } from '@qb/common/api/interfaces/attribute-value'
+import { Product } from '@qb/common/api/interfaces/product'
+import { SimpleAttributeValue } from '@qb/common/api/interfaces/simple-attribute-value'
 import { Copy } from '@qb/common/constants/copy'
-import { Types } from '@qb/common/constants/inversify/types'
-import { ProductService } from '../product.service'
+import * as Stripe from 'stripe'
+import { ProductService } from '../../product/product.service'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
@@ -19,11 +17,11 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
  * @class StripeProductService
  * @description Methods for interacting with the Stripe Products API
  */
-@injectable()
+@Injectable()
 export class StripeProductService {
 
     constructor(
-        @inject(Types.ProductService) private productService: ProductService,
+        @Inject(ProductService) private productService: ProductService,
     ) { }
 
     public async createProducts(products: Product[]): Promise<Stripe.products.IProduct[]> {

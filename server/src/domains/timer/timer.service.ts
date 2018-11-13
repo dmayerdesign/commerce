@@ -5,7 +5,7 @@ import { Timer } from '@qb/common/api/entities/timer'
 import { ListFromQueryRequest } from '@qb/common/api/requests/list.request'
 import { Types } from '@qb/common/constants/inversify/types'
 import { QbRepository } from '../../shared/data-access/repository'
-import { ErrorService } from './error.service'
+import { ErrorService } from '../error/error.service'
 
 @injectable()
 export class TimerService {
