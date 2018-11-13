@@ -1,8 +1,8 @@
+import { Document } from 'mongoose'
 import { Attribute } from './attribute'
-import { MongooseDocument } from './mongoose-document'
 import { Ref } from './ref'
 
-export interface AttributeValue extends MongooseDocument {
+export interface AttributeValue extends Document {
     attribute: Ref<Attribute>
     name: string
     slug: string

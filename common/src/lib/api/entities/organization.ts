@@ -1,7 +1,7 @@
 import { OrganizationType } from '../../constants/enums/organization-type'
-import { arrayProp, model, prop, MongooseDocument, MongooseSchemaOptions } from '../../goosetype'
 import { Ref } from '../../goosetype'
-import { Organization as IOrganization } from '../interfaces/organization'
+import { arrayProp, model, prop, MongooseDocument, MongooseSchemaOptions } from '../../goosetype'
+import { Taxonomy as ITaxonomy } from '../interfaces/taxonomy'
 import { GlobalStyles } from './global-styles'
 import { OrganizationBranding } from './organization-branding'
 import { OrganizationRetailSettings } from './organization-retail-settings'
@@ -10,7 +10,7 @@ import { Taxonomy } from './taxonomy'
 import { UiContent } from './ui-content'
 
 @model(Organization, MongooseSchemaOptions.timestamped)
-export class Organization extends MongooseDocument implements IOrganization {
+export class Organization extends MongooseDocument {
     @prop({ enum: OrganizationType }) public type?: OrganizationType
     @prop() public name: string
     @arrayProp({ itemsType: String }) public dbaNames: string[]
@@ -20,7 +20,7 @@ export class Organization extends MongooseDocument implements IOrganization {
     @prop() public storeUiContent: UiContent
     @prop() public blogUiContent?: UiContent
     @prop() public storeUiSettings?: StoreUiSettings
-    @arrayProp({ itemsRef: Taxonomy }) public searchableTaxonomies?: Ref<Taxonomy>[]
+    @arrayProp({ itemsRef: Taxonomy }) public searchableTaxonomies?: Ref<ITaxonomy>[]
     @prop() public globalStyles?: GlobalStyles
     @prop() public defaultsHaveBeenSet: boolean
 }

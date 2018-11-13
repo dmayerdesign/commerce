@@ -1,6 +1,6 @@
-import { MongooseDocument } from './mongoose-document'
+import { Document } from 'mongoose'
 
-export interface Attribute extends MongooseDocument {
+export interface Attribute extends Document {
     singularName: string
     pluralName: string
     slug: string

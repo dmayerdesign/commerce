@@ -29,7 +29,6 @@ qb() {
             fi
         fi
         if [ "$2" = "server" ]; then
-            qb generate mongoose-module-config
             if [ "$3" = "development" ]; then
                 export ENVIRONMENT=development
                 qb generate app-config
@@ -99,15 +98,10 @@ qb() {
     if [ "$1" = "generate" ]; then
         if [ "$2" = "app-config" ]; then
             ts-node common/src/code-gen/generate-app-config.ts
-        # elif [ "$2" = "public_api" ]; then
-        #     ts-node common/src/code-gen/generate-public_api.ts
-        elif [ "$2" = "mongoose-module-config" ]; then
-            ts-node common/src/code-gen/generate-mongoose-module-config.ts
         elif [ "$2" = "all" ]; then
             export ENVIRONMENT=development
             qb generate app-config
             qb generate public_api
-            qb generate mongoose-module-config
         else
             echo "" # Nothing.
         fi

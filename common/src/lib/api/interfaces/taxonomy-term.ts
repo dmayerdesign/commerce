@@ -1,11 +1,11 @@
+import { Document } from 'mongoose'
 import { Attribute } from './attribute'
 import { AttributeValue } from './attribute-value'
-import { MongooseDocument } from './mongoose-document'
 import { PageSettings } from './page-settings'
 import { Ref } from './ref'
 import { Taxonomy } from './taxonomy'
 
-export interface TaxonomyTerm extends MongooseDocument {
+export interface TaxonomyTerm extends Document {
     taxonomy: Ref<Taxonomy>
     singularName: string
     pluralName: string

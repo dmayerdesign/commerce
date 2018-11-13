@@ -8,4 +8,7 @@ export class Crud {
         defaultSortField: 'createdAt',
         defaultSortDirection: SortDirection.Descending,
     }
+    public static readonly Params = {
+        listRequest: 'lr' as 'lr'
+    }
 }

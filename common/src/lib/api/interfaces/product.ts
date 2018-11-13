@@ -1,9 +1,9 @@
+import { Document } from 'mongoose'
 import { ProductClass } from '../../constants/enums/product-class'
 import { Attribute } from './attribute'
 import { AttributeValue } from './attribute-value'
 import { Dimensions } from './dimensions'
 import { Image } from './image'
-import { MongooseDocument } from './mongoose-document'
 import { Price } from './price'
 import { Ref } from './ref'
 import { SimpleAttributeValue } from './simple-attribute-value'
@@ -11,15 +11,15 @@ import { TaxonomyTerm } from './taxonomy-term'
 import { Units } from './units'
 import { Weight } from './weight'
 
-export interface Product extends MongooseDocument {
-	// Aesthetic.
+export interface Product extends Document {
+    // Aesthetic.
     name: string
     slug: string
     description: string
     featuredImages: Image[]
     images: Image[]
 
-	// Organizational.
+    // Organizational.
     sku: string
     class: ProductClass
     isStandalone: boolean
@@ -39,8 +39,8 @@ export interface Product extends MongooseDocument {
     isVariation: boolean
     isDefaultVariation: boolean
 
-	// Attributes.
-	/// Own attributes.
+    // Attributes.
+    /// Own attributes.
     attributeValues: Ref<AttributeValue>[]
     simpleAttributeValues: SimpleAttributeValue[]
     /// Variation attributes.
@@ -49,20 +49,20 @@ export interface Product extends MongooseDocument {
     variableAttributeValues: Ref<AttributeValue>[]
     variableSimpleAttributeValues: SimpleAttributeValue[]
 
-	// Taxonomy.
+    // Taxonomy.
     taxonomyTerms: Ref<TaxonomyTerm>[]
     taxonomyTermSlugs: string[] // TODO: remove (used for convenience in HyzerShop migration for building image urls)
 
-	// Shipping.
+    // Shipping.
     units: Units
     dimensions: Dimensions
     shippingWeight: Weight
     netWeight: Weight
 
-	// Additional tax.
+    // Additional tax.
     additionalTax: number
 
-	// Sales.
+    // Sales.
     stockQuantity: number
     totalSales: number
     existsInStripe: boolean

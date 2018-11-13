@@ -1,7 +1,9 @@
 import { isPlatformBrowser } from '@angular/common'
-import { HttpClient } from '@angular/common/http'
+import { HttpClient, HttpParams } from '@angular/common/http'
 import { Component, Inject, PLATFORM_ID } from '@angular/core'
 import { FormControl } from '@angular/forms'
+import { ListRequest } from '@qb/common/api/requests/list.request'
+import { Crud } from '@qb/common/constants/crud'
 import { Observable } from 'rxjs'
 
 @Component({
@@ -36,6 +38,12 @@ export class AppComponent {
       ? 'browser'
       : 'server'
 
-    this.data = this._httpClient.get('/api/domain-events')
+    const request = new ListRequest({
+      limit: 5,
+    })
+
+    const params = new HttpParams()
+      .set(Crud.Params.listRequest, JSON.stringify(request))
+    this.data = this._httpClient.get('/api/products/stream', { params })
   }
 }

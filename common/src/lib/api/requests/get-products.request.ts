@@ -1,4 +1,5 @@
-import { ListFromIdsRequest, ListFromSearchRequest } from './list.request'
+import { Product } from '../interfaces/product'
+import { ListRequest } from './list.request'
 
 export enum GetProductsFilterType {
     Property,
@@ -17,7 +18,7 @@ export interface GetProductsFilter {
     }
 }
 
-export class GetProductsRequest extends ListFromSearchRequest {
+export class GetProductsRequest extends ListRequest<Product> {
     public filters?: GetProductsFilter[]
 
     constructor(request?: GetProductsRequest) {
@@ -27,5 +28,3 @@ export class GetProductsRequest extends ListFromSearchRequest {
         }
     }
 }
-
-export class GetProductsFromIdsRequest extends ListFromIdsRequest { }
