@@ -5,9 +5,7 @@ import { ListRequest } from '../requests/list.request'
 import { UpdateManyRequest } from '../requests/update-many.request'
 import { UpdateRequest } from '../requests/update.request'
 
-export interface QbRepository<EntityType extends Document> {
-  configureForGoosetypeEntity(entityConstructor: typeof MongooseDocument): void
-  configureForMongooseModel(model: Model<EntityType>): void
+export interface QbBaseRepository<EntityType extends any> {
   get(primaryKey: string): Promise<EntityType>
   list(listRequest: ListRequest<EntityType>): Promise<EntityType[]>
   stream(listRequest: ListRequest<EntityType>, response?: IResponse): Promise<void>
@@ -16,6 +14,18 @@ export interface QbRepository<EntityType extends Document> {
   update(updateRequest: UpdateRequest<EntityType>): Promise<EntityType>
   deleteMany(primaryKeys: string[]): Promise<EntityType[]>
   delete(primaryKey: string): Promise<EntityType>
+}
+
+export interface QbRepository<EntityType extends Document> extends QbBaseRepository<EntityType> {
+  configureForGoosetypeEntity(entityConstructor: typeof MongooseDocument): void
+  configureForMongooseModel(model: Model<EntityType>): void
+}
+
+export interface QbThirdPartyRepository<EntityType> extends QbBaseRepository<EntityType> { }
+
+export interface QbReadOnlyRepository<EntityType> {
+  list(listRequest: ListRequest<EntityType>): Promise<EntityType[]>
+  get?(primaryKey: string): Promise<EntityType>
 }
 
 export const DB_CONNECTION = 'DbConnection'

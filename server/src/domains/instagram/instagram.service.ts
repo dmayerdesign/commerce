@@ -7,7 +7,7 @@ import * as rp from 'request-promise-native'
 
 @Injectable()
 export class InstagramService {
-    public async getFeed(): Promise<InstagramPost[]> {
+    public async list(): Promise<InstagramPost[]> {
         const recentPostsEndpoint = `https://api.instagram.com/v1/users/${AppConfig.instagram_user_id}/media/recent`
         const requestOptions: rp.RequestPromiseOptions = {
             qs: {

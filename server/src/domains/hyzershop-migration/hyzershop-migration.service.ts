@@ -22,7 +22,7 @@ import { WeightUnit } from '@qb/common/constants/enums/weight-unit'
 import * as productsJSON from '@qb/common/work-files/migration/hyzershop-products'
 import { pluralize, singularize, titleize } from 'inflection'
 import { camelCase, cloneDeep, kebabCase } from 'lodash'
-import { QbRepository } from '../data-access/repository'
+import { QbRepository } from '../../shared/data-access/repository'
 
 @Injectable()
 export class HyzershopMigrationService {
@@ -125,13 +125,13 @@ export class HyzershopMigrationService {
                                         const variableAttributeValueValues = product[key].split('|')
                                         const variableAttributeSlug = kebabCase(theKey)
                                         try {
-                                            const variableAttribute = await this._attributesClient.upsert({
+                                            const variableAttribute = await this._attributeRepository.upsert({
                                                 slug: variableAttributeSlug
                                             })
                                             variableAttributeIds.push(variableAttribute._id)
                                             for (const variableAttributeValueSlug of variableAttributeValueSlugs) {
                                                 try {
-                                                    const variableAttributeValue = await this._attributeValuesClient.upsert({
+                                                    const variableAttributeValue = await this._attributeValueRepository.upsert({
                                                         attribute: variableAttribute._id,
                                                         slug: variableAttributeValueSlug,
                                                         value: variableAttributeValueValues[variableAttributeValueSlugs.indexOf(variableAttributeValueSlug)],
@@ -152,10 +152,10 @@ export class HyzershopMigrationService {
                                         const attributeValueSlug = kebabCase(theKey + '-' + newProduct[key].replace(/\s/g, '-').replace(/[\(\)]/g, '').toLowerCase())
                                         const attributeSlug = kebabCase(theKey)
                                         try {
-                                            const attribute = await this._attributesClient.upsert({
+                                            const attribute = await this._attributeRepository.upsert({
                                                 slug: attributeSlug
                                             })
-                                            const attributeValue = await this._attributeValuesClient.upsert({
+                                            const attributeValue = await this._attributeValueRepository.upsert({
                                                 attribute: attribute._id,
                                                 slug: attributeValueSlug,
                                                 value,
@@ -195,7 +195,7 @@ export class HyzershopMigrationService {
 
                             // Add speed/glide/turn/fade Attribute.
 
-                            const speedGlideTurnFadeAttribute = await this._attributesClient.upsert({ slug: key })
+                            const speedGlideTurnFadeAttribute = await this._attributeRepository.upsert({ slug: key })
                             simpleAttributeValues.push({
                                 attribute: speedGlideTurnFadeAttribute._id,
                                 value: flightStats[key]
@@ -224,20 +224,20 @@ export class HyzershopMigrationService {
                                     const attributeValueSlug = attributeSlug + '-' + stabilityValue
                                     const taxonomyTermSlug = taxonomySlug + '-' + stabilityValue
 
-                                    const attribute = await this._attributesClient.upsert({
+                                    const attribute = await this._attributeRepository.upsert({
                                         slug: attributeSlug,
                                     })
-                                    const attributeValue = await this._attributeValuesClient.upsert({
+                                    const attributeValue = await this._attributeValueRepository.upsert({
                                         attribute: attribute._id,
                                         slug: attributeValueSlug,
                                         value: stabilityValue,
                                     })
                                     attributeValueIds.push(attributeValue._id)
 
-                                    const taxonomy = await this._taxonomiesClient.upsert({
+                                    const taxonomy = await this._taxonomyRepository.upsert({
                                         slug: taxonomySlug,
                                     })
-                                    const taxonomyTerm = await this._taxonomyTermsClient.upsert({
+                                    const taxonomyTerm = await this._taxonomyTermRepository.upsert({
                                         taxonomy: taxonomy._id,
                                         slug: taxonomyTermSlug,
                                     })
@@ -250,7 +250,7 @@ export class HyzershopMigrationService {
                         }
 
                         if (key === 'inboundsId') {
-                            const inboundsIdAttribute = await this._attributesClient.upsert({ slug: kebabCase(key) })
+                            const inboundsIdAttribute = await this._attributeRepository.upsert({ slug: kebabCase(key) })
                             simpleAttributeValues.push({
                                 attribute: inboundsIdAttribute._id,
                                 value: newProduct[key]
@@ -269,10 +269,10 @@ export class HyzershopMigrationService {
                             })
 
                             try {
-                                const taxonomy = await this._taxonomiesClient.upsert({ slug: taxonomySlug })
+                                const taxonomy = await this._taxonomyRepository.upsert({ slug: taxonomySlug })
 
                                 taxonomyTermSlugs.forEach((taxonomyTermSlug) => {
-                                    taxonomyTermPromises.push(this._taxonomyTermsClient.upsert({
+                                    taxonomyTermPromises.push(this._taxonomyTermRepository.upsert({
                                         taxonomy: taxonomy._id,
                                         slug: taxonomyTermSlug
                                     }))
@@ -446,7 +446,7 @@ export class HyzershopMigrationService {
          * The switch
          ******* -> */
         try {
-            const allProducts = await this._productsClient.insert(newProducts)
+            const allProducts = await this._productRepository.insert(newProducts)
             const parentProducts = allProducts.filter((p) => p.isParent)
             const variationProducts = allProducts.filter((p) => p.isVariation)
 
@@ -489,10 +489,10 @@ export class HyzershopMigrationService {
                     }
 
                     try {
-                        attributeValues = await this._attributeValuesClient.list(
+                        attributeValues = await this._attributeValueRepository.list(
                             new ListRequest({ ids: product.attributeValues })
                         )
-                        taxonomyTerms = await this._taxonomyTermsClient.list(new ListRequest({ ids: product.taxonomyTerms }))
+                        taxonomyTerms = await this._taxonomyTermRepository.list(new ListRequest({ ids: product.taxonomyTerms }))
                         isDisc = taxonomyTerms && taxonomyTerms.some((taxTerm) => taxTerm.slug === 'product-type-discs')
                     }
                     catch (error) {
@@ -623,13 +623,13 @@ export class HyzershopMigrationService {
 
             for (let i = 0; i < discTypes.length; i++) {
                 const slug = discTypes[i]
-                const discType = await this._taxonomyTermsClient.lookup('slug', slug)
+                const discType = await this._taxonomyTermRepository.lookup('slug', slug)
                 const partialSlug = slug.replace('disc-type-', '')
                 const name = titleize(partialSlug.replace(/-/g, ' '))
                 const singularName = singularize(name)
                 const pluralName = pluralize(name)
 
-                await this._taxonomyTermsClient.update(new UpdateRequest({
+                await this._taxonomyTermRepository.update(new UpdateRequest({
                     id: discType._id,
                     update: {
                         singularName,
@@ -650,7 +650,7 @@ export class HyzershopMigrationService {
 
             for (let i = 0; i < brands.length; i++) {
                 const slug = brands[i]
-                const brand = await this._taxonomyTermsClient.lookup('slug', slug)
+                const brand = await this._taxonomyTermRepository.lookup('slug', slug)
                 const partialSlug = slug.replace('brand-', '')
                 let brandName = titleize(partialSlug.substring(0, partialSlug.indexOf('-')))
                 let name = titleize(partialSlug.replace(/-/g, ' '))
@@ -665,7 +665,7 @@ export class HyzershopMigrationService {
                 const singularName = singularize(name)
                 const pluralName = `${brandName} Discs`
 
-                await this._taxonomyTermsClient.update(new UpdateRequest({
+                await this._taxonomyTermRepository.update(new UpdateRequest({
                     id: brand._id,
                     update: {
                         singularName,
