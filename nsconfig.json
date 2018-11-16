@@ -1,0 +1,7 @@
+{
+  "appResourcesPath": "mobile/App_Resources",
+  "appPath": "ui/web/src",
+  "nsext": ".tns",
+  "webext": "",
+  "shared": true
+}

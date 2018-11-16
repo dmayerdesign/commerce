@@ -5,6 +5,8 @@
   "author": "",
   "license": "MIT",
   "scripts": {
+    "android": "tns run android --bundle",
+    "ios": "tns run ios --bundle",
     "dev": "npm run qb dev ui & npm run qb dev server",
     "start": "node dist/main.js",
     "test": "npm run qb test ui && npm run qb test server",
@@ -24,6 +26,7 @@
     "@angular/platform-browser-dynamic": "~7.0.0",
     "@angular/platform-server": "7.0.2",
     "@angular/router": "~7.0.0",
+    "@nativescript/schematics": "0.4.0",
     "@nestjs/common": "^5.1.0",
     "@nestjs/core": "^5.1.0",
     "@nestjs/ng-universal": "0.1.1",
@@ -35,14 +38,19 @@
     "mongoose": "5.3.9",
     "mongoose-delete": "0.4.0",
     "mongoose-findorcreate": "3.0.0",
+    "nativescript-angular": "~7.0.0",
+    "nativescript-theme-core": "~1.0.4",
     "ng-click-outside": "4.0.0",
     "reflect-metadata": "^0.1.12",
     "rxjs": "~6.3.3",
     "stripe": "6.13.0",
+    "tns-core-modules": "5.2.0-2018-11-15-221043-02",
     "typescript": "~3.1.1",
     "zone.js": "~0.8.26"
   },
   "devDependencies": {
+    "nativescript-dev-webpack": "^0.17.0",
+    "@nativescript/schematics": "~0.3.0",
     "@angular-devkit/build-angular": "~0.10.0",
     "@angular-devkit/build-ng-packagr": "~0.10.0",
     "@angular/cli": "~7.0.3",
@@ -82,5 +90,14 @@
     "webpack": "^4.16.5",
     "webpack-cli": "^3.1.0",
     "webpack-node-externals": "^1.7.2"
+  },
+  "nativescript": {
+    "id": "org.cubie.mobile",
+    "tns-ios": {
+      "version": "5.1.0-2018-11-15-163943-04"
+    },
+    "tns-android": {
+      "version": "5.0.0"
+    }
   }
 }

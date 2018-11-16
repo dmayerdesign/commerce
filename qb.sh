@@ -5,11 +5,21 @@ source ./.env
 qb() {
     if [ "$1" = "dev" ]; then
         if [ "$2" = "ui" ]; then
-            qb prebuild ui development;
-            ng serve;
+            qb prebuild ui development
+            ng serve
         elif [ "$2" = "server" ]; then
-            qb prebuild server development;
-            nodemon --config nodemon.json;
+            qb prebuild server development
+            nodemon --config nodemon.json
+        elif [ "$2" = "mobile" ]; then
+            if [ "$3" = "android" ]; then
+                tns run android --bundle
+            elif [ "$3" = "ios" ]; then
+                tns run ios --bundle
+            elif [ "$3" = "all" ]; then
+                qb dev mobile android & qb dev mobile ios
+            else
+                qb dev mobile all
+            fi
         else
             qb dev ui & qb dev server
         fi
@@ -53,9 +63,17 @@ qb() {
             fi
         elif [ "$2" = "server" ]; then
             tsc -p server/tsconfig.server.json;
+        elif [ "$2" = "mobile" ]; then
+            if [ "$3" = "development" ]; then
+                tns build android --bundle
+                tns build ios --bundle
+            elif [ "$3" = "production" ]; then
+                tns build android --bundle --env.uglify
+                tns build ios --bundle --env.uglify
+            fi
         elif [ "$2" = "all" ]; then
             if [ "$3" = "development" ]; then
-                qb build ui development && qb build server development
+                qb build ui development && qb build server development && qb build mobile
             elif [ "$3" = "production" ]; then
                 qb build ui production && qb build server production
             fi
