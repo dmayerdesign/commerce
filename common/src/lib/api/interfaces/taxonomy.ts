@@ -1,4 +1,4 @@
-import { Document } from 'mongoose'
+import { Document } from '@qb/common/goosetype/interfaces'
 
 export interface Taxonomy extends Document {
     singularName: string

@@ -109,14 +109,19 @@ qb() {
 
     if [[ ("$1" = "help" || "$1" = "--help" || "$1" = "-h") ]]; then
         echo "
-Usage of \"qb\" (or \"npm run qb\"):
-
-Develop:        qb dev [ui|server]
-Build:          qb build <ui|server|all> <development|production>
-Test:           qb test ui [unit|e2e]
-                qb test server [unit] [watch|cov]
-Code gen:       qb generate all
-";
+_____________________________________________________________________
+                                                                    |
+                                                                    |
+Usage of \"qb\" (or \"npm run qb\"):                                |
+                                                                    |   
+Develop:        qb dev [ui|server]                                  |
+Build:          qb build <ui|server|all> <development|production>   |
+Test:           qb test ui [unit|e2e]                               |
+                qb test server [unit] [watch|cov]                   |
+Code gen:       qb generate all                                     |
+                                                                    |
+____________________________________________________________________|
+";                                                                  
     fi
 }
 

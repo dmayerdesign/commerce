@@ -1,12 +1,12 @@
-import * as mongoose from 'mongoose'
+import { Document as MongooseDocument, Schema, SchemaTypeOpts } from 'mongoose'
 
 export type Func = (...args: any[]) => any
 export type RequiredType = boolean | [boolean, string] | string | Func | [Func, string]
 export type PropType = 'array' | 'object'
 
-export interface BasePropOptions extends mongoose.SchemaTypeOpts<any> { }
+export interface BasePropOptions extends SchemaTypeOpts<any> { }
 
-export interface IMongooseDocument extends mongoose.Document {
+export interface Document extends MongooseDocument {
     _id: string
     createdAt?: any
     updatedAt?: any
@@ -21,7 +21,7 @@ export interface ArrayPropOptions extends BasePropOptions {
 }
 
 export interface SchemaTypeOptions extends PropOptions {
-    type?: string | Function | Object | mongoose.Schema.Types.ObjectId
+    type?: string | Function | Object | Schema.Types.ObjectId
 }
 
 export interface ValidateNumberOptions {

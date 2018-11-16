@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { inject, injectable } from 'inversify'
+import { Inject, Injectable } from '@nestjs/common'
 import {
     controller,
     httpDelete,
@@ -11,17 +11,17 @@ import {
     response,
 } from 'inversify-express-utils'
 
-import { ApiEndpoints } from '@mte/common/constants/api-endpoints'
-import { Types } from '@mte/common/constants/inversify/types'
+import { ApiEndpoints } from '@qb/common/constants/api-endpoints'
+import { Types } from '@qb/common/constants/inversify/types'
 import { UserService } from '../services/user.service'
-import { ApiController } from './api.controller'
+import { QbController } from '../../../shared/controller/controller'
 
 @injectable()
-@controller(ApiEndpoints.User)
-export class UserController extends ApiController {
+@controller(User)
+export class UserController extends QbController {
 
     constructor(
-        @inject(Types.UserService) private _userService: UserService,
+        @Inject(UserService) private _userService: UserService,
     ) { super() }
 
     @httpGet('/', Types.isAuthenticated)

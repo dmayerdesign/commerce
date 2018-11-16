@@ -11,12 +11,12 @@ export class SchemaNotDefinedError extends Error { }
 
 let modelBuilder: ModelBuilder // Create a singleton.
 
-export class ModelBuilder {
-    public schemaDefinitions: { [key: string]: SchemaDefinition } = {}
-    public schemas: { [key: string]: Schema } = {}
-    public preMiddleware: any = {}
-    public postMiddleware: any = {}
-    public plugins: any = {}
+class ModelBuilder {
+    public schemaDefinitions = new Map<string, SchemaDefinition>()
+    public schemas = new Map<string, Schema>()
+    public preMiddleware = new Map<any, any>()
+    public postMiddleware = new Map<any, any>()
+    public plugins = new Map<any, any>()
 
     constructor() {
         if (!modelBuilder) {
@@ -27,22 +27,23 @@ export class ModelBuilder {
 
     public findOrCreateSchema(name: string, schemaDefinition: SchemaDefinition, schemaOptions: SchemaOptions): Schema {
         let schema: Schema
+        const schemaName = camelCase(name)
 
-        if (!modelBuilder.schemas[camelCase(name)]) {
+        if (!this.schemas.get(schemaName)) {
             schema = new Schema(schemaDefinition, schemaOptions)
-            modelBuilder.schemas[camelCase(name)] = schema
+            this.schemas.set(schemaName, schema)
         } else {
-            schema = modelBuilder.schemas[camelCase(name)]
+            schema = this.schemas.get(schemaName)
             Object.keys(schemaDefinition).forEach((schemaKey) => {
                 schema.add({ [schemaKey]: schemaDefinition[schemaKey] })
             })
         }
 
-        // Allows getters to work.
+        // Allow getters to work.
         schema.set('toObject', { getters: true })
         schema.set('toJSON', { getters: true })
 
-        // Prevents `MongoError: Unknown modifier: $pushAll` (see https://github.com/Automattic/mongoose/issues/5574)
+        // Prevent `MongoError: Unknown modifier: $pushAll` (see https://github.com/Automattic/mongoose/issues/5574)
         // TODO: remove once upgraded to mongoose v5.x
         schema.set('usePushEach', true)
 
@@ -80,6 +81,7 @@ export class ModelBuilder {
             return type
         }
         else {
+            const typeName = camelCase(type.name)
             if (type === Schema.Types.ObjectId) {
                 return Schema.Types.ObjectId
             }
@@ -87,13 +89,18 @@ export class ModelBuilder {
             // assume it's a custom schema. If the schema has yet to be defined, define it.
             // (This will probably only happen if you're using a schema class as the type
             // of one of its own properties.)
-            return this.findOrCreateSchema(camelCase(type.name), this.schemaDefinitions[camelCase(type.name)], options)
+            return this.findOrCreateSchema(
+                typeName,
+                this.schemaDefinitions.get(typeName),
+                options
+            )
         }
     }
 
     public baseProp(propTypeArgs: PropTypeArgs): void {
         const { target, key, propType, options } = propTypeArgs
-        let schemaDefinition: SchemaDefinition = this.schemaDefinitions[camelCase(target.constructor.name)]
+        const name = camelCase(target.constructor.name)
+        let schemaDefinition: SchemaDefinition = this.schemaDefinitions.get(name)
         let schemaProperty: SchemaTypeOpts<any> = {}
         let type: any
 
@@ -104,7 +111,8 @@ export class ModelBuilder {
         ]
 
         if (!schemaDefinition) {
-            schemaDefinition = this.schemaDefinitions[camelCase(target.constructor.name)] = {}
+            schemaDefinition = {}
+            this.schemaDefinitions.set(name, {})
         }
 
         // Might need a second glance.
@@ -184,4 +192,5 @@ export class ModelBuilder {
 }
 
 modelBuilder = new ModelBuilder()
+
 export { modelBuilder }

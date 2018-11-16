@@ -1,4 +1,4 @@
-import { Document } from 'mongoose'
+import { Document } from '@qb/common/goosetype/interfaces'
 import { OrganizationType } from '../../constants/enums/organization-type'
 import { GlobalStyles } from './global-styles'
 import { OrganizationBranding } from './organization-branding'

@@ -1,14 +1,14 @@
-import { MongooseDocument } from './mongoose-document'
+import { Document } from '@qb/common/goosetype/interfaces'
 
 // Brand colors.
 
-export interface OrganizationBrandingColors extends MongooseDocument {
+export interface OrganizationBrandingColors extends Document {
     primary: string
 }
 
 // Branding.
 
-export interface OrganizationBranding extends MongooseDocument {
+export interface OrganizationBranding extends Document {
     displayName: string
     logo: string
     colors: OrganizationBrandingColors

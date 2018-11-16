@@ -1,6 +1,6 @@
-import { MongooseDocument } from './mongoose-document'
+import { Document } from '@qb/common/goosetype/interfaces'
 
-export interface CustomRegion extends MongooseDocument {
+export interface CustomRegion extends Document {
     isActive?: boolean
     isMetaRegion?: boolean
     childRegions?: CustomRegion[]

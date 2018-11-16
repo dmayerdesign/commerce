@@ -1,12 +1,13 @@
 
 import { Injectable } from '@nestjs/common'
 import { AppConfig } from '@qb/app-config'
+import { QbReadOnlyRepository } from '@qb/common/api/interfaces/repository'
 import { ApiErrorResponse } from '@qb/common/api/responses/api-error.response'
 import { InstagramPost } from '@qb/common/models/ui/instagram-post'
 import * as rp from 'request-promise-native'
 
 @Injectable()
-export class InstagramService {
+export class InstagramRepository implements QbReadOnlyRepository<InstagramPost> {
     public async list(): Promise<InstagramPost[]> {
         const recentPostsEndpoint = `https://api.instagram.com/v1/users/${AppConfig.instagram_user_id}/media/recent`
         const requestOptions: rp.RequestPromiseOptions = {

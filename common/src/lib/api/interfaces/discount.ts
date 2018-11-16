@@ -1,4 +1,4 @@
-import { Document } from 'mongoose'
+import { Document } from '@qb/common/goosetype/interfaces'
 import { Price } from './price'
 import { Product } from './product'
 import { Ref } from './ref'

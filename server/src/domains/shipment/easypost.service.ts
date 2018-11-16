@@ -1,6 +1,6 @@
 const EasypostModule = require('@easypost/api')
 import { Easypost } from '@qb/common/types/node-easypost'
-import { inject, injectable } from 'inversify'
+import { Inject, Injectable } from '@nestjs/common'
 
 import { Address } from '@qb/common/api/entities/address'
 import { EasypostRate } from '@qb/common/api/entities/easypost-rate'
@@ -15,7 +15,7 @@ const easypost = new EasypostModule(process.env.EASYPOST_API_KEY) as Easypost
 export class EasypostService {
 
     constructor(
-        @inject(Types.OrderService) private orderService: OrderService
+        @Inject(OrderService) private orderService: OrderService
     ) {}
 
 	/**

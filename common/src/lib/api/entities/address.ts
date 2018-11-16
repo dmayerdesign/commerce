@@ -1,10 +1,9 @@
 import * as findOrCreate from 'mongoose-findorcreate'
 import { model, plugin, prop, MongooseDocument } from '../../goosetype'
-import { Address as IAddress } from '../interfaces/address'
 
 @plugin(findOrCreate)
 @model(Address)
-export class Address extends MongooseDocument implements IAddress {
+export class Address extends MongooseDocument {
     @prop() public name?: string
     @prop() public company?: string
     @prop() public street1: string

@@ -1,40 +1,39 @@
-import { Response } from 'express'
-import { inject, injectable } from 'inversify'
-import {
-    controller,
-    httpGet,
-    interfaces,
-    queryParam,
-    requestParam,
-    response,
-} from 'inversify-express-utils'
+import { Get, Inject, Injectable, Param, Query, Response } from '@nestjs/common'
+import { Cart } from '@qb/common/api/entities/cart'
+import { Cart as ICart } from '@qb/common/api/interfaces/cart'
+import { Product as IProduct } from '@qb/common/api/interfaces/product'
+import { GetCartItemsFromIdsRequest } from '@qb/common/api/requests/get-cart-items-from-ids.request'
+import { carts } from '@qb/common/constants/api-endpoints'
+import { Response as IResponse } from 'express'
+import { QbController } from '../../../shared/controller/controller'
+import { QbRepository } from '../../../shared/data-access/repository'
+import { CartService } from '../cart/cart.service'
 
-import { GetCartItemsFromIdsRequest } from '@mte/common/api/requests/get-cart-items-from-ids.request'
-import { ApiEndpoints, Types } from '@mte/common/constants'
-import { CartService } from '../services/cart.service'
-import { ApiController } from './api.controller'
-
-@injectable()
-@controller(ApiEndpoints.Cart)
-export class CartController extends ApiController implements interfaces.Controller {
+@Injectable()
+@controller(carts)
+export class CartController extends QbController<ICart> {
 
     constructor(
-        @inject(Types.CartService) private cartService: CartService,
-    ) { super() }
-
-    @httpGet('/refresh')
-    public refresh(
-        @queryParam('request') request: string,
-        @response() res: Response,
-    ): void {
-        const parsedQuery: GetCartItemsFromIdsRequest = request ? JSON.parse(request) : {}
-        this.handleApiResponse(this.cartService.refresh(parsedQuery), res)
+        @Inject(CartService) private cartService: CartService,
+        @Inject(QbRepository) protected readonly _repository: QbRepository<ICart>
+    ) {
+        super()
+        this._repository.configureForGoosetypeEntity(Cart)
     }
 
-    @httpGet('/get-item/:id')
+    @Get('/refresh')
+    public refresh(
+        @Query('request') request: string,
+        @Response() res: IResponse,
+    ): Promise<IProduct[]> {
+        const parsedQuery: GetCartItemsFromIdsRequest = request ? JSON.parse(request) : {}
+        return this.cartService.refresh(parsedQuery)
+    }
+
+    @Get('/get-item/:id')
     public getOne(
-        @requestParam('id') id: string,
-        @response() res: Response,
+        @Param('id') id: string,
+        @Response() res: IResponse,
     ): void {
         this.handleApiResponse(this.cartService.getItem(id), res)
     }

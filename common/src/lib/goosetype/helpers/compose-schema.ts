@@ -4,11 +4,12 @@ import { modelBuilder } from '../goosetype-model-builder'
 import { MongooseDocument } from '../models/mongoose-document'
 
 export function composeSchema<T>(target: MongooseDocument, schemaOptions?: mongoose.SchemaOptions): mongoose.Schema {
-    const schemaDefinition = modelBuilder.schemaDefinitions[camelCase(target.constructor.name)]
-    const schema = modelBuilder.findOrCreateSchema(target.constructor.name, schemaDefinition, schemaOptions)
-    const preMiddleware = modelBuilder.preMiddleware[camelCase(target.constructor.name)]
-    const postMiddleware = modelBuilder.postMiddleware[camelCase(target.constructor.name)]
-    const plugins = modelBuilder.plugins[camelCase(target.constructor.name)]
+    const name = camelCase(target.constructor.name)
+    const schemaDefinition = modelBuilder.schemaDefinitions.get(name)
+    const schema = modelBuilder.findOrCreateSchema(name, schemaDefinition, schemaOptions)
+    const preMiddleware = modelBuilder.preMiddleware.get(name)
+    const postMiddleware = modelBuilder.postMiddleware.get(name)
+    const plugins = modelBuilder.plugins.get(name)
 
     if (preMiddleware) {
         preMiddleware.forEach((preHookArgs) => {

@@ -1,6 +1,6 @@
 import * as AWS from 'aws-sdk'
 import * as fs from 'fs-extra'
-import { inject, injectable } from 'inversify'
+import { Inject, Injectable } from '@nestjs/common'
 import * as multer from 'multer'
 import * as path from 'path'
 import sharp from 'sharp'
@@ -19,7 +19,7 @@ AWS.config.region = AppConfig.aws_region
 @injectable()
 export class UploadService {
     constructor(
-        @inject(Types.QbRepository) private repository: QbRepository<Product>
+        @Inject(QbRepository) private repository: QbRepository<Product>
     ) {}
 
     private s3 = new AWS.S3({

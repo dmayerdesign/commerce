@@ -1,4 +1,4 @@
-import { Document } from 'mongoose'
+import { Document } from '@qb/common/goosetype/interfaces'
 import { UserRole } from '../../constants/enums/user-role'
 import { Address } from './address'
 import { Cart } from './cart'

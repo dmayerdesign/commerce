@@ -1,8 +1,8 @@
-import { MongooseDocument } from './mongoose-document'
+import { Document } from '@qb/common/goosetype/interfaces'
 import { Ref } from './ref'
 import { User } from './user'
 
-export interface LinkEmbed extends MongooseDocument {
+export interface LinkEmbed extends Document {
     url: string
     type: string
     thumbnail_url: string
@@ -11,18 +11,18 @@ export interface LinkEmbed extends MongooseDocument {
     provider_url: string
 }
 
-export interface Author extends MongooseDocument {
+export interface Author extends Document {
     userId: string
     firstName: string
     lastName: string
 }
 
-export interface Reactions extends MongooseDocument {
+export interface Reactions extends Document {
     up: Ref<User>[]
     down: Ref<User>[]
 }
 
-export interface Comment extends MongooseDocument {
+export interface Comment extends Document {
     author: Author
     content: string
     images: string[]
@@ -30,7 +30,7 @@ export interface Comment extends MongooseDocument {
     reactions: Reactions
 }
 
-export interface Post extends MongooseDocument {
+export interface Post extends Document {
     author: Author
     type: string
     content: Author

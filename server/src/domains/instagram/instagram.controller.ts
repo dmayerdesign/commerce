@@ -1,15 +1,13 @@
 
-import { Controller, Get, Inject, Injectable, Response } from '@nestjs/common'
-import { ApiEndpoints } from '@qb/common/constants/api-endpoints'
+import { Controller, Inject } from '@nestjs/common'
+import { instagramPosts } from '@qb/common/constants/api-endpoints'
 import { InstagramPost } from '@qb/common/models/ui/instagram-post'
-import { QbRepository } from 'server/src/shared/data-access/repository'
 import { QbReadOnlyController } from '../../shared/controller/controller'
-import { InstagramService } from './instagram.service'
+import { InstagramRepository } from './instagram.repository'
 
-@Injectable()
-@Controller(ApiEndpoints.Instagram)
+@Controller(instagramPosts)
 export class InstagramController extends QbReadOnlyController<InstagramPost> {
     constructor(
-        @Inject(QbRepository) protected _repository: InstagramService
+        @Inject(InstagramRepository) protected _repository: InstagramRepository
     ) { super() }
 }

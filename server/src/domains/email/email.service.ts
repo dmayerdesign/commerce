@@ -1,7 +1,7 @@
-import { inject, injectable } from 'inversify'
+import { Inject, Injectable } from '@nestjs/common'
 const mailgun = require('mailgun-js')({ apiKey: process.env.MAILGUN_API_KEY, domain: process.env.MAILGUN_DOMAIN })
 
-import { AppConfig } from '@mte/app-config'
+import { AppConfig } from '@qb/app-config'
 import { EmailOptions, EmailServiceOptions, OrderEmailOptions } from '@qb/common/api/interfaces/email-options'
 import { EmailBuilder } from '@qb/common/builders/email.builder'
 import { Types } from '@qb/common/constants/inversify/types'
@@ -18,7 +18,7 @@ const emailVerification = require('@qb/common/emails/templates/emailVerification
 @injectable()
 export class EmailService implements IEmailService {
     constructor(
-        @inject(Types.OrderHelper) private orderHelper: OrderHelper,
+        @Inject(OrderHelper) private orderHelper: OrderHelper,
     ) {}
 
     /**
