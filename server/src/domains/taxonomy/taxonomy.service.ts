@@ -1,6 +1,6 @@
 import { Types } from '@qb/common/constants/inversify/types'
 import { Taxonomy } from '@qb/common/api/entities/taxonomy'
-import { inject, injectable } from 'inversify'
+import { Inject, Injectable } from '@nestjs/common'
 import { QbRepository } from '../../shared/data-access/repository'
 import { CrudService } from './crud.service'
 
@@ -16,7 +16,7 @@ export class TaxonomyService extends CrudService<Taxonomy> {
     public model = Taxonomy
 
     constructor(
-        @inject(Types.QbRepository) protected repository: QbRepository<Taxonomy>,
+        @Inject(QbRepository) protected repository: QbRepository<Taxonomy>,
     ) {
         super()
     }

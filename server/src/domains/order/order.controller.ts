@@ -1,5 +1,5 @@
 import { Response } from 'express'
-import { inject, injectable } from 'inversify'
+import { Inject, Injectable } from '@nestjs/common'
 import {
     controller,
     httpDelete,
@@ -12,18 +12,18 @@ import {
     response,
 } from 'inversify-express-utils'
 
-import { GetOrdersRequest } from '@mte/common/api/requests/get-orders.request'
-import { PlaceOrderRequest } from '@mte/common/api/requests/place-order.request'
-import { ApiEndpoints, Types } from '@mte/common/constants'
+import { GetOrdersRequest } from '@qb/common/api/requests/get-orders.request'
+import { PlaceOrderRequest } from '@qb/common/api/requests/place-order.request'
+import { ApiEndpoints, Types } from '@qb/common/constants'
 import { OrderService } from '../services/order.service'
-import { ApiController } from './api.controller'
+import { QbController } from '../../../shared/controller/controller'
 
 @injectable()
-@controller(ApiEndpoints.Orders)
-export class OrdersController extends ApiController implements interfaces.Controller {
+@controller(Orders)
+export class OrdersController extends QbController implements interfaces.Controller {
 
     constructor(
-        @inject(Types.OrderService) private orderService: OrderService,
+        @Inject(OrderService) private orderService: OrderService,
     ) { super() }
 
     @httpGet('/')

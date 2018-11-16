@@ -1,4 +1,4 @@
-import { inject, injectable } from 'inversify'
+import { Inject, Injectable } from '@nestjs/common'
 
 import { Order } from '@qb/common/api/entities/order'
 import { Product } from '@qb/common/api/entities/product'
@@ -28,12 +28,12 @@ export class OrderService extends CrudService<Order> implements IOrderService {
     protected model = Order
 
     constructor(
-        @inject(Types.QbRepository) protected repository: QbRepository<Order>,
-        @inject(Types.StripeOrderService) private stripeOrderService: StripeOrderService,
-        @inject(Types.CartService) private cartService: CartService,
-        @inject(Types.ProductService) private productService: ProductService,
-        @inject(Types.EmailService) private emailService: EmailService,
-        @inject(Types.OrganizationService) private organizationService: OrganizationService,
+        @Inject(QbRepository) protected repository: QbRepository<Order>,
+        @Inject(StripeOrderService) private stripeOrderService: StripeOrderService,
+        @Inject(CartService) private cartService: CartService,
+        @Inject(ProductService) private productService: ProductService,
+        @Inject(EmailService) private emailService: EmailService,
+        @Inject(OrganizationService) private organizationService: OrganizationService,
     ) { super() }
 
     public async place(newOrder: Order): Promise<StripeSubmitOrderResponse> {

@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcrypt-nodejs'
 import { Request, Response } from 'express'
-import { inject, injectable } from 'inversify'
+import { Inject, Injectable } from '@nestjs/common'
 import * as jwt from 'jsonwebtoken'
 
 import { User } from '@qb/common/api/entities/user'
@@ -24,7 +24,7 @@ export class UserService extends CrudService<User> {
     protected model = User
 
     constructor(
-        @inject(Types.QbRepository) protected repository: QbRepository<User>
+        @Inject(QbRepository) protected repository: QbRepository<User>
     ) { super() }
 
     private userPopulateOptions: PopulateOptions = {

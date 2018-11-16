@@ -1,4 +1,4 @@
-import { Document } from 'mongoose'
+import { Document } from '@qb/common/goosetype/interfaces'
 import { OrderStatus } from '../../constants/enums/order-status'
 import { Discount } from './discount'
 import { EasypostRate } from './easypost-rate'

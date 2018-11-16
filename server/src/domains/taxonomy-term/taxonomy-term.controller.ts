@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { inject, injectable } from 'inversify'
+import { Inject, Injectable } from '@nestjs/common'
 import {
     controller,
     httpDelete,
@@ -11,18 +11,18 @@ import {
     response,
 } from 'inversify-express-utils'
 
-import { AppConfig } from '@mte/app-config'
-import { ApiEndpoints, Types } from '@mte/common/constants'
-import { GetTaxonomyTermsFromIdsRequest, GetTaxonomyTermsRequest } from '@mte/common/api/requests/get-taxonomy-terms.request'
+import { AppConfig } from '@qb/app-config'
+import { ApiEndpoints, Types } from '@qb/common/constants'
+import { GetTaxonomyTermsFromIdsRequest, GetTaxonomyTermsRequest } from '@qb/common/api/requests/get-taxonomy-terms.request'
 import { TaxonomyTermService } from '../services/taxonomy-term.service'
-import { ApiController } from './api.controller'
+import { QbController } from '../../../shared/controller/controller'
 
 @injectable()
-@controller(ApiEndpoints.TaxonomyTerms)
-export class TaxonomyTermsController extends ApiController implements interfaces.Controller {
+@controller(TaxonomyTerms)
+export class TaxonomyTermsController extends QbController implements interfaces.Controller {
 
     constructor(
-        @inject(Types.TaxonomyTermService) private taxonomyTermService: TaxonomyTermService
+        @Inject(TaxonomyTermService) private taxonomyTermService: TaxonomyTermService
     ) { super() }
 
     @httpGet('/')

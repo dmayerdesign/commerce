@@ -1,7 +1,7 @@
+import { Document } from '@qb/common/goosetype/interfaces'
 import { Address } from './address'
-import { MongooseDocument } from './mongoose-document'
 
-export interface OrderCustomer extends MongooseDocument {
+export interface OrderCustomer extends Document {
     userId: string
     stripeCustomerId: string
     email: string

@@ -1,6 +1,6 @@
 import { DomainEventVerb } from '@qb/common/constants/enums/domain-event-verb'
 import { HttpVerb } from '@qb/common/modules/http/http.models'
-import { Document } from 'mongoose'
+import { Document } from '@qb/common/goosetype/interfaces'
 import { Diff } from './diff'
 
 export interface DomainEvent extends Document {

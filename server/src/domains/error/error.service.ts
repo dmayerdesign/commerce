@@ -1,11 +1,9 @@
-import { inject, injectable } from 'inversify'
-
-import { Types } from '@qb/common/constants/inversify/types'
+import { Inject, Injectable } from '@nestjs/common'
 import { EmailService } from '../../domains/email/email.service'
 
-@injectable()
+@Injectable()
 export class ErrorService {
-    @inject(Types.EmailService) private emailService: EmailService
+    @Inject(EmailService) private emailService: EmailService
 
     public handleError(error: Error) {
         console.error(error)

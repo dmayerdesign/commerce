@@ -1,4 +1,4 @@
-import { Document } from 'mongoose'
+import { Document } from '@qb/common/goosetype/interfaces'
 import { Attribute } from './attribute'
 import { Ref } from './ref'
 

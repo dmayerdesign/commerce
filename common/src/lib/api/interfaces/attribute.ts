@@ -1,4 +1,4 @@
-import { Document } from 'mongoose'
+import { Document } from '@qb/common/goosetype/interfaces'
 
 export interface Attribute extends Document {
     singularName: string

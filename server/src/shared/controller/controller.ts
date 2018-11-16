@@ -5,7 +5,7 @@ import { UpdateManyRequest } from '@qb/common/api/requests/update-many.request'
 import { UpdateRequest } from '@qb/common/api/requests/update.request'
 import { Crud } from '@qb/common/constants/crud'
 import { Response as IResponse } from 'express'
-import { Document } from 'mongoose'
+import { Document } from '@qb/common/goosetype/interfaces'
 
 export abstract class QbBaseController<EntityType extends any> {
 

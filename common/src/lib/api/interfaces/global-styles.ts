@@ -1,7 +1,7 @@
-import { MongooseDocument } from './mongoose-document'
+import { Document } from '@qb/common/goosetype/interfaces'
 import { ShoppingCartIcons } from './shopping-cart-icons'
 
-export interface GlobalStyles extends MongooseDocument {
+export interface GlobalStyles extends Document {
     backgroundPatternImageSrc: string
     shoppingCartIcons: ShoppingCartIcons
 }

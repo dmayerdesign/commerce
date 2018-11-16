@@ -1,4 +1,4 @@
-import { inject, injectable } from 'inversify'
+import { Inject, Injectable } from '@nestjs/common'
 import * as rp from 'request-promise-native'
 
 import { Timer } from '@qb/common/api/entities/timer'
@@ -10,8 +10,8 @@ import { ErrorService } from '../error/error.service'
 @injectable()
 export class TimerService {
     constructor(
-        @inject(Types.ErrorService) private errorService: ErrorService,
-        @inject(Types.QbRepository) private repository: QbRepository<Timer>
+        @Inject(ErrorService) private errorService: ErrorService,
+        @Inject(QbRepository) private repository: QbRepository<Timer>
     ) {
         this.onInit()
     }

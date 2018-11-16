@@ -1,6 +1,6 @@
-import { MongooseDocument } from './mongoose-document'
+import { Document } from '@qb/common/goosetype/interfaces'
 
-export interface PageSettings extends MongooseDocument {
+export interface PageSettings extends Document {
     banner: string
     bannerOverlay: string
 }

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { inject, injectable } from 'inversify'
+import { Inject, Injectable } from '@nestjs/common'
 import {
     controller,
     httpDelete,
@@ -11,20 +11,20 @@ import {
     response,
 } from 'inversify-express-utils'
 
-import { Product } from '@mte/common/api/entities/product'
-import { GetProductsFromIdsRequest, GetProductsRequest } from '@mte/common/api/requests/get-products.request'
-import { ApiEndpoints, Types } from '@mte/common/constants'
+import { Product } from '@qb/common/api/entities/product'
+import { GetProductsFromIdsRequest, GetProductsRequest } from '@qb/common/api/requests/get-products.request'
+import { ApiEndpoints, Types } from '@qb/common/constants'
 import { HyzershopMigrationService } from '../services/hyzershop-migration.service'
 import { ProductService } from '../services/product.service'
-import { ApiController } from './api.controller'
+import { QbController } from '../../../shared/controller/controller'
 
 @injectable()
-@controller(ApiEndpoints.ProductsAdmin/*, Types.isOwner*/)
-export class ProductsAdminController extends ApiController implements interfaces.Controller {
+@controller(ProductsAdmin/*, Types.isOwner*/)
+export class ProductsAdminController extends QbController implements interfaces.Controller {
 
     constructor(
-        @inject(Types.ProductService) private productService: ProductService,
-        @inject(Types.HyzershopMigrationService) private wms: HyzershopMigrationService,
+        @Inject(ProductService) private productService: ProductService,
+        @Inject(HyzershopMigrationService) private wms: HyzershopMigrationService,
     ) { super() }
 
     @httpGet('/get-by-slug/:slug')

@@ -1,6 +1,6 @@
-import { MongooseDocument } from './mongoose-document'
+import { Document } from '@qb/common/goosetype/interfaces'
 
-export interface EasypostRate extends MongooseDocument {
+export interface EasypostRate extends Document {
     created_at: string
     updated_at: string
     mode: string /* "test" or "production" */

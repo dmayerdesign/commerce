@@ -1,4 +1,4 @@
-import { Document } from 'mongoose'
+import { Document } from '@qb/common/goosetype/interfaces'
 import { ProductClass } from '../../constants/enums/product-class'
 import { Attribute } from './attribute'
 import { AttributeValue } from './attribute-value'

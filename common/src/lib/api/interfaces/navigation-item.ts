@@ -1,8 +1,8 @@
 import { TemplateRef } from '@angular/core'
-import { MongooseDocument } from './mongoose-document'
+import { Document } from '@qb/common/goosetype/interfaces'
 import { Ref } from './ref'
 
-export interface NavigationItem extends MongooseDocument {
+export interface NavigationItem extends Document {
     text: string
     isTopLevel?: boolean
     className?: string

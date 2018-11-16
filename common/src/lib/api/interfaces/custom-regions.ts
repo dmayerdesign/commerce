@@ -1,7 +1,7 @@
+import { Document } from '@qb/common/goosetype/interfaces'
 import { CustomRegion } from './custom-region'
-import { MongooseDocument } from './mongoose-document'
 
-export interface CustomRegions extends MongooseDocument {
+export interface CustomRegions extends Document {
     productDetailInfoHeader: CustomRegion[]
     productDetailMid: CustomRegion[]
 }

@@ -1,6 +1,6 @@
 import { Wishlist } from '@qb/common/api/entities/wishlist'
 import { Types } from '@qb/common/constants/inversify/types'
-import { inject, injectable } from 'inversify'
+import { Inject, Injectable } from '@nestjs/common'
 import { QbRepository } from '../../shared/data-access/repository'
 import { CrudService } from './crud.service'
 
@@ -16,7 +16,7 @@ export class WishlistService extends CrudService<Wishlist> {
     public model = Wishlist
 
     constructor(
-        @inject(Types.QbRepository) protected repository: QbRepository<Wishlist>,
+        @Inject(QbRepository) protected repository: QbRepository<Wishlist>,
     ) {
         super()
     }

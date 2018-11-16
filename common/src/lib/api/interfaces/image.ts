@@ -1,6 +1,6 @@
-import { MongooseDocument } from './mongoose-document'
+import { Document } from '@qb/common/goosetype/interfaces'
 
-export interface Image extends MongooseDocument {
+export interface Image extends Document {
     large?: string
     medium?: string
     thumbnail?: string

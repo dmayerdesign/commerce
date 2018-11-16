@@ -1,6 +1,6 @@
-import { MongooseDocument } from './mongoose-document'
+import { Document } from '@qb/common/goosetype/interfaces'
 
-export interface MongooseDocument {
+export interface Document {
     _id?: string
     id?: string
 }

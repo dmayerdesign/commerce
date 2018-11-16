@@ -3,8 +3,9 @@ import { applyDomino, AngularUniversalModule } from '@nestjs/ng-universal'
 import { DB_CONNECTION } from '@qb/common/api/interfaces/repository'
 import { connect } from 'mongoose'
 import { join } from 'path'
+import { DiscountController } from './domains/discount/discount.controller'
 import { DomainEventController } from './domains/domain-event/domain-event.controller'
-import { InstagramService } from './domains/instagram/instagram.service'
+import { InstagramRepository } from './domains/instagram/instagram.repository'
 import { OrganizationController } from './domains/organization/organization.controller'
 import { OrganizationService } from './domains/organization/organization.service'
 import { ProductController } from './domains/product/product.controller'
@@ -22,6 +23,7 @@ applyDomino(global, join(BROWSER_DIR, 'index.html'))
     }),
   ],
   controllers: [
+    DiscountController,
     DomainEventController,
     OrganizationController,
     ProductController,
@@ -30,7 +32,7 @@ applyDomino(global, join(BROWSER_DIR, 'index.html'))
     QbRepository,
     OrganizationService,
     ProductService,
-    InstagramService,
+    InstagramRepository,
     {
       provide: DB_CONNECTION,
       useFactory: () => {

@@ -1,6 +1,6 @@
-import { MongooseDocument } from './mongoose-document'
+import { Document } from '@qb/common/goosetype/interfaces'
 
-export interface Address extends MongooseDocument {
+export interface Address extends Document {
     name?: string
     company?: string
     street1: string

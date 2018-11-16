@@ -1,8 +1,8 @@
+import { Document } from '@qb/common/goosetype/interfaces'
 import { Address } from './address'
-import { MongooseDocument } from './mongoose-document'
 import { Price } from './price'
 
-export interface OrganizationRetailSettings extends MongooseDocument {
+export interface OrganizationRetailSettings extends Document {
     shippingAddress: Address
     billingAddress: Address
     salesTaxPercentage: number
