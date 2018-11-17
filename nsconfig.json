@@ -1,5 +1,5 @@
 {
-  "appResourcesPath": "mobile/App_Resources",
+  "appResourcesPath": "platforms/App_Resources",
   "appPath": "ui/web/src",
   "nsext": ".tns",
   "webext": "",

@@ -34,7 +34,7 @@ module.exports = env => {
         // the nsconfig.json configuration file
         // when bundling with `tns run android|ios --bundle`.
         appPath = "app",
-        appResourcesPath = "app/App_Resources",
+        appResourcesPath = "platforms/App_Resources",
 
         // You can provide the following flags when running 'tns run android|ios'
         aot, // --env.aot
