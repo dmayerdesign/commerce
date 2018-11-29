@@ -34,7 +34,7 @@ export class ProductService {
     constructor(
         @Inject(QbRepository) private _productRepository: QbRepository<IProduct>,
         @Inject(QbRepository) private _taxonomyTermsRepository: QbRepository<ITaxonomyTerm>,
-        @Inject(QbRepository) private organizationService: OrganizationService,
+        @Inject(OrganizationService) private _organizationService: OrganizationService,
     ) {
         this._productRepository.configureForGoosetypeEntity(Product)
         this._taxonomyTermsRepository.configureForGoosetypeEntity(TaxonomyTerm)
@@ -130,10 +130,12 @@ export class ProductService {
         return this._productRepository.stream(listRequest, response)
     }
 
-    public async getPriceRangeForRequest(body: GetProductsRequest): Promise<Price[]> {
-        const listRequest = await this._createGetProductsRequestQuery(body)
-        listRequest.skip = 0
-        listRequest.limit = 0
+    public async getPriceRangeForShop(): Promise<Price[]> {
+        const getProductsRequest = new GetProductsRequest({
+            skip: 0,
+            limit: 0
+        })
+        const listRequest = await this._createGetProductsRequestQuery(getProductsRequest)
         try {
             const products = await this._productRepository.list(listRequest)
             const _priceRange = products.reduce<Price[]>((priceRange, product) => {
@@ -155,22 +157,14 @@ export class ProductService {
                 }
                 return priceRange
             }, [
-                { amount: 0, currency: Currency.USD },
-                { amount: 0, currency: Currency.USD },
+                { amount: 0, currency: Currency.USD } as Price,
+                { amount: 0, currency: Currency.USD } as Price,
             ])
             return _priceRange
         }
         catch (error) {
             throw new ApiErrorResponse(error)
         }
-    }
-
-    public async getPriceRangeForShop(): Promise<Price[]> {
-        const getProductsRequest = new GetProductsRequest({
-            skip: 0,
-            limit: 0
-        })
-        return this.getPriceRangeForRequest(getProductsRequest)
     }
 
     public updateInventory(products: Product[], order: Order): Promise<IProduct[]> {
@@ -288,7 +282,7 @@ export class ProductService {
 
             let organization: Organization
             try {
-                organization = await this.organizationService.getOrganization()
+                organization = await this._organizationService.getOrganization()
                 const searchableTaxonomiesQuery = {
                     taxonomy: { $in: organization.searchableTaxonomies },
                     name: { $regex: searchRegExp },
@@ -309,7 +303,8 @@ export class ProductService {
             searchQuery.$and.push(searchOr)
         }
 
-        // If there are filters, convert each filter to MongoDB query syntax and add it to `searchQuery.$and`.
+        // If there are filters, convert each filter to MongoDB query syntax and add it to
+        // `searchQuery.$and`.
 
         if (filters) {
             for (let i = 0; i < filters.length; i++) {

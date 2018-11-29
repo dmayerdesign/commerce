@@ -20,7 +20,7 @@
       }
     },
     "web": {
-      "root": "ui/web/",
+      "root": "ui/web",
       "sourceRoot": "ui/web/src",
       "projectType": "application",
       "prefix": "",

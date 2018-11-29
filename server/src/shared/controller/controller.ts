@@ -4,8 +4,8 @@ import { ListRequest } from '@qb/common/api/requests/list.request'
 import { UpdateManyRequest } from '@qb/common/api/requests/update-many.request'
 import { UpdateRequest } from '@qb/common/api/requests/update.request'
 import { Crud } from '@qb/common/constants/crud'
-import { Response as IResponse } from 'express'
 import { Document } from '@qb/common/goosetype/interfaces'
+import { Response as IResponse } from 'express'
 
 export abstract class QbBaseController<EntityType extends any> {
 

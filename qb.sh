@@ -22,9 +22,11 @@ qb() {
             if [ "$3" = "development" ]; then
                 export ENVIRONMENT=development
                 qb generate app-config
+                qb generate angular-data-services
             elif [ "$3" = "production" ]; then
                 export ENVIRONMENT=production
                 qb generate app-config
+                qb generate angular-data-services
                 qb test ui
             fi
         fi
@@ -32,9 +34,11 @@ qb() {
             if [ "$3" = "development" ]; then
                 export ENVIRONMENT=development
                 qb generate app-config
+                qb generate angular-data-services
             elif [ "$3" = "production" ]; then
                 export ENVIRONMENT=production
                 qb generate app-config
+                qb generate angular-data-services
                 qb test server
             fi
         fi
@@ -98,10 +102,13 @@ qb() {
     if [ "$1" = "generate" ]; then
         if [ "$2" = "app-config" ]; then
             ts-node common/src/code-gen/generate-app-config.ts
+        elif [ "$2" = "angular-data-services" ]; then
+            ts-node common/src/code-gen/generate-angular-data-services.ts
         elif [ "$2" = "all" ]; then
             export ENVIRONMENT=development
             qb generate app-config
-            qb generate public_api
+            qb generate angular-data-services
+            # qb generate public_api
         else
             echo "" # Nothing.
         fi

@@ -7,7 +7,6 @@ export type PropType = 'array' | 'object'
 export interface BasePropOptions extends SchemaTypeOpts<any> { }
 
 export interface Document extends MongooseDocument {
-    _id: string
     createdAt?: any
     updatedAt?: any
 }
