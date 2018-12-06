@@ -1,6 +1,6 @@
-import { MongooseDocument } from './mongoose-document'
+import { Document } from './document'
 
-export interface ShoppingCartIcons extends MongooseDocument {
+export interface ShoppingCartIcons extends Document {
     empty: string
     1: string
     2: string

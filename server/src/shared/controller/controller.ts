@@ -94,7 +94,8 @@ export abstract class QbReadOnlyController<EntityType extends any> {
 export abstract class QbThirdPartyController<EntityType extends any>
   extends QbBaseController<EntityType> { }
 
-export abstract class QbController<EntityType extends Document> {
+export abstract class QbController<EntityType extends Document>
+  extends QbBaseController<EntityType> {
   protected abstract _repository: QbRepository<EntityType>
 }
 

@@ -2,7 +2,7 @@ import { prop, schema, MongooseDocument } from '../../goosetype'
 import { Address } from './address'
 import { Price } from './price'
 
-@schema(OrganizationRetailSettings)
+@schema()
 export class OrganizationRetailSettings extends MongooseDocument {
     @prop() public shippingAddress: Address
     @prop() public billingAddress: Address

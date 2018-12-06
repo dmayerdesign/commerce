@@ -27,6 +27,3 @@ export interface QbReadOnlyRepository<EntityType> {
   list(listRequest: ListRequest<EntityType>): Promise<EntityType[]>
   get?(primaryKey: string): Promise<EntityType>
 }
-
-export const DB_CONNECTION = 'DbConnection'
-

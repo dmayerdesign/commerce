@@ -1,62 +1,25 @@
-import { Response } from 'express'
-import { Inject, Injectable } from '@nestjs/common'
-import {
-    controller,
-    httpDelete,
-    httpGet,
-    httpPost,
-    interfaces,
-    queryParam,
-    requestBody,
-    requestParam,
-    response,
-} from 'inversify-express-utils'
+import { Body, Controller, Inject, Post } from '@nestjs/common'
+import { Order } from '@qb/common/api/entities/order'
+import { Order as IOrder } from '@qb/common/api/interfaces/order'
+import { orders } from '@qb/common/constants/api-endpoints'
+import { QbController } from '../../shared/controller/controller'
+import { QbRepository } from '../../shared/data-access/repository'
+import { OrderService } from './order.service'
 
-import { GetOrdersRequest } from '@qb/common/api/requests/get-orders.request'
-import { PlaceOrderRequest } from '@qb/common/api/requests/place-order.request'
-import { ApiEndpoints, Types } from '@qb/common/constants'
-import { OrderService } from '../services/order.service'
-import { QbController } from '../../../shared/controller/controller'
+@Controller(orders)
+export class OrderController extends QbController<IOrder> {
+  constructor(
+    @Inject(QbRepository) protected readonly _repository: QbRepository<IOrder>,
+    @Inject(OrderService) protected readonly _orderService: OrderService,
+  ) {
+    super()
+    this._repository.configureForGoosetypeEntity(Order)
+  }
 
-@injectable()
-@controller(Orders)
-export class OrdersController extends QbController implements interfaces.Controller {
-
-    constructor(
-        @Inject(OrderService) private orderService: OrderService,
-    ) { super() }
-
-    @httpGet('/')
-    public get(
-        @queryParam('request') request: string,
-        @response() res: Response,
-    ): void {
-        const parsedQuery: GetOrdersRequest = request ? JSON.parse(request) : {}
-        this.handleApiResponse(this.orderService.get(parsedQuery), res)
-    }
-
-    @httpGet('/:id')
-    public getOne(
-        @requestParam('id') id: string,
-        @response() res: Response,
-    ): void {
-        this.handleApiResponse(this.orderService.getOne(id), res)
-    }
-
-    @httpPost('/place')
-    public place(
-        @requestBody() body: PlaceOrderRequest,
-        @response() res: Response,
-    ): void {
-        this.handleApiResponse(this.orderService.place(body), res)
-    }
-
-
-    @httpDelete('/:id')
-    public delete(
-        @requestParam('id') id: string,
-        @response() res: Response,
-    ): void {
-        this.handleApiResponse(this.orderService.deleteOne(id), res)
-    }
+  @Post()
+  public createOne(
+    @Body() body: Partial<IOrder>,
+  ): Promise<IOrder> {
+    return this._orderService.place(body)
+  }
 }

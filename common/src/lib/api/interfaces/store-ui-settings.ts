@@ -1,7 +1,7 @@
-import { MongooseDocument } from './mongoose-document'
+import { Document } from './document'
 import { ProductsFilter } from './products-filter'
 
-export interface StoreUiSettings extends MongooseDocument {
+export interface StoreUiSettings extends Document {
     orderOfVariableAttributeSelects?: string[]
     combinedVariableAttributeSelects?: string[][]
     productsFilters?: ProductsFilter[]

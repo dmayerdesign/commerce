@@ -11,18 +11,6 @@ export interface EmailStyleOptions extends Document {
     innerBgColor: string
 }
 
-export interface EmailServiceOptions extends Document {
-    fromName?: string
-    fromEmail?: string
-    toName?: string
-    toEmail: string
-    subject?: string
-    preheader?: string
-    html?: string
-    text?: string
-    organization?: Organization
-}
-
 export interface EmailOptions extends Document {
     fromName: string
     fromEmail: string
@@ -35,7 +23,7 @@ export interface EmailOptions extends Document {
     organization?: Organization
 }
 
-export interface OrderEmailOptions extends EmailServiceOptions {
+export interface OrderEmailOptions extends EmailOptions {
     order?: Order
     orderDisplayItems: CartDisplayItem<Product>[]
 }

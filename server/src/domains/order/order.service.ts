@@ -1,19 +1,18 @@
 import { Inject, Injectable } from '@nestjs/common'
-
 import { Order } from '@qb/common/api/entities/order'
 import { Product } from '@qb/common/api/entities/product'
-import { GetCartItemsFromIdsRequest } from '@qb/common/api/requests/get-cart-items-from-ids.request'
+import { Order as IOrder } from '@qb/common/api/interfaces/order'
+import { Product as IProduct } from '@qb/common/api/interfaces/product'
+import { UpdateManyRequest } from '@qb/common/api/requests/update-many.request'
 import { ApiErrorResponse } from '@qb/common/api/responses/api-error.response'
-import { StripeSubmitOrderResponse } from '@qb/common/api/responses/stripe/stripe-submit-order.response'
-import { CartHelper } from '@qb/common/helpers/cart.helper'
-import { UserHelper } from '@qb/common/helpers/user.helper'
+import { getDisplayItems } from '@qb/common/helpers/cart.helpers'
+import { getFullName } from '@qb/common/helpers/user.helpers'
 import { QbRepository } from '../../shared/data-access/repository'
-import { OrderService as IOrderService } from '../interfaces/order-service'
-import { CartService } from '../order/cart/cart.service'
+import { EmailService } from '../email/email.service'
 import { StripeOrderService } from '../order/stripe/stripe-order.service'
-import { CrudService } from './crud.service'
-import { OrganizationService } from './organization.service'
-import { ProductService } from './product.service'
+import { OrganizationService } from '../organization/organization.service'
+import { ProductService } from '../product/product.service'
+import { OrderService as IOrderService } from './order.service.interface'
 
 /**
  * TODO:
@@ -22,21 +21,24 @@ import { ProductService } from './product.service'
  * -- Maybe create a `ProductRecommendationData` entity
  * --- { productId: string, purchasedWithProducts: { productId: string, count: number }[] }
  */
-@injectable()
-export class OrderService extends CrudService<Order> implements IOrderService {
+@Injectable()
+export class OrderService implements IOrderService {
 
     protected model = Order
 
     constructor(
-        @Inject(QbRepository) protected repository: QbRepository<Order>,
-        @Inject(StripeOrderService) private stripeOrderService: StripeOrderService,
-        @Inject(CartService) private cartService: CartService,
-        @Inject(ProductService) private productService: ProductService,
-        @Inject(EmailService) private emailService: EmailService,
-        @Inject(OrganizationService) private organizationService: OrganizationService,
-    ) { super() }
+        @Inject(QbRepository) protected _repository: QbRepository<IOrder>,
+        @Inject(QbRepository) private _productRepository: QbRepository<IProduct>,
+        @Inject(StripeOrderService) private _stripeOrderService: StripeOrderService,
+        @Inject(ProductService) private _productService: ProductService,
+        @Inject(EmailService) private _emailService: EmailService,
+        @Inject(OrganizationService) private _organizationService: OrganizationService,
+    ) {
+        this._repository.configureForGoosetypeEntity(Order)
+        this._productRepository.configureForGoosetypeEntity(Product)
+    }
 
-    public async place(newOrder: Order): Promise<StripeSubmitOrderResponse> {
+    public async place(newOrder: Partial<IOrder>): Promise<IOrder> {
         try {
             // Hydrate the order (replace the `id`s stored in `order.items` with products).
 
@@ -44,35 +46,37 @@ export class OrderService extends CrudService<Order> implements IOrderService {
 
             // Submit the order.
 
-            const stripeSubmitOrderResponse = await this.stripeOrderService.submitOrder(order)
+            const stripeSubmitOrderResponse = await this._stripeOrderService.submitOrder(order)
 
-            const paidOrder = await this._hydrate(stripeSubmitOrderResponse.body.order)
-            const parentProducts = await this.productService.getParentProducts(order.items as Product[])
-            const allProducts = [ ...order.items as Product[], ...parentProducts ]
+            const paidOrder = await this._hydrate(stripeSubmitOrderResponse.order)
+            const parentProducts = await this._productService.getParentProducts(order.items as IProduct[])
+            const allProducts = [ ...order.items as IProduct[], ...parentProducts ]
 
             // Update the stock quantity and total sales of each variation and standalone.
 
-            this.productService.updateInventory(allProducts, paidOrder)
+            this._productService.updateInventory(allProducts, paidOrder)
 
             // Set `existsInStripe` asynchronously.
 
-            this.productService.update(allProducts.map((product) => product._id), {
-                existsInStripe: true,
-            })
+            this._productRepository.updateMany(new UpdateManyRequest({
+                ids: allProducts.map((product) => product._id),
+                update: {
+                    existsInStripe: true,
+                },
+            }))
 
             // Send a receipt.
 
-            const getOrganizationResponse = await this.organizationService.getOrganization()
-            const organization = getOrganizationResponse.body
-            await this.emailService.sendReceipt({
+            const organization = await this._organizationService.getOrganization()
+            await this._emailService.sendReceipt({
                 organization,
                 order: paidOrder,
-                orderDisplayItems: CartHelper.getDisplayItems(order.items as Product[]),
+                orderDisplayItems: getDisplayItems(order.items as IProduct[]),
                 toEmail: paidOrder.customer.email,
-                toName: UserHelper.getFullName(paidOrder.customer)
+                toName: getFullName(paidOrder.customer)
             })
 
-            return stripeSubmitOrderResponse
+            return paidOrder
         }
         catch (error) {
             if (error instanceof ApiErrorResponse) {
@@ -88,7 +92,7 @@ export class OrderService extends CrudService<Order> implements IOrderService {
      * Warning: No validation is done to ensure that `items` is not already populated.
      * @param {Order} order
      */
-    private async _hydrate(order: Order): Promise<Order> {
+    private async _hydrate(order: Partial<IOrder>): Promise<IOrder> {
         if (!order.items ||
             !order.items.length) {
             return order

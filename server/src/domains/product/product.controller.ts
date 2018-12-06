@@ -3,13 +3,14 @@ import { Product } from '@qb/common/api/entities/product'
 import { Price } from '@qb/common/api/interfaces/price'
 import { Product as IProduct } from '@qb/common/api/interfaces/product'
 import { ListRequest } from '@qb/common/api/requests/list.request'
+import { products } from '@qb/common/constants/api-endpoints'
 import { Crud } from '@qb/common/constants/crud'
 import { Response as IResponse } from 'express'
 import { QbController } from '../../shared/controller/controller'
 import { QbRepository } from '../../shared/data-access/repository'
 import { ProductService } from './product.service'
 
-@Controller('api/products')
+@Controller(products)
 export class ProductController extends QbController<IProduct> {
   constructor(
     @Inject(QbRepository) protected readonly _repository: QbRepository<IProduct>,

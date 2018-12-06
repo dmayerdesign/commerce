@@ -1,6 +1,6 @@
 import { prop, schema, MongooseDocument } from '../../goosetype'
 
-@schema(ShoppingCartIcons)
+@schema()
 export class ShoppingCartIcons extends MongooseDocument {
     @prop() public empty: string
     @prop() public 1: string

@@ -7,15 +7,15 @@ import { Product } from '../../api/interfaces/product'
 import { SimpleAttributeValue } from '../../api/interfaces/simple-attribute-value'
 import { VariableAttributeSelectOptionType } from '../../constants/enums/variable-attribute-select-option-type'
 import { VariableAttributeSelectType } from '../../constants/enums/variable-attribute-select-type'
-import { ProductHelper } from '../../helpers/product.helper'
+import { isAttributeValue } from '../../helpers/product.helpers'
 import { Stateful } from '../common/stateful'
 
 export class VariableAttributeSelectState {
     public selectedOption?: VariableAttributeSelectOption = null
     public matchingVariations?: Product[] = []
     public availableOptions?: VariableAttributeSelectOption[]
-    public wasFirstSelected? = false
-    public allOptionsAreAvailable? = false
+    public wasFirstSelected ? = false
+    public allOptionsAreAvailable ? = false
 }
 
 export interface VariableAttributeSelectAttribute<Attribute> {
@@ -146,7 +146,7 @@ export class VariableAttributeSelect extends Stateful<VariableAttributeSelectSta
                                             if (!existingOption) {
                                                 const label = (attrValue as AttributeValue).name || attrValue.value
                                                 return {
-                                                    type: ProductHelper.isAttributeValue(attrValue) ? VariableAttributeSelectOptionType.AttributeValue : VariableAttributeSelectOptionType.SimpleAttributeValue,
+                                                    type: isAttributeValue(attrValue) ? VariableAttributeSelectOptionType.AttributeValue : VariableAttributeSelectOptionType.SimpleAttributeValue,
                                                     label,
                                                     data: attrValue,
                                                     matchingVariations: [ variation ],

@@ -1,6 +1,6 @@
 import { arrayProp, prop, schema, MongooseDocument } from '../../goosetype'
 
-@schema(CustomRegion)
+@schema()
 export class CustomRegion extends MongooseDocument {
     @prop({ default: true }) public isActive?: boolean
     @prop() public isMetaRegion?: boolean

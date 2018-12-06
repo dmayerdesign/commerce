@@ -3,7 +3,6 @@ import { Order } from '@qb/common/api/entities/order'
 import { Discount as IDiscount } from '@qb/common/api/interfaces/discount'
 import { Order as IOrder } from '@qb/common/api/interfaces/order'
 import { Product as IProduct } from '@qb/common/api/interfaces/product'
-import { GetProductsRequest } from '@qb/common/api/requests/get-products.request'
 import { ListRequest } from '@qb/common/api/requests/list.request'
 import { UpdateRequest } from '@qb/common/api/requests/update.request'
 import { ApiErrorResponse } from '@qb/common/api/responses/api-error.response'
@@ -15,6 +14,7 @@ import { StripeOrder } from '@qb/common/stripe-shims/stripe-order'
 import * as Stripe from 'stripe'
 import { QbRepository } from '../../../shared/data-access/repository'
 import { OrganizationService } from '../../organization/organization.service'
+import { ProductListRequest } from '../../product/product.request.list'
 import { getSubTotal, getTotal } from '../order.helpers'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
@@ -44,7 +44,7 @@ export class StripeOrderActionsService {
      * @returns {Promise<StripeCreateOrderResponse>}
      * @memberof StripeService
      */
-    public async createOrder(order: Order): Promise<StripeCreateOrderResponse> {
+    public async createOrder(order: IOrder): Promise<StripeCreateOrderResponse> {
         let orderItems: IProduct[]
         let orderDiscounts: IDiscount[]
 
@@ -59,7 +59,7 @@ export class StripeOrderActionsService {
 
         try {
             const organization = await this.organizationService.getOrganization()
-            const orderItemsRequest = new GetProductsRequest()
+            const orderItemsRequest = new ProductListRequest()
             orderItemsRequest.ids = order.items as string[]
             orderItems = await this._productRepository.list(orderItemsRequest)
             order.subTotal = getSubTotal(orderItems)

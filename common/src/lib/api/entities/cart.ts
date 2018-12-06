@@ -3,7 +3,7 @@ import { CartItem } from '../interfaces/cart-item'
 import { Discount } from './discount'
 import { Price } from './price'
 
-@schema(Cart)
+@schema()
 export class Cart extends MongooseDocument {
     @prop() public count?: number
     @arrayProp({ itemsRefPath: 'cartItemsRefModelName' }) public items: Ref<CartItem>[]

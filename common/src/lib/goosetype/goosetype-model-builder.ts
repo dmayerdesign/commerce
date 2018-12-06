@@ -111,6 +111,7 @@ class ModelBuilder {
         ]
 
         if (!schemaDefinition) {
+            console.log('Does the prop ever handle creating the schema definition? Yes!')
             schemaDefinition = {}
             this.schemaDefinitions.set(name, {})
         }

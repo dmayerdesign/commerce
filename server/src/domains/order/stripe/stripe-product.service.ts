@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common'
-import { Price } from '@qb/common/api/entities/price'
 import { Attribute } from '@qb/common/api/interfaces/attribute'
 import { AttributeValue } from '@qb/common/api/interfaces/attribute-value'
+import { Price } from '@qb/common/api/interfaces/price'
 import { Product } from '@qb/common/api/interfaces/product'
 import { SimpleAttributeValue } from '@qb/common/api/interfaces/simple-attribute-value'
 import { Copy } from '@qb/common/constants/copy'

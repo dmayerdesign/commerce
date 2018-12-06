@@ -1,9 +1,9 @@
 import { prop, schema, MongooseDocument } from '../../goosetype'
-import { ImageHelper } from '../../helpers/image.helper'
+import { getImageForSchema } from '../../helpers/image.helpers'
 
-@schema(Image)
+@schema()
 export class Image extends MongooseDocument {
-    @prop({ get: ImageHelper.getImageForSchema }) public large?: string
-    @prop({ get: ImageHelper.getImageForSchema }) public medium?: string
-    @prop({ get: ImageHelper.getImageForSchema }) public thumbnail?: string
+    @prop({ get: getImageForSchema }) public large?: string
+    @prop({ get: getImageForSchema }) public medium?: string
+    @prop({ get: getImageForSchema }) public thumbnail?: string
 }

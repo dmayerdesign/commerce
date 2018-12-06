@@ -1,6 +1,6 @@
 import { prop, schema, MongooseDocument } from '../../goosetype'
 
-@schema(StripeCardHash)
+@schema()
 export class StripeCardHash extends MongooseDocument {
     @prop() public id: string
     @prop() public object: string

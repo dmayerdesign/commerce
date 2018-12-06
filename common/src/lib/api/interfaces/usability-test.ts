@@ -1,9 +1,8 @@
-import { MongooseDocument } from './mongoose-document'
+import { Document } from './document'
 import { Ref } from './ref'
 import { UsabilityExperience } from './usability-experience'
-import { UsabilityTestBucket } from './usability-test-bucket'
 
-export interface UsabilityTest extends MongooseDocument {
+export interface UsabilityTest extends Document {
     usabilityExperience: Ref<UsabilityExperience>
     description: string
     buckets: number

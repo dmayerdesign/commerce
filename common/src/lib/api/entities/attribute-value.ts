@@ -11,8 +11,3 @@ export class AttributeValue extends MongooseDocument {
     @prop() public description: string
     @prop() public value: any
 }
-
-export class CreateAttributeValueError extends Error { }
-export class FindAttributeValueError extends Error { }
-export class UpdateAttributeValueError extends Error { }
-export class DeleteAttributeValueError extends Error { }

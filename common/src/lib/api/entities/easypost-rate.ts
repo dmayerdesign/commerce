@@ -1,7 +1,7 @@
 import { Currency } from '../../constants/enums/currency'
 import { prop, schema, MongooseDocument } from '../../goosetype'
 
-@schema(EasypostRate)
+@schema()
 export class EasypostRate extends MongooseDocument {
     @prop() public readonly created_at: string
     @prop() public readonly updated_at: string

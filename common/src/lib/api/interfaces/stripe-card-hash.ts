@@ -1,6 +1,6 @@
-import { MongooseDocument } from './mongoose-document'
+import { Document } from './document'
 
-export interface StripeCardHash extends MongooseDocument {
+export interface StripeCardHash extends Document {
     id: string
     object: string
     number: number

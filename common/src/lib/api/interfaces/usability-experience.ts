@@ -1,5 +1,5 @@
-import { MongooseDocument } from './mongoose-document'
+import { Document } from './document'
 
-export interface UsabilityExperience extends MongooseDocument {
+export interface UsabilityExperience extends Document {
     description: string
 }

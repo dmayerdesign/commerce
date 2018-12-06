@@ -1,10 +1,10 @@
 import { Types } from 'mongoose'
 import { prop, schema, MongooseDocument, Ref } from '../../goosetype'
-import { Diff as IDiff } from '../interfaces/diff'
+import { Document } from '../interfaces/document'
 
-@schema(Diff)
-export class Diff extends MongooseDocument implements IDiff {
-  @prop({ type: Types.ObjectId }) public recordId: Ref<MongooseDocument>
+@schema()
+export class Diff extends MongooseDocument {
+  @prop({ type: Types.ObjectId }) public recordId: Ref<Document>
   @prop() public previousValue: any
   @prop() public currentValue: any
 }

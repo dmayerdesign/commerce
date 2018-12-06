@@ -5,7 +5,7 @@ import { ListRequest } from '@qb/common/api/requests/list.request'
 import { UpdateManyRequest } from '@qb/common/api/requests/update-many.request'
 import { UpdateRequest } from '@qb/common/api/requests/update.request'
 import { MongooseDocument } from '@qb/common/goosetype/models/mongoose-document'
-import { isArrayLike, toArray } from '@qb/common/helpers/mongoose.helper'
+import { isArrayLike, toArray } from '@qb/common/helpers/mongoose.helpers'
 import * as JSONStream from 'JSONStream'
 import { Response as IResponse } from 'express'
 import { Document, DocumentQuery, Model } from 'mongoose'
@@ -17,6 +17,7 @@ export class QbRepository<EntityType extends Document> implements IQbRepository<
   public configureForGoosetypeEntity(entityConstructor: typeof MongooseDocument): void {
     this.configureForMongooseModel(entityConstructor.getModel())
   }
+
   public configureForMongooseModel(model: Model<EntityType>): void {
     this._model = model
   }
@@ -39,7 +40,7 @@ export class QbRepository<EntityType extends Document> implements IQbRepository<
       .pipe(response.contentType('json'))
   }
 
-  public async insert(body: (EntityType | Partial<EntityType>)[]): Promise<EntityType[]> {
+  public async insert(body: Partial<EntityType>[]): Promise<EntityType[]> {
     const documents = body.map((value) => new this._model(value))
     return Promise.all(documents.map((document) => document.save()))
   }

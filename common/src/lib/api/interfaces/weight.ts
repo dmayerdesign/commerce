@@ -1,7 +1,7 @@
 import { WeightUnit } from '../../constants/enums/weight-unit'
-import { MongooseDocument } from './mongoose-document'
+import { Document } from './document'
 
-export interface Weight extends MongooseDocument {
+export interface Weight extends Document {
     amount: number
     unitOfMeasurement: WeightUnit
 }

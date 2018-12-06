@@ -1,13 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { Attribute } from '@qb/common/api/entities/attribute'
 import { AttributeValue } from '@qb/common/api/entities/attribute-value'
-import { Image } from '@qb/common/api/entities/image'
 import { Price } from '@qb/common/api/entities/price'
 import { Product } from '@qb/common/api/entities/product'
 import { Taxonomy } from '@qb/common/api/entities/taxonomy'
 import { TaxonomyTerm } from '@qb/common/api/entities/taxonomy-term'
 import { Attribute as IAttribute } from '@qb/common/api/interfaces/attribute'
 import { AttributeValue as IAttributeValue } from '@qb/common/api/interfaces/attribute-value'
+import { Image } from '@qb/common/api/interfaces/image'
 import { Product as IProduct } from '@qb/common/api/interfaces/product'
 import { Taxonomy as ITaxonomy } from '@qb/common/api/interfaces/taxonomy'
 import { TaxonomyTerm as ITaxonomyTerm } from '@qb/common/api/interfaces/taxonomy-term'
@@ -544,11 +544,11 @@ export class HyzershopMigrationService {
                         imageBaseUrl = '/product-images/discraft-deluxe-disc-golf-set'
                     }
 
-                    const productImage: Image = {
+                    const productImage = {
                         large: imageBaseUrl + '-large.png',
                         medium: imageBaseUrl + '-medium.png',
                         thumbnail: imageBaseUrl + '-thumbnail.png',
-                    }
+                    } as Image
 
                     product.featuredImages.push(productImage)
                     product.images.push(productImage)
@@ -638,7 +638,7 @@ export class HyzershopMigrationService {
                             banner: `/page-images/${partialSlug}-banner.jpg`,
                             bannerOverlay: `/page-images/${slug}.png`,
                         },
-                    }
+                    } as ITaxonomyTerm
                 }))
             }
 
@@ -674,7 +674,7 @@ export class HyzershopMigrationService {
                             banner: `/page-images/${partialSlug}-banner.jpg`,
                             bannerOverlay: `/page-images/${slug}.png`,
                         },
-                    }
+                    } as ITaxonomyTerm
                 }))
             }
 

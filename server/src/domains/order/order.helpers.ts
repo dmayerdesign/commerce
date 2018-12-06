@@ -1,7 +1,5 @@
 import { Copy } from '@qb/common/constants/copy'
-import { CartHelper } from '@qb/common/helpers/cart.helper'
-
-const { getSubTotal, getTotal } = CartHelper
+import { getSubTotal, getTotal } from '@qb/common/helpers/cart.helpers'
 
 export { getSubTotal, getTotal }
 

@@ -7,7 +7,7 @@ import { SimpleAttributeValue } from '../interfaces/simple-attribute-value'
 import { TaxonomyTerm as ITaxonomyTerm } from '../interfaces/taxonomy-term'
 import { TaxonomyTerm } from './taxonomy-term'
 
-@schema(ProductsFilter)
+@schema()
 export class ProductsFilter extends MongooseDocument implements IProductsFilter {
     @prop({ enum: ProductsFilterType }) public filterType: ProductsFilterType
     @prop() public enabled: boolean

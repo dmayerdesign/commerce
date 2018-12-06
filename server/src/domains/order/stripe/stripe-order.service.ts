@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common'
-import { Order } from '@qb/common/api/entities/order'
-import { FindProductsError, Product } from '@qb/common/api/entities/product'
+import { Order } from '@qb/common/api/interfaces/order'
+import { Product } from '@qb/common/api/interfaces/product'
 import { ListRequest } from '@qb/common/api/requests/list.request'
 import { ApiErrorResponse } from '@qb/common/api/responses/api-error.response'
 import { StripeSubmitOrderResponse } from '@qb/common/api/responses/stripe/stripe-submit-order.response'
@@ -56,7 +56,7 @@ export class StripeOrderService {
             const standalones = variationsAndStandalones.filter((variationOrStandalone) => !variationOrStandalone.isVariation)
 
             if (!variationsAndStandalones || !variationsAndStandalones.length) {
-                throw new ApiErrorResponse(new FindProductsError(Copy.ErrorMessages.productsNotFound), HttpStatus.CLIENT_ERROR_NOT_FOUND)
+                throw new ApiErrorResponse(new Error(Copy.ErrorMessages.productsNotFound), HttpStatus.CLIENT_ERROR_NOT_FOUND)
             }
 
             variationsAndStandalones.forEach(product => {
@@ -82,12 +82,12 @@ export class StripeOrderService {
             const parents = await this._productRepository.list(findParentsRequest)
 
             // Create the products and SKUs in Stripe.
-            const stripeProducts = await this.stripeProductService.createProducts([ ...parents, ...standalones ])
+            await this.stripeProductService.createProducts([ ...parents, ...standalones ])
             await this.stripeProductService.createSkus([ ...variations, ...standalones ])
 
             // Create the order in Stripe.
             const createOrderResponse = await this.stripeOrderActionsService.createOrder(orderData)
-            const { order } = createOrderResponse.body
+            const { order } = createOrderResponse
             // If the customer opted to save their payment info, create the customer in Stripe.
             if (order.customer.savePaymentInfo) {
                 const stripeCustomer = await this.stripeCustomerService.createCustomer(order)

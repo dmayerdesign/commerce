@@ -9,8 +9,3 @@ export class Attribute extends MongooseDocument {
     @prop() public slug: string
     @prop() public description: string
 }
-
-export class CreateAttributeError extends Error { }
-export class FindAttributeError extends Error { }
-export class UpdateAttributeError extends Error { }
-export class DeleteAttributeError extends Error { }

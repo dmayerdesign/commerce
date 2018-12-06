@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core'
 import { NavigationItem } from '@qb/common/api/entities/navigation-item'
 import { BootstrapBreakpointKey } from '@qb/common/constants/enums/bootstrap-breakpoint-key'
-import { ArrayHelper } from '@qb/common/helpers/array.helper'
-import { TreeHelper } from '@qb/common/helpers/tree.helper'
+import { pullFrom, pushTo } from '@qb/common/helpers/array.helpers'
+import { hasChildren } from '@qb/common/helpers/tree.helpers'
 import { WindowRefService } from '../../services/window-ref.service'
 
 export interface NavigationListContext {
@@ -95,35 +95,34 @@ export class QbNavigationListComponent {
     @Input() public items: NavigationItem[]
     @Input() public id: string
     public navItemsShowingChildren: NavigationItem[] = []
-    public treeHelper = TreeHelper
 
     constructor(
         private windowRefService: WindowRefService
     ) {}
 
     public isShowingChildren(item: NavigationItem): boolean {
-        return TreeHelper.hasChildren(item)
+        return hasChildren(item)
             && !!this.navItemsShowingChildren.find((navItem) => item === navItem)
     }
 
     public handleNavLinkMouseEnter(item: NavigationItem): void {
         if (this.windowRefService.mediaBreakpointAbove(BootstrapBreakpointKey.Sm)) {
-            ArrayHelper.pushTo<NavigationItem>(this.navItemsShowingChildren, item)
+            pushTo<NavigationItem>(this.navItemsShowingChildren, item)
         }
     }
 
     public handleNavLinkMouseLeave(item: NavigationItem): void {
         if (this.windowRefService.mediaBreakpointAbove(BootstrapBreakpointKey.Sm)) {
-            ArrayHelper.pullFrom<NavigationItem>(this.navItemsShowingChildren, item)
+            pullFrom<NavigationItem>(this.navItemsShowingChildren, item)
         }
     }
 
     public handleDropdownExpandClick(item: NavigationItem): void {
         if (this.isShowingChildren(item)) {
-            ArrayHelper.pullFrom<NavigationItem>(this.navItemsShowingChildren, item)
+            pullFrom<NavigationItem>(this.navItemsShowingChildren, item)
         }
         else {
-            ArrayHelper.pushTo<NavigationItem>(this.navItemsShowingChildren, item)
+            pushTo<NavigationItem>(this.navItemsShowingChildren, item)
         }
     }
 
@@ -140,16 +139,16 @@ export class QbNavigationListComponent {
     }
 
     public shouldShowDownArrow(item: NavigationItem): boolean {
-        return TreeHelper.hasChildren(item) && this.windowRefService.mediaBreakpointAbove(BootstrapBreakpointKey.Sm)
+        return hasChildren(item) && this.windowRefService.mediaBreakpointAbove(BootstrapBreakpointKey.Sm)
     }
 
     public shouldShowPlus(item: NavigationItem): boolean {
-        return TreeHelper.hasChildren(item) && this.windowRefService.mediaBreakpointBelow(BootstrapBreakpointKey.Md)
+        return hasChildren(item) && this.windowRefService.mediaBreakpointBelow(BootstrapBreakpointKey.Md)
     }
 
     public getNavItemClassList(item: NavigationItem): string[] {
         const classList = []
-        if (TreeHelper.hasChildren(item)) {
+        if (hasChildren(item)) {
             classList.push('dropdown')
         }
         if (!!item.className) {

@@ -1,25 +1,25 @@
 import { Inject } from '@nestjs/common'
 import { Attribute } from '@qb/common/api/entities/attribute'
 import { AttributeValue } from '@qb/common/api/entities/attribute-value'
-import { Order } from '@qb/common/api/entities/order'
 import { Product } from '@qb/common/api/entities/product'
 import { Taxonomy } from '@qb/common/api/entities/taxonomy'
 import { TaxonomyTerm } from '@qb/common/api/entities/taxonomy-term'
+import { Order } from '@qb/common/api/interfaces/order'
 import { Organization } from '@qb/common/api/interfaces/organization'
 import { Price } from '@qb/common/api/interfaces/price'
 import { Product as IProduct } from '@qb/common/api/interfaces/product'
 import { TaxonomyTerm as ITaxonomyTerm } from '@qb/common/api/interfaces/taxonomy-term'
-import { GetProductsFilterType, GetProductsRequest } from '@qb/common/api/requests/get-products.request'
 import { ListRequest } from '@qb/common/api/requests/list.request'
 import { UpdateRequest } from '@qb/common/api/requests/update.request'
 import { ApiErrorResponse } from '@qb/common/api/responses/api-error.response'
 import { Currency } from '@qb/common/constants/enums/currency'
 import { RangeLimit } from '@qb/common/constants/enums/range-limit'
-import { ProductHelper } from '@qb/common/helpers/product.helper'
+import { getPrice } from '@qb/common/helpers/product.helpers'
 import { Response } from 'express'
 import { QbRepository } from '../../shared/data-access/repository'
 import { OrganizationService } from '../organization/organization.service'
 import { attributeValueFilter, propertyFilter, simpleAttributeValueFilter, taxonomyTermFilter } from '../product/product.helpers'
+import { ProductListFilterType, ProductListRequest } from './product.request.list'
 
 /**
  * Methods for querying the `products` collection
@@ -113,8 +113,8 @@ export class ProductService {
      * Get an unfiltered list of parent & standalone products,
      * or use a search/filter query
      */
-    public async getProducts(body: GetProductsRequest, response: Response): Promise<void> {
-        const listRequest = await this._createGetProductsRequestQuery(body)
+    public async getProducts(body: ProductListRequest, response: Response): Promise<void> {
+        const listRequest = await this._createProductListRequestQuery(body)
 
         if (!listRequest.populates) {
             listRequest.populates = []
@@ -131,15 +131,15 @@ export class ProductService {
     }
 
     public async getPriceRangeForShop(): Promise<Price[]> {
-        const getProductsRequest = new GetProductsRequest({
+        const getProductsRequest = new ProductListRequest({
             skip: 0,
             limit: 0
         })
-        const listRequest = await this._createGetProductsRequestQuery(getProductsRequest)
+        const listRequest = await this._createProductListRequestQuery(getProductsRequest)
         try {
             const products = await this._productRepository.list(listRequest)
             const _priceRange = products.reduce<Price[]>((priceRange, product) => {
-                const price = ProductHelper.getPrice(product)
+                const price = getPrice(product)
                 if (Array.isArray(price)) {
                     if (priceRange[RangeLimit.Min].amount === 0 || price[RangeLimit.Min].amount < priceRange[RangeLimit.Min].amount) {
                         priceRange[RangeLimit.Min] = price[RangeLimit.Min]
@@ -167,7 +167,7 @@ export class ProductService {
         }
     }
 
-    public updateInventory(products: Product[], order: Order): Promise<IProduct[]> {
+    public updateInventory(products: IProduct[], order: Order): Promise<IProduct[]> {
         const productPromises: Promise<IProduct>[] = []
 
         products.forEach((product) => {
@@ -175,11 +175,11 @@ export class ProductService {
             if (product.isParent) {
                 const variations = products.filter((p) => p.parentSku === product.sku)
                 const variationSkus = variations.map((v) => v.sku)
-                const orderVariations = order.items.filter((op: Product) => variationSkus.indexOf(op.sku) > -1)
+                const orderVariations = order.items.filter((op: IProduct) => variationSkus.indexOf(op.sku) > -1)
                 qty = orderVariations.length
             }
             else {
-                const orderItems = order.items.filter((op: Product) => op.sku === product.sku) as Product[]
+                const orderItems = order.items.filter((op: IProduct) => op.sku === product.sku) as IProduct[]
                 qty = orderItems.length
             }
 
@@ -204,7 +204,7 @@ export class ProductService {
         return Promise.all(productPromises)
     }
 
-    public async getParentProducts(products: Product[]): Promise<IProduct[]> {
+    public async getParentProducts(products: IProduct[]): Promise<IProduct[]> {
         const parentProducts: IProduct[] = []
         for (const product of products) {
             if (!product.isVariation) {
@@ -231,14 +231,14 @@ export class ProductService {
     // Helpers.
 
     public getPrice(product: IProduct): Price | Price[] {
-        return ProductHelper.getPrice(product)
+        return getPrice(product)
     }
 
     public determinePrice(product: IProduct): Price | Price[] {
-        return ProductHelper.getPrice(product)
+        return getPrice(product)
     }
 
-    private async _createGetProductsRequestQuery(body: GetProductsRequest): Promise<ListRequest<IProduct>> {
+    private async _createProductListRequestQuery(body: ProductListRequest): Promise<ListRequest<IProduct>> {
         const {
             limit,
             skip,
@@ -246,7 +246,7 @@ export class ProductService {
             filters,
             sortBy,
             sortDirection,
-        } = new GetProductsRequest(body)
+        } = new ProductListRequest(body)
         let taxonomyTermIdsToSearch: string[]
         const searchRegExp = search ? new RegExp(search, 'gi') : undefined
         const searchOr: {
@@ -319,19 +319,19 @@ export class ProductService {
 
                 // Property Filter.
 
-                if (filter.type === GetProductsFilterType.Property) {
+                if (filter.type === ProductListFilterType.Property) {
                     searchQuery = propertyFilter(filter, searchQuery)
                 }
 
                 // Simple Attribute Value Filter - performs an `$elemMatch` on `Product.simpleAttributeValues` and `Product.variableSimpleAttributeValues`.
 
-                if (filter.type === GetProductsFilterType.SimpleAttributeValue) {
+                if (filter.type === ProductListFilterType.SimpleAttributeValue) {
                     searchQuery = simpleAttributeValueFilter(filter, searchQuery)
                 }
 
                 // Attribute Value Filter - performs an `$or` query on `Product.attributeValues` and `Product.variableAttributeValues`.
 
-                if (filter.type === GetProductsFilterType.AttributeValue) {
+                if (filter.type === ProductListFilterType.AttributeValue) {
                     searchQuery = attributeValueFilter(filter, searchQuery)
                 }
 
@@ -340,7 +340,7 @@ export class ProductService {
                     // to provide is the `slug`. For AttributeValues, the front end is fetching them
                     // in order to display them anyway, so providing the `id` is easy.
 
-                if (filter.type === GetProductsFilterType.TaxonomyTerm) {
+                if (filter.type === ProductListFilterType.TaxonomyTerm) {
                     const taxonomyTerms = await this._taxonomyTermsRepository.list(
                         new ListRequest({
                             query: { slug: { $in: filter.values } }

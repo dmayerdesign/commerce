@@ -1,6 +1,6 @@
 import { prop, schema, MongooseDocument } from '../../goosetype'
 
-@schema(Dimensions)
+@schema()
 export class Dimensions extends MongooseDocument {
     @prop() public length: number
     @prop() public width: number

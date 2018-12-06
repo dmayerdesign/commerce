@@ -1,6 +1,6 @@
 import { GetProductsFilter } from '@qb/common/api/requests/get-products.request'
 import { RangeLimit } from '@qb/common/constants/enums/range-limit'
-import { queryWithAndOperation } from '@qb/common/helpers/mongoose.helper'
+import { queryWithAndOperation } from '@qb/common/helpers/mongoose.helpers'
 import { cloneDeep } from 'lodash'
 
 export function propertyFilter(filter: GetProductsFilter, query: typeof queryWithAndOperation): typeof queryWithAndOperation {

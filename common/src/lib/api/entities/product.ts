@@ -96,12 +96,3 @@ export class Product extends MongooseDocument {
     @prop() public totalSales: number
     @prop() public existsInStripe: boolean
 }
-
-export class CreateProductError extends Error { }
-export class CreateProductsError extends Error { }
-export class FindProductError extends Error { }
-export class FindProductsError extends Error { }
-export class UpdateProductError extends Error { }
-export class UpdateProductsError extends Error { }
-export class DeleteProductError extends Error { }
-export class DeleteProductsError extends Error { }

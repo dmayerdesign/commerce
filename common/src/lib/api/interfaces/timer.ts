@@ -1,6 +1,6 @@
-import { MongooseDocument } from './mongoose-document'
+import { Document } from './document'
 
-export interface Timer extends MongooseDocument {
+export interface Timer extends Document {
     name: string
     url: string
     method: string

@@ -1,7 +1,7 @@
 import { arrayProp, model, prop, schema, MongooseDocument, MongooseSchemaOptions, Ref } from '../../goosetype'
 import { User } from './user'
 
-@schema(LinkEmbed)
+@schema()
 export class LinkEmbed {
     @prop() public url: string
     @prop() public type: string
@@ -11,14 +11,14 @@ export class LinkEmbed {
     @prop() public provider_url: string
 }
 
-@schema(Author)
+@schema()
 export class Author {
     @prop() public userId: string
     @prop() public firstName: string
     @prop() public lastName: string
 }
 
-@schema(Reactions)
+@schema()
 export class Reactions {
     @arrayProp({ itemsRef: User }) public up: Ref<User>[]
     @arrayProp({ itemsRef: User }) public down: Ref<User>[]
