@@ -22,7 +22,7 @@ export abstract class QbBaseController<EntityType extends any> {
   public list(
     @Query(Crud.Params.listRequest) query: string,
   ): Promise<EntityType[]> {
-    const request: ListRequest<EntityType> = JSON.parse(query)
+    const request: ListRequest<EntityType> = query ? JSON.parse(query) : new ListRequest()
     return this._repository.list(request)
   }
 
@@ -31,7 +31,7 @@ export abstract class QbBaseController<EntityType extends any> {
     @Query(Crud.Params.listRequest) query: string,
     @Response() response: IResponse,
   ): Promise<void> {
-    const request: ListRequest<EntityType> = JSON.parse(query)
+    const request: ListRequest<EntityType> = query ? JSON.parse(query) : new ListRequest()
     return this._repository.stream(request, response)
   }
 
@@ -79,7 +79,7 @@ export abstract class QbReadOnlyController<EntityType extends any> {
   public list(
     @Query(Crud.Params.listRequest) query: string,
   ): Promise<EntityType[]> {
-    const request: ListRequest<EntityType> = JSON.parse(query)
+    const request: ListRequest<EntityType> = query ? JSON.parse(query) : new ListRequest()
     return this._repository.list(request)
   }
 

@@ -2,7 +2,7 @@ import * as findOrCreate from 'mongoose-findorcreate'
 import { model, plugin, prop, MongooseDocument } from '../../goosetype'
 
 @plugin(findOrCreate)
-@model(Address)
+@model()
 export class Address extends MongooseDocument {
     @prop() public name?: string
     @prop() public company?: string

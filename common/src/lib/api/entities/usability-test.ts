@@ -2,11 +2,11 @@ import { arrayProp, model, prop, MongooseDocument, MongooseSchemaOptions, Ref } 
 import { UsabilityExperience } from './usability-experience'
 import { UsabilityTestBucket } from './usability-test-bucket'
 
-@model(UsabilityTest, MongooseSchemaOptions.timestamped)
+@model(MongooseSchemaOptions.timestamped)
 export class UsabilityTest extends MongooseDocument {
     @prop({ ref: UsabilityExperience }) public usabilityExperience: Ref<UsabilityExperience>
     @prop() public description: string
-    @arrayProp({ itemsRef: UsabilityTestBucket }) public buckets: number
+    @arrayProp({ ref: UsabilityTestBucket }) public buckets: number
 }
 
 // Errors.

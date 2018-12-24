@@ -39,14 +39,14 @@ import { Weight } from './weight'
     next()
 })
 @plugin(mongooseDelete)
-@model(Product, MongooseSchemaOptions.timestamped)
+@model(MongooseSchemaOptions.timestamped)
 export class Product extends MongooseDocument {
     // Aesthetic.
     @prop() public name: string
     @prop() public slug: string
     @prop() public description: string
-    @arrayProp({ itemsType: Image }) public featuredImages: Image[]
-    @arrayProp({ itemsType: Image }) public images: Image[]
+    @arrayProp({ type: Image }) public featuredImages: Image[]
+    @arrayProp({ type: Image }) public images: Image[]
 
     // Organizational.
     @prop({ unique: true }) public sku: string
@@ -55,32 +55,32 @@ export class Product extends MongooseDocument {
     @prop() public isParent: boolean
     @prop() public parentSku: string
     @prop({ ref: Product }) public parent: Ref<Product>
-    @prop({ default: 'Product' }) public cartItemsRefModelName: string
+    @prop({ default: 'Product' }) public cartrefModelName: string
 
     // Financial.
     @prop() public price: Price
-    @arrayProp({ itemsType: Price }) public priceRange: Price[]
+    @arrayProp({ type: Price }) public priceRange: Price[]
     @prop() public salePrice: Price
-    @arrayProp({ itemsType: Price }) public salePriceRange: Price[]
+    @arrayProp({ type: Price }) public salePriceRange: Price[]
     @prop() public isOnSale: boolean
-    @arrayProp({ itemsType: String }) public variationSkus: string[]
-    @arrayProp({ itemsRef: Product }) public variations: Ref<Product>[]
+    @arrayProp({ type: String }) public variationSkus: string[]
+    @arrayProp({ ref: Product }) public variations: Ref<Product>[]
     @prop() public isVariation: boolean
     @prop() public isDefaultVariation: boolean
 
     // Attributes.
     /// Own attributes.
-    @arrayProp({ itemsRef: AttributeValue }) public attributeValues: Ref<AttributeValue>[]
-    @arrayProp({ itemsType: SimpleAttributeValue }) public simpleAttributeValues: SimpleAttributeValue[]
+    @arrayProp({ ref: AttributeValue }) public attributeValues: Ref<AttributeValue>[]
+    @arrayProp({ type: SimpleAttributeValue }) public simpleAttributeValues: SimpleAttributeValue[]
     /// Variation attributes.
-    @arrayProp({ itemsType: String }) public variableProperties: string[]
-    @arrayProp({ itemsRef: Attribute }) public variableAttributes: Ref<Attribute>[]
-    @arrayProp({ itemsRef: AttributeValue }) public variableAttributeValues: Ref<AttributeValue>[]
-    @arrayProp({ itemsType: SimpleAttributeValue }) public variableSimpleAttributeValues: SimpleAttributeValue[]
+    @arrayProp({ type: String }) public variableProperties: string[]
+    @arrayProp({ ref: Attribute }) public variableAttributes: Ref<Attribute>[]
+    @arrayProp({ ref: AttributeValue }) public variableAttributeValues: Ref<AttributeValue>[]
+    @arrayProp({ type: SimpleAttributeValue }) public variableSimpleAttributeValues: SimpleAttributeValue[]
 
     // Taxonomy.
-    @arrayProp({ itemsRef: TaxonomyTerm }) public taxonomyTerms: Ref<TaxonomyTerm>[]
-    @arrayProp({ itemsType: String }) public taxonomyTermSlugs: string[]
+    @arrayProp({ ref: TaxonomyTerm }) public taxonomyTerms: Ref<TaxonomyTerm>[]
+    @arrayProp({ type: String }) public taxonomyTermSlugs: string[]
 
     // Shipping.
     @prop() public units: Units

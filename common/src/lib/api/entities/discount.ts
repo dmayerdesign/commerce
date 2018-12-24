@@ -5,11 +5,11 @@ import { TaxonomyTerm } from './taxonomy-term'
 
 @schema()
 export class DiscountExceptions extends MongooseDocument {
-    @arrayProp({ itemsRef: Product }) public products: Ref<Product>[]
-    @arrayProp({ itemsRef: TaxonomyTerm }) public taxonomyTerms: Ref<TaxonomyTerm>[]
+    @arrayProp({ ref: Product }) public products: Ref<Product>[]
+    @arrayProp({ ref: TaxonomyTerm }) public taxonomyTerms: Ref<TaxonomyTerm>[]
 }
 
-@model(Discount)
+@model()
 export class Discount extends MongooseDocument {
     @prop() public code: string
     @prop() public total: Price

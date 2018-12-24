@@ -15,8 +15,8 @@ export interface PropOptions extends BasePropOptions { }
 
 export interface ArrayPropOptions extends BasePropOptions {
     items?: any
-    itemsRef?: any
-    itemsRefPath?: string
+    ref?: any
+    refPath?: string
 }
 
 export interface SchemaTypeOptions extends PropOptions {

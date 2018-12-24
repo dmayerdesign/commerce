@@ -2,6 +2,7 @@ import {
     AfterContentInit,
     Component,
     ContentChild,
+    ContentChildren,
     ElementRef,
     Input,
     OnDestroy,
@@ -48,7 +49,6 @@ export class QbFormFieldComponent extends HeartbeatComponent implements OnInit, 
     @Input() public customErrorMessage: TemplateRef<any>
     @ContentChild('input', { read: ElementRef }) public input: ElementRef
 
-    public element: ElementRef
     public errorMessage: string
     public hasBlurred = false
     public isFocused = false
@@ -82,44 +82,42 @@ export class QbFormFieldComponent extends HeartbeatComponent implements OnInit, 
     }
 
     public ngAfterContentInit(): void {
-        let nativeElement: HTMLElement
-
-        if (this.input) {
-            this.element = this.input
-            nativeElement = this.element.nativeElement
-        } else {
-            throw new Error(`A control bound to a template local named 'input' must be passed \
-as a content child of <qb-form-field>, like so:
+        const nativeElement = this.input ? this.input.nativeElement : null
+        if (!this.input || !nativeElement) {
+            throw new Error(`Invalid value provided to @ContentChild: ${this.input}.
+One ControlValueAccessor bound to a template local named 'input' must be passed as a \
+content child of <qb-form-field>, like so:
 
     <qb-form-field [options]="{ label: 'Email' }">
-        <input formControlName="email">
+        <input #input formControlName="email">
     </qb-form-field>\n`)
         }
 
-        if (nativeElement && (!this.options || typeof this.options.formControlType === 'undefined')) {
+        if (!this.options || typeof this.options.formControlType === 'undefined') {
             this.options.formControlType = (function() {
-                const nodeName = nativeElement.nodeName.toLowerCase()
-                const inputType = nativeElement.getAttribute('type')
+                const firstNativeElement = nativeElement
+                const nodeName = firstNativeElement.nodeName.toLowerCase()
+                const inputType = firstNativeElement.getAttribute('type')
                 if (nodeName === 'select') {
                     return nodeName
                 }
                 else if (inputType) {
                     if (inputType === 'checkbox') {
-                        return inputType
+                        return 'checkbox'
                     }
                 }
                 return nodeName as 'input'
             }())
         }
 
-        fromEvent(this.element.nativeElement, 'blur')
+        fromEvent(nativeElement, 'blur')
             .pipe(takeWhile(() => this.isAlive))
             .subscribe(() => {
                 this.isFocused = false
                 this.hasBlurred = true
             })
 
-        fromEvent(this.element.nativeElement, 'focus')
+        fromEvent(nativeElement, 'focus')
             .pipe(takeWhile(() => this.isAlive))
             .subscribe(() => {
                 this.isFocused = true

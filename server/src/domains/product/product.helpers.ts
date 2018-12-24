@@ -1,9 +1,9 @@
-import { GetProductsFilter } from '@qb/common/api/requests/get-products.request'
+import { ProductListFilter } from '@qb/common/api/requests/models/product-list-filter'
 import { RangeLimit } from '@qb/common/constants/enums/range-limit'
 import { queryWithAndOperation } from '@qb/common/helpers/mongoose.helpers'
 import { cloneDeep } from 'lodash'
 
-export function propertyFilter(filter: GetProductsFilter, query: typeof queryWithAndOperation): typeof queryWithAndOperation {
+export function propertyFilter(filter: ProductListFilter, query: typeof queryWithAndOperation): typeof queryWithAndOperation {
   const newQuery = cloneDeep(query)
   if (filter.values && filter.values.length) {
     const propertyVOs = filter.values.map(val => {
@@ -28,7 +28,7 @@ export function propertyFilter(filter: GetProductsFilter, query: typeof queryWit
   return newQuery
 }
 
-export function simpleAttributeValueFilter(filter: GetProductsFilter, query: typeof queryWithAndOperation): typeof queryWithAndOperation {
+export function simpleAttributeValueFilter(filter: ProductListFilter, query: typeof queryWithAndOperation): typeof queryWithAndOperation {
     const newQuery = cloneDeep(query)
     let attributeVOs: { value: any }[] = []
 
@@ -95,7 +95,7 @@ export function simpleAttributeValueFilter(filter: GetProductsFilter, query: typ
     return newQuery
 }
 
-export function attributeValueFilter(filter: GetProductsFilter, query: typeof queryWithAndOperation): typeof queryWithAndOperation {
+export function attributeValueFilter(filter: ProductListFilter, query: typeof queryWithAndOperation): typeof queryWithAndOperation {
     const newQuery = cloneDeep(query)
     const ids = filter.values
 

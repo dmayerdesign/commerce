@@ -1,4 +1,4 @@
-export enum ProductsFilterType {
+export enum ProductListFilterUiType {
     // Defaults.
     PriceRange = 'price-range',
     ProductTypes = 'product-types',

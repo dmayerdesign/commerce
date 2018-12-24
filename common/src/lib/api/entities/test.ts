@@ -1,6 +1,6 @@
 import { model, prop, MongooseDocument, MongooseSchemaOptions } from '../../goosetype'
 
-@model(Test, MongooseSchemaOptions.timestamped)
+@model(MongooseSchemaOptions.timestamped)
 export class Test extends MongooseDocument {
     @prop() public name: string
 }

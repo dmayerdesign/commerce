@@ -4,7 +4,7 @@ import { Product as IProduct } from '@qb/common/api/interfaces/product'
 import { carts } from '@qb/common/constants/api-endpoints'
 import { Crud } from '@qb/common/constants/crud'
 import { QbRepository } from '../../../shared/data-access/repository'
-import { ProductListRequest } from '../../product/product.request.list'
+import { ProductListRequest } from '../../product/product.list-request'
 
 @Controller(carts)
 export class CartController {

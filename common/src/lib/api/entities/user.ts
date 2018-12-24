@@ -6,7 +6,7 @@ import { Image } from './image'
 import { Order } from './order'
 import { Wishlist } from './wishlist'
 
-@model(User, MongooseSchemaOptions.timestamped)
+@model(MongooseSchemaOptions.timestamped)
 export class User extends MongooseDocument {
     @prop({ required: true }) public email: string
     @prop() public emailIsVerified?: boolean
@@ -28,7 +28,7 @@ export class User extends MongooseDocument {
     @prop() public facebookId?: string
     @prop() public googleId?: string
 
-    @arrayProp({ itemsRef: Order }) public orders?: Ref<Order>[]
+    @arrayProp({ ref: Order }) public orders?: Ref<Order>[]
     @prop() public stripeCustomerId?: string
 
     @prop() public cart?: Cart

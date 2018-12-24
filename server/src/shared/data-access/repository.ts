@@ -41,6 +41,7 @@ export class QbRepository<EntityType extends Document> implements IQbRepository<
   }
 
   public async insert(body: Partial<EntityType>[]): Promise<EntityType[]> {
+    console.log(body)
     const documents = body.map((value) => new this._model(value))
     return Promise.all(documents.map((document) => document.save()))
   }
@@ -162,7 +163,8 @@ export class QbRepository<EntityType extends Document> implements IQbRepository<
       return doc
     }
     else {
-      return (await this.insert([ body ])[0])
+      const docs = await this.insert([ body ])
+      return docs[0]
     }
   }
 

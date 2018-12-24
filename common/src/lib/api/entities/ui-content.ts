@@ -1,10 +1,9 @@
-import { arrayProp, prop, schema, MongooseDocument, MongooseSchemaOptions, Ref } from '../../goosetype'
-import { UiContent as IUiContent } from '../interfaces/ui-content'
+import { arrayProp, prop, schema, MongooseDocument, Ref } from '../../goosetype'
 import { CustomRegions } from './custom-regions'
 import { NavigationItem } from './navigation-item'
 
 @schema()
-export class UiContent extends MongooseDocument implements IUiContent {
-    @arrayProp({ itemsRef: NavigationItem }) public primaryNavigation: Ref<NavigationItem>[]
+export class UiContent extends MongooseDocument {
+    @arrayProp({ ref: NavigationItem }) public primaryNavigation: Ref<NavigationItem>[]
     @prop() public customRegions?: CustomRegions
 }

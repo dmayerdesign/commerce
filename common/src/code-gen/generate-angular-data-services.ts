@@ -6,7 +6,6 @@ import * as apiEndpoints from '../lib/constants/api-endpoints'
 
 const endpointsBlacklist = [
   'instagramPosts',
-  'productsAdmin',
 ]
 
 async function main(): Promise<void> {

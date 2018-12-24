@@ -3,7 +3,7 @@ import { HttpVerb } from '@qb/common/modules/http/http.models'
 import { model, prop, MongooseDocument, MongooseSchemaOptions } from '../../goosetype'
 import { Diff } from './diff'
 
-@model(DomainEvent, MongooseSchemaOptions.timestamped)
+@model(MongooseSchemaOptions.timestamped)
 export class DomainEvent extends MongooseDocument {
     @prop() public verb: DomainEventVerb
     @prop() public httpVerb?: HttpVerb

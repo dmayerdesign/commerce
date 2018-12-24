@@ -19,7 +19,8 @@ import { Response } from 'express'
 import { QbRepository } from '../../shared/data-access/repository'
 import { OrganizationService } from '../organization/organization.service'
 import { attributeValueFilter, propertyFilter, simpleAttributeValueFilter, taxonomyTermFilter } from '../product/product.helpers'
-import { ProductListFilterType, ProductListRequest } from './product.request.list'
+import { ProductListRequest } from './product.list-request'
+import { ProductListFilterType } from '@qb/common/api/requests/models/product-list-filter';
 
 /**
  * Methods for querying the `products` collection
@@ -337,8 +338,8 @@ export class ProductService {
 
                 // Taxonomy Filter - performs an `$or` query on `Product.taxonomyTerms`.
                     // Note: here we're using `slug`s rather than `id`s so that all the front end needs
-                    // to provide is the `slug`. For AttributeValues, the front end is fetching them
-                    // in order to display them anyway, so providing the `id` is easy.
+                    // to provide is the `slug`. (For AttributeValues, the front end is fetching them
+                    // in order to display them anyway, so providing the `id` is easy.)
 
                 if (filter.type === ProductListFilterType.TaxonomyTerm) {
                     const taxonomyTerms = await this._taxonomyTermsRepository.list(

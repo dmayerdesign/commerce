@@ -1,15 +1,15 @@
-import { ProductsFilterType } from '../../constants/enums/products-filter-type'
+import { ProductListFilterType } from '../requests/models/product-list-filter'
 import { AttributeValue } from './attribute-value'
-import { ProductsFilterDisplayWhen } from './products-filter-display-when'
+import { ProductListFilterUiDisplayWhen } from './product-list-filter-ui-display-when'
 import { Ref } from './ref'
 import { SimpleAttributeValue } from './simple-attribute-value'
 import { TaxonomyTerm } from './taxonomy-term'
 
-export interface ProductsFilter {
-    filterType: ProductsFilterType
+export interface ProductListFilterUi {
+    filterType: ProductListFilterType
     enabled: boolean
     displayAlways?: boolean
-    displayWhen?: ProductsFilterDisplayWhen
+    displayWhen?: ProductListFilterUiDisplayWhen
     label?: string
     taxonomyTermOptions?: Ref<TaxonomyTerm>[]
     attributeValueOptions?: (Ref<AttributeValue> | SimpleAttributeValue)[]

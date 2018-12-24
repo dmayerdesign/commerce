@@ -1,10 +1,10 @@
 import { arrayProp, model, prop, MongooseDocument, MongooseSchemaOptions, Ref } from '../../goosetype'
 import { Product } from './product'
 
-@model(Wishlist, MongooseSchemaOptions.timestamped)
+@model(MongooseSchemaOptions.timestamped)
 export class Wishlist extends MongooseDocument {
     @prop() public userId: string
-    @arrayProp({ itemsRef: Product }) public products: Ref<Product>[]
+    @arrayProp({ ref: Product }) public products: Ref<Product>[]
 }
 
 // Errors.

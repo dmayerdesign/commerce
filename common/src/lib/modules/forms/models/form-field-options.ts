@@ -8,4 +8,6 @@ export interface QbFormFieldOptions {
     errorMessages?: { [errorType: string]: string }
     formControlType?: 'input'|'select'|'checkbox'
     data?: any
+    defaultValue?: any
+    validators?: any[]
 }

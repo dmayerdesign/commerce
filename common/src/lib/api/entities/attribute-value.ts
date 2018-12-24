@@ -3,7 +3,7 @@ import { model, plugin, prop, MongooseDocument, Ref } from '../../goosetype'
 import { Attribute } from './attribute'
 
 @plugin(findOrCreate)
-@model(AttributeValue)
+@model()
 export class AttributeValue extends MongooseDocument {
     @prop({ ref: Attribute }) public attribute: Ref<Attribute>
     @prop() public name: string

@@ -1,5 +1,5 @@
 import { Document } from '@qb/common/goosetype/interfaces'
 
-export interface ProductsFilterDisplayWhen extends Document {
+export interface ProductListFilterUiDisplayWhen extends Document {
     taxonomyTermSlug: string
 }

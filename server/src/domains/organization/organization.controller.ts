@@ -1,12 +1,12 @@
 import { Controller, Get, Inject } from '@nestjs/common'
 import { Organization } from '@qb/common/api/entities/organization'
 import { Organization as IOrganization } from '@qb/common/api/interfaces/organization'
-import { ApiEndpoints } from '@qb/common/constants/api-endpoints'
+import { organizations } from '@qb/common/constants/api-endpoints'
 import { QbController } from '../../shared/controller/controller'
 import { QbRepository } from '../../shared/data-access/repository'
 import { OrganizationService } from './organization.service'
 
-@Controller(Organizations)
+@Controller(organizations)
 export class OrganizationController extends QbController<IOrganization> {
   constructor(
     @Inject(QbRepository) protected readonly _repository: QbRepository<IOrganization>,

@@ -5,7 +5,7 @@ import { Currency } from '@qb/common/constants/enums/currency'
 import { RangeLimit } from '@qb/common/constants/enums/range-limit'
 
 export function isProduct(obj: any): boolean {
-    return obj.cartItemsRefModelName === 'Product'
+    return obj.cartrefModelName === 'Product'
         || (obj.isParent || obj.isVariation || obj.isStandalone)
 }
 

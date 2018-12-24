@@ -1,7 +1,7 @@
 import { model, prop, MongooseDocument, MongooseSchemaOptions, Ref } from '../../goosetype'
 import { UsabilityExperience } from './usability-experience'
 
-@model(UsabilityTestBucket, MongooseSchemaOptions.timestamped)
+@model(MongooseSchemaOptions.timestamped)
 export class UsabilityTestBucket extends MongooseDocument {
     @prop() public description: string
     @prop({ ref: UsabilityExperience }) public usabilityExperience: Ref<UsabilityExperience>

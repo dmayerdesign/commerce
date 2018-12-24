@@ -13,8 +13,6 @@ import { Taxonomy as ITaxonomy } from '@qb/common/api/interfaces/taxonomy'
 import { TaxonomyTerm as ITaxonomyTerm } from '@qb/common/api/interfaces/taxonomy-term'
 import { ListRequest } from '@qb/common/api/requests/list.request'
 import { UpdateRequest } from '@qb/common/api/requests/update.request'
-import { ApiErrorResponse } from '@qb/common/api/responses/api-error.response'
-import { ApiResponse } from '@qb/common/api/responses/api.response'
 import { Currency } from '@qb/common/constants/enums/currency'
 import { ProductClass } from '@qb/common/constants/enums/product-class'
 import { RangeLimit } from '@qb/common/constants/enums/range-limit'
@@ -28,11 +26,11 @@ import { QbRepository } from '../../shared/data-access/repository'
 export class HyzershopMigrationService {
 
     constructor(
-        @Inject() private readonly _productRepository: QbRepository<IProduct>,
-        @Inject() private readonly _attributeRepository: QbRepository<IAttribute>,
-        @Inject() private readonly _attributeValueRepository: QbRepository<IAttributeValue>,
-        @Inject() private readonly _taxonomyRepository: QbRepository<ITaxonomy>,
-        @Inject() private readonly _taxonomyTermRepository: QbRepository<ITaxonomyTerm>,
+        @Inject(QbRepository) private readonly _productRepository: QbRepository<IProduct>,
+        @Inject(QbRepository) private readonly _attributeRepository: QbRepository<IAttribute>,
+        @Inject(QbRepository) private readonly _attributeValueRepository: QbRepository<IAttributeValue>,
+        @Inject(QbRepository) private readonly _taxonomyRepository: QbRepository<ITaxonomy>,
+        @Inject(QbRepository) private readonly _taxonomyTermRepository: QbRepository<ITaxonomyTerm>,
     ) {
         this._productRepository.configureForGoosetypeEntity(Product)
         this._attributeRepository.configureForGoosetypeEntity(Attribute)
@@ -41,7 +39,7 @@ export class HyzershopMigrationService {
         this._taxonomyTermRepository.configureForGoosetypeEntity(TaxonomyTerm)
     }
 
-    public async createProductsFromExportedJSON(): Promise<ApiResponse<IProduct[]>> {
+    public async createProductsFromExportedJSON(): Promise<IProduct[]> {
         const newProducts = []
 
         const dropAllProductRelatedCollections = async () => {
@@ -55,7 +53,7 @@ export class HyzershopMigrationService {
         await dropAllProductRelatedCollections()
 
         const buildProducts = async () => {
-            for (const product of productsJSON) {
+            for (const product of productsJSON as any) {
                 if (!!product['Product Name'].match(/^Template/)) {
                     continue
                 }
@@ -139,12 +137,12 @@ export class HyzershopMigrationService {
                                                     variableAttributeValueIds.push(variableAttributeValue._id)
                                                 }
                                                 catch (error) {
-                                                    throw new ApiErrorResponse(error)
+                                                    throw error
                                                 }
                                             }
                                         }
                                         catch (error) {
-                                            throw new ApiErrorResponse(error)
+                                            throw error
                                         }
                                     }
                                     else {
@@ -164,7 +162,7 @@ export class HyzershopMigrationService {
                                             delete newProduct[key]
                                         }
                                         catch (error) {
-                                            throw new ApiErrorResponse(error)
+                                            throw error
                                         }
                                     }
                                 }
@@ -244,7 +242,7 @@ export class HyzershopMigrationService {
                                     taxonomyTermIds.push(taxonomyTerm._id)
                                 }
                                 catch (error) {
-                                    throw new ApiErrorResponse(error)
+                                    throw error
                                 }
                             }
                         }
@@ -286,7 +284,7 @@ export class HyzershopMigrationService {
                                 delete newProduct[key]
                             }
                             catch (error) {
-                                throw new ApiErrorResponse(error)
+                                throw error
                             }
                         }
                         if (key === 'price') {
@@ -326,14 +324,18 @@ export class HyzershopMigrationService {
                                         currency: Currency.USD,
                                     } as Price,
                                 ]
-                                newProduct.salePriceRange[RangeLimit.Min].amount = parseFloat(salePriceRangeTotals[RangeLimit.Min])
-                                newProduct.salePriceRange[RangeLimit.Max].amount = parseFloat(salePriceRangeTotals[RangeLimit.Max])
+                                newProduct.salePriceRange[RangeLimit.Min].amount = parseFloat(
+                                    salePriceRangeTotals[RangeLimit.Min]
+                                )
+                                newProduct.salePriceRange[RangeLimit.Max].amount = parseFloat(
+                                    salePriceRangeTotals[RangeLimit.Max]
+                                )
                                 delete newProduct.salePrice
                             }
                             else {
                                 newProduct.salePrice = {
                                     amount: +newProduct[key],
-                                    currency: Currency.USD
+                                    currency: Currency.USD,
                                 } as Price
                             }
                         }
@@ -427,9 +429,9 @@ export class HyzershopMigrationService {
                 newProduct.simpleAttributeValues = simpleAttributeValues
                 newProduct.taxonomyTerms = taxonomyTermIds
 
-                delete (<any>newProduct).images
-                delete (<any>newProduct).featuredImage
-                delete (<any>newProduct).thumbnail
+                delete (newProduct as any).images
+                delete (newProduct as any).featuredImage
+                delete (newProduct as any).thumbnail
 
                 newProducts.push(newProduct)
             }
@@ -439,7 +441,8 @@ export class HyzershopMigrationService {
             await buildProducts()
         }
         catch (error) {
-            throw new ApiErrorResponse(error)
+            console.log(error)
+            throw error
         }
 
         /*************
@@ -496,10 +499,10 @@ export class HyzershopMigrationService {
                         isDisc = taxonomyTerms && taxonomyTerms.some((taxTerm) => taxTerm.slug === 'product-type-discs')
                     }
                     catch (error) {
-                        throw new ApiErrorResponse(error)
+                        throw error
                     }
-
-                    const name = product.name.substr(0, product.name.indexOf(' -'))
+console.log(`SKU: ${JSON.stringify(product)}`)
+                    const name = product.name.substring(0, product.name.indexOf(' -'))
                     imageBaseUrl += kebabCase(name).replace(/\W/g, '-')
 
                     if (isDisc) {
@@ -678,10 +681,10 @@ export class HyzershopMigrationService {
                 }))
             }
 
-            return new ApiResponse(allProducts)
+            return allProducts
         }
         catch (error) {
-            throw new ApiErrorResponse(error)
+            throw error
         }
         /**/
     }

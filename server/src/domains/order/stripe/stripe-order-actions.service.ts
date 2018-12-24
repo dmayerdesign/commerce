@@ -14,7 +14,7 @@ import { StripeOrder } from '@qb/common/stripe-shims/stripe-order'
 import * as Stripe from 'stripe'
 import { QbRepository } from '../../../shared/data-access/repository'
 import { OrganizationService } from '../../organization/organization.service'
-import { ProductListRequest } from '../../product/product.request.list'
+import { ProductListRequest } from '../../product/product.list-request'
 import { getSubTotal, getTotal } from '../order.helpers'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)

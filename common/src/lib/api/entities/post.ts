@@ -20,30 +20,30 @@ export class Author {
 
 @schema()
 export class Reactions {
-    @arrayProp({ itemsRef: User }) public up: Ref<User>[]
-    @arrayProp({ itemsRef: User }) public down: Ref<User>[]
+    @arrayProp({ ref: User }) public up: Ref<User>[]
+    @arrayProp({ ref: User }) public down: Ref<User>[]
 }
 
-@model(Comment, MongooseSchemaOptions.timestamped)
+@model(MongooseSchemaOptions.timestamped)
 export class Comment extends MongooseDocument {
     @prop() public author: Author
     @prop() public content: string
-    @arrayProp({ itemsType: String }) public images: string[]
+    @arrayProp({ type: String }) public images: string[]
     @prop() public linkEmbed: LinkEmbed
     @prop() public reactions: Reactions
 }
 
-@model(Post, MongooseSchemaOptions.timestamped)
+@model(MongooseSchemaOptions.timestamped)
 export class Post extends MongooseDocument {
     @prop() public author: Author
     @prop({ default: 'normal' }) public type: string
     @prop() public content: Author
     @prop() public eventDate: Date
     @prop() public eventLocation: string
-    @arrayProp({ itemsType: String }) public tags: string[]
-    @arrayProp({ itemsType: String }) public images: string[]
+    @arrayProp({ type: String }) public tags: string[]
+    @arrayProp({ type: String }) public images: string[]
     @prop() public linkEmbed: LinkEmbed
-    @arrayProp({ itemsType: Comment }) public comments: Comment[]
+    @arrayProp({ type: Comment }) public comments: Comment[]
     @prop() public reactions: Reactions
 }
 

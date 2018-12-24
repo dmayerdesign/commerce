@@ -2,7 +2,7 @@ import * as findOrCreate from 'mongoose-findorcreate'
 import { model, plugin, prop, MongooseDocument, MongooseSchemaOptions } from '../../goosetype'
 
 @plugin(findOrCreate)
-@model(Taxonomy, MongooseSchemaOptions.timestamped)
+@model(MongooseSchemaOptions.timestamped)
 export class Taxonomy extends MongooseDocument {
     @prop() public singularName: string
     @prop() public pluralName: string

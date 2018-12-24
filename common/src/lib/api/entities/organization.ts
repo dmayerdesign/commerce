@@ -9,18 +9,18 @@ import { StoreUiSettings } from './store-ui-settings'
 import { Taxonomy } from './taxonomy'
 import { UiContent } from './ui-content'
 
-@model(Organization, MongooseSchemaOptions.timestamped)
+@model(MongooseSchemaOptions.timestamped)
 export class Organization extends MongooseDocument {
     @prop({ enum: OrganizationType }) public type?: OrganizationType
     @prop() public name: string
-    @arrayProp({ itemsType: String }) public dbaNames: string[]
+    @arrayProp({ type: String }) public dbaNames: string[]
     @prop() public retailSettings: OrganizationRetailSettings
     @prop() public branding: OrganizationBranding
     @prop() public storeUrl: string
     @prop() public storeUiContent: UiContent
     @prop() public blogUiContent?: UiContent
     @prop() public storeUiSettings?: StoreUiSettings
-    @arrayProp({ itemsRef: Taxonomy }) public searchableTaxonomies?: Ref<ITaxonomy>[]
+    @arrayProp({ ref: Taxonomy }) public searchableTaxonomies?: Ref<ITaxonomy>[]
     @prop() public globalStyles?: GlobalStyles
     @prop() public defaultsHaveBeenSet: boolean
 }

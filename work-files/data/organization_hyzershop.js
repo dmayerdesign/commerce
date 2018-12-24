@@ -113,7 +113,7 @@ exports.hyzershop = {
         "combinedVariableAttributeSelects": [
             ["color", "netWeight"]
         ],
-        "productsFilters": [
+        "productListFilterUis": [
             {
                 "filterType": "price-range",
                 "enabled": true,

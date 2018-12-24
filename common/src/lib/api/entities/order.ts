@@ -9,15 +9,15 @@ import { Price } from './price'
 import { Product } from './product'
 import { StripeCardToken } from './stripe-card-token'
 
-@model(Order, MongooseSchemaOptions.timestamped)
+@model(MongooseSchemaOptions.timestamped)
 export class Order extends MongooseDocument {
-    @arrayProp({ itemsRef: Product }) public items: Ref<IProduct>[]
-    @arrayProp({ itemsRef: Discount }) public discounts: Ref<IDiscount>[]
+    @arrayProp({ ref: Product }) public items: Ref<IProduct>[]
+    @arrayProp({ ref: Discount }) public discounts: Ref<IDiscount>[]
     @prop() public subTotal: Price
     @prop() public total: Price
     @prop() public taxPercent: number
     @prop() public shippingCost: Price
-    @arrayProp({ itemsType: EasypostRate }) public shippingRates: EasypostRate[]
+    @arrayProp({ type: EasypostRate }) public shippingRates: EasypostRate[]
     @prop() public selectedShippingRateId: string
     @prop() public shippingInsuranceAmt: number
     @prop() public carrier: string
