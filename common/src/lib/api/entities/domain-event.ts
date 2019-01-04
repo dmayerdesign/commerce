@@ -1,18 +1,16 @@
 import { DomainEventVerb } from '@qb/common/constants/enums/domain-event-verb'
 import { HttpVerb } from '@qb/common/modules/http/http.models'
-import { model, prop, MongooseDocument, MongooseSchemaOptions } from '../../goosetype'
+import { Column, CreateDateColumn, Entity, ObjectIdColumn, ObjectID, UpdateDateColumn } from 'typeorm'
 import { Diff } from './diff'
 
-@model(MongooseSchemaOptions.timestamped)
-export class DomainEvent extends MongooseDocument {
-    @prop() public verb: DomainEventVerb
-    @prop() public httpVerb?: HttpVerb
-    @prop() public httpRequest?: any
-    @prop() public httpResponse?: any
-    @prop() public diff: Diff
+@Entity()
+export class DomainEvent {
+    @ObjectIdColumn() public id: ObjectID
+    @Column({ enum: DomainEventVerb }) public verb: DomainEventVerb
+    @Column({ enum: HttpVerb }) public httpVerb?: HttpVerb
+    @Column() public httpRequest?: any
+    @Column() public httpResponse?: any
+    @Column() public diff: Diff
+    @CreateDateColumn({ type: 'timestamp' }) public createdAt: Date
+    @UpdateDateColumn({ type: 'timestamp' }) public updatedAt: Date
 }
-
-export class CreateDomainEventError extends Error { }
-export class FindDomainEventError extends Error { }
-export class UpdateDomainEventError extends Error { }
-export class DeleteDomainEventError extends Error { }

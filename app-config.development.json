@@ -11,5 +11,7 @@
   "paypal_env": "sandbox",
   "google_analytics_tracking_code": "",
   "stripe_publishable_key": "pk_test_rz5tt18zJDXs4vZ4AFjW6uC2",
-  "instagram_user_id": 2256915511
+  "instagram_user_id": 2256915511,
+  "path_to_web_ssr_from_module_root": "../../dist/web-ssr",
+  "path_to_entities_from_module_root": "../../common/src/lib/api/entities/*.ts"
 }

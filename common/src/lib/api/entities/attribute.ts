@@ -1,11 +1,10 @@
-import * as findOrCreate from 'mongoose-findorcreate'
-import { model, plugin, prop, MongooseDocument } from '../../goosetype'
+import { Column, Entity, ObjectIdColumn, ObjectID } from 'typeorm'
 
-@plugin(findOrCreate)
-@model()
-export class Attribute extends MongooseDocument {
-    @prop() public singularName: string
-    @prop() public pluralName: string
-    @prop() public slug: string
-    @prop() public description: string
+@Entity()
+export class Attribute {
+  @ObjectIdColumn() public id: ObjectID
+  @Column() public singularName: string
+  @Column() public pluralName: string
+  @Column() public slug: string
+  @Column() public description: string
 }

@@ -8,13 +8,13 @@ import { ProductListFilterType } from '../requests/models/product-list-filter'
 import { TaxonomyTerm } from './taxonomy-term'
 
 @schema()
-export class ProductListFilterUi extends MongooseDocument implements IProductListFilterUi {
-    @prop({ enum: ProductListFilterType }) public filterType: ProductListFilterType
-    @prop() public enabled: boolean
-    @prop() public displayAlways?: boolean
-    @prop() public displayWhen?: ProductListFilterUiDisplayWhen
-    @prop() public label?: string
-    @arrayProp({ ref: TaxonomyTerm }) public taxonomyTermOptions?: Ref<ITaxonomyTerm>[]
-    @arrayProp({ type: {} }) public attributeValueOptions?:
+export class ProductListFilterUi implements IProductListFilterUi {
+    @Column({ enum: ProductListFilterType }) public filterType: ProductListFilterType
+    @Column() public enabled: boolean
+    @Column() public displayAlways?: boolean
+    @Column() public displayWhen?: ProductListFilterUiDisplayWhen
+    @Column() public label?: string
+    @OneToMany({ ref: TaxonomyTerm }) public taxonomyTermOptions?: Ref<ITaxonomyTerm>[]
+    @OneToMany({ type: {} }) public attributeValueOptions?:
         (Ref<AttributeValue> | SimpleAttributeValue)[]
 }

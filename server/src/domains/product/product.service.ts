@@ -10,6 +10,7 @@ import { Price } from '@qb/common/api/interfaces/price'
 import { Product as IProduct } from '@qb/common/api/interfaces/product'
 import { TaxonomyTerm as ITaxonomyTerm } from '@qb/common/api/interfaces/taxonomy-term'
 import { ListRequest } from '@qb/common/api/requests/list.request'
+import { ProductListFilterType } from '@qb/common/api/requests/models/product-list-filter'
 import { UpdateRequest } from '@qb/common/api/requests/update.request'
 import { ApiErrorResponse } from '@qb/common/api/responses/api-error.response'
 import { Currency } from '@qb/common/constants/enums/currency'
@@ -20,7 +21,6 @@ import { QbRepository } from '../../shared/data-access/repository'
 import { OrganizationService } from '../organization/organization.service'
 import { attributeValueFilter, propertyFilter, simpleAttributeValueFilter, taxonomyTermFilter } from '../product/product.helpers'
 import { ProductListRequest } from './product.list-request'
-import { ProductListFilterType } from '@qb/common/api/requests/models/product-list-filter';
 
 /**
  * Methods for querying the `products` collection
@@ -176,12 +176,12 @@ export class ProductService {
             if (product.isParent) {
                 const variations = products.filter((p) => p.parentSku === product.sku)
                 const variationSkus = variations.map((v) => v.sku)
-                const orderVariations = order.items.filter((op: IProduct) => variationSkus.indexOf(op.sku) > -1)
+                const orderVariations = order.products.filter((op: IProduct) => variationSkus.indexOf(op.sku) > -1)
                 qty = orderVariations.length
             }
             else {
-                const orderItems = order.items.filter((op: IProduct) => op.sku === product.sku) as IProduct[]
-                qty = orderItems.length
+                const orderProducts = order.products.filter((op: IProduct) => op.sku === product.sku) as IProduct[]
+                qty = orderProducts.length
             }
 
             let newStockQuantity = Math.floor((product.stockQuantity || 0) - qty)
@@ -192,7 +192,7 @@ export class ProductService {
             productPromises.push(
                 this._productRepository.update(
                     new UpdateRequest({
-                        id: product._id,
+                        id: product.id,
                         update: {
                             stockQuantity: newStockQuantity,
                             totalSales: newTotalSales,
@@ -290,7 +290,7 @@ export class ProductService {
                     slug: { $regex: searchRegExp },
                 }
                 taxonomyTermIdsToSearch = (await this._taxonomyTermsRepository.list(new ListRequest({ query: searchableTaxonomiesQuery })))
-                    .map((taxonomyTerm) => taxonomyTerm._id)
+                    .map((taxonomyTerm) => taxonomyTerm.id)
             }
             catch (error) {
                 throw error
@@ -347,7 +347,7 @@ export class ProductService {
                             query: { slug: { $in: filter.values } }
                         })
                     )
-                    const taxonomyTermIds = taxonomyTerms ? taxonomyTerms.map((term) => term._id) : []
+                    const taxonomyTermIds = taxonomyTerms ? taxonomyTerms.map((term) => term.id) : []
                     searchQuery = taxonomyTermFilter(taxonomyTermIds, searchQuery)
                 }
             }

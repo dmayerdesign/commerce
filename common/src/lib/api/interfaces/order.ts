@@ -9,7 +9,7 @@ import { Ref } from './ref'
 import { StripeCardToken } from './stripe-card-token'
 
 export interface Order extends Document {
-    items: Ref<Product>[]
+    products: Ref<Product>[]
     discounts: Ref<Discount>[]
     subTotal: Price
     total: Price

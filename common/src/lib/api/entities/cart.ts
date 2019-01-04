@@ -1,13 +1,14 @@
-import { arrayProp, prop, schema, MongooseDocument, Ref } from '../../goosetype'
-import { CartItem } from '../interfaces/cart-item'
+import { Column, Entity, ObjectIdColumn, ObjectID, OneToMany } from 'typeorm'
 import { Discount } from './discount'
 import { Price } from './price'
+import { Product } from './product'
 
-@schema()
-export class Cart extends MongooseDocument {
-    @prop() public count?: number
-    @arrayProp({ refPath: 'cartrefModelName' }) public items: Ref<CartItem>[]
-    @prop() public subTotal: Price
-    @prop() public total: Price
-    @arrayProp({ ref: Discount }) public discounts?: Ref<Discount>[]
+@Entity()
+export class Cart {
+  @ObjectIdColumn() public id: ObjectID
+  @Column() public count?: number
+  @OneToMany(() => Product, product => product.id) public products: Product[]
+  @Column() public subTotal: Price
+  @Column() public total: Price
+  @OneToMany(() => Discount, discount => discount.id) public discounts?: Discount[]
 }

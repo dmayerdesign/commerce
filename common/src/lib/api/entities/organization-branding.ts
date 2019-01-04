@@ -1,18 +1,16 @@
-import { prop, schema, MongooseDocument } from '../../goosetype'
+import { Column } from 'typeorm';
 
 // Brand colors.
 
-@schema()
-export class OrganizationBrandingColors extends MongooseDocument {
-    @prop() public primary: string
+export class OrganizationBrandingColors {
+    @Column() public primary: string
 }
 
 // Branding.
 
-@schema()
-export class OrganizationBranding extends MongooseDocument {
-    @prop() public displayName: string
-    @prop() public logo: string
-    @prop() public colors: OrganizationBrandingColors
-    @prop() public cartName: string
+export class OrganizationBranding {
+    @Column() public displayName: string
+    @Column() public logo: string
+    @Column() public colors: OrganizationBrandingColors
+    @Column() public cartName: string
 }

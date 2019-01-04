@@ -2,14 +2,8 @@ import { arrayProp, model, prop, MongooseDocument, MongooseSchemaOptions, Ref } 
 import { Product } from './product'
 
 @model(MongooseSchemaOptions.timestamped)
-export class Wishlist extends MongooseDocument {
-    @prop() public userId: string
-    @arrayProp({ ref: Product }) public products: Ref<Product>[]
+export class Wishlist {
+    @ObjectIdColumn() public id: ObjectID
+    @Column() public userId: string
+    @OneToMany({ ref: Product }) public products: Ref<Product>[]
 }
-
-// Errors.
-
-export class CreateWishlistError extends Error { }
-export class FindWishlistError extends Error { }
-export class UpdateWishlistError extends Error { }
-export class DeleteWishlistError extends Error { }

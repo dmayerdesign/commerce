@@ -3,14 +3,10 @@ import { model, plugin, prop, MongooseDocument, MongooseSchemaOptions } from '..
 
 @plugin(findOrCreate)
 @model(MongooseSchemaOptions.timestamped)
-export class Taxonomy extends MongooseDocument {
-    @prop() public singularName: string
-    @prop() public pluralName: string
-    @prop() public slug: string
-    @prop() public description: string
+export class Taxonomy {
+    @ObjectIdColumn() public id: ObjectID
+    @Column() public singularName: string
+    @Column() public pluralName: string
+    @Column() public slug: string
+    @Column() public description: string
 }
-
-export class CreateTaxonomyError extends Error { }
-export class FindTaxonomyError extends Error { }
-export class UpdateTaxonomyError extends Error { }
-export class DeleteTaxonomyError extends Error { }

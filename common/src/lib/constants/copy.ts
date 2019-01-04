@@ -15,7 +15,7 @@ export class Copy {
         // Order
         findOrderError: 'Failed to look up the order.',
         invalidOrder: 'Not a valid order.',
-        itemOutOfStockError: 'Oh no — one of your chosen items is out of stock!',
+        productOutOfStockError: 'Oh no — one of your chosen products is out of stock!',
 
         // Product
         productsNotFound: 'The products could not be found.',

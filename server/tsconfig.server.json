@@ -10,7 +10,9 @@
     "target": "es2015",
     "sourceMap": true,
     "allowJs": true,
-    "outDir": "../dist/server"
+    "outDir": "../dist/server",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
   },
   "files": [
     "src/main.ts"

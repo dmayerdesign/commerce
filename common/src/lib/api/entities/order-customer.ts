@@ -1,14 +1,13 @@
-import { prop, schema, MongooseDocument } from '../../goosetype'
+import { Column, ObjectIdColumn, ObjectID } from 'typeorm'
 import { Address } from './address'
 
-@schema()
-export class OrderCustomer extends MongooseDocument {
-    @prop() public userId: string
-    @prop() public stripeCustomerId: string
-    @prop() public email: string
-    @prop() public lastName: string
-    @prop() public firstName: string
-    @prop() public shippingAddress: Address
-    @prop() public billingAddress: Address
-    @prop() public savePaymentInfo: boolean
+export class OrderCustomer {
+    @ObjectIdColumn() public userId: ObjectID
+    @Column() public stripeCustomerId: string
+    @Column() public email: string
+    @Column() public lastName: string
+    @Column() public firstName: string
+    @Column() public shippingAddress: Address
+    @Column() public billingAddress: Address
+    @Column() public savePaymentInfo: boolean
 }

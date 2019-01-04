@@ -3,10 +3,10 @@ import { Address } from './address'
 import { Price } from './price'
 
 @schema()
-export class OrganizationRetailSettings extends MongooseDocument {
-    @prop() public shippingAddress: Address
-    @prop() public billingAddress: Address
-    @prop() public salesTaxPercentage: number
-    @prop() public addSalesTax?: boolean
-    @prop() public shippingFlatRate?: Price
+export class OrganizationRetailSettings {
+    @Column() public shippingAddress: Address
+    @Column() public billingAddress: Address
+    @Column() public salesTaxPercentage: number
+    @Column() public addSalesTax?: boolean
+    @Column() public shippingFlatRate?: Price
 }

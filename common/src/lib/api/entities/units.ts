@@ -3,7 +3,7 @@ import { WeightUnit } from '../../constants/enums/weight-unit'
 import { prop, schema, MongooseDocument } from '../../goosetype'
 
 @schema()
-export class Units extends MongooseDocument {
-    @prop({ enum: WeightUnit }) public weight: WeightUnit
-    @prop({ enum: LengthUnit }) public length: LengthUnit
+export class Units {
+    @Column({ enum: WeightUnit }) public weight: WeightUnit
+    @Column({ enum: LengthUnit }) public length: LengthUnit
 }

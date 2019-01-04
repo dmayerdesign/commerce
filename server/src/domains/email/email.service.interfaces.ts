@@ -44,5 +44,5 @@ export interface EmailOptions {
 
 export interface OrderEmailOptions extends EmailServiceOptions {
     order?: Order
-    orderDisplayItems: CartDisplayItem<Product>[]
+    orderDisplayProducts: CartDisplayItem<Product>[]
 }

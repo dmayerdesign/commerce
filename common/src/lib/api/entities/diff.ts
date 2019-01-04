@@ -1,10 +1,9 @@
-import { Types } from 'mongoose'
-import { prop, schema, MongooseDocument, Ref } from '../../goosetype'
-import { Document } from '../interfaces/document'
+import { Column, Entity, ObjectIdColumn, ObjectID } from 'typeorm'
 
-@schema()
-export class Diff extends MongooseDocument {
-  @prop({ type: Types.ObjectId }) public recordId: Ref<Document>
-  @prop() public previousValue: any
-  @prop() public currentValue: any
+@Entity()
+export class Diff {
+  @ObjectIdColumn() public id: ObjectID
+  @Column() public recordId: ObjectID
+  @Column() public previousValue: any
+  @Column() public currentValue: any
 }

@@ -140,7 +140,7 @@ export class VariableAttributeSelect extends Stateful<VariableAttributeSelectSta
                             _options = _options.concat(
                                 allVariationAttributeValues
                                     .map((attrValue) => {
-                                        if ((attrValue.attribute as Attribute)._id === (attribute.data as Attribute)._id) {
+                                        if ((attrValue.attribute as Attribute).id === (attribute.data as Attribute).id) {
                                             const existingOption = _options
                                                 .find((option) => attrValue.value === (option.data as AttributeValue).value)
                                             if (!existingOption) {
@@ -214,7 +214,7 @@ export class VariableAttributeSelect extends Stateful<VariableAttributeSelectSta
         preCombinedOptions.forEach((options) => {
             options.forEach((option) => {
                 option.matchingVariations.forEach((matchingVariation) => {
-                    if (!matchingVariations.find((p) => p._id === matchingVariation._id)) {
+                    if (!matchingVariations.find((p) => p.id === matchingVariation.id)) {
                         matchingVariations.push(matchingVariation)
                     }
                 })
@@ -233,7 +233,7 @@ export class VariableAttributeSelect extends Stateful<VariableAttributeSelectSta
                     option.matchingVariations.forEach((matchingVar) => {
                         if (matchingVar === matchingVariation) {
                             combinedOption.sourceOptions.push(option)
-                            if (!combinedOption.matchingVariations.find((mv) => mv._id === matchingVar._id)) {
+                            if (!combinedOption.matchingVariations.find((mv) => mv.id === matchingVar.id)) {
                                 combinedOption.matchingVariations.push(matchingVar)
                             }
                         }

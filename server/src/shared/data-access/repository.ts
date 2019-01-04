@@ -158,7 +158,7 @@ export class QbRepository<EntityType extends Document> implements IQbRepository<
   }
 
   public async upsert(body: Partial<EntityType>): Promise<EntityType> {
-    const doc = await this.get(body._id)
+    const doc = await this.get(body.id)
     if (doc) {
       return doc
     }

@@ -2,15 +2,9 @@ import { model, prop, MongooseDocument, MongooseSchemaOptions, Ref } from '../..
 import { UsabilityExperience } from './usability-experience'
 
 @model(MongooseSchemaOptions.timestamped)
-export class UsabilityTestBucket extends MongooseDocument {
-    @prop() public description: string
-    @prop({ ref: UsabilityExperience }) public usabilityExperience: Ref<UsabilityExperience>
-    @prop() public likelihood: number
+export class UsabilityTestBucket {
+    @ObjectIdColumn() public id: ObjectID
+    @Column() public description: string
+    @Column({ ref: UsabilityExperience }) public usabilityExperience: Ref<UsabilityExperience>
+    @Column() public likelihood: number
 }
-
-// Errors.
-
-export class CreateUsabilityTestBucketError extends Error { }
-export class FindUsabilityTestBucketError extends Error { }
-export class UpdateUsabilityTestBucketError extends Error { }
-export class DeleteUsabilityTestBucketError extends Error { }

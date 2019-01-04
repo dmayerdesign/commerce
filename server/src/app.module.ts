@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common'
 import { applyDomino, AngularUniversalModule } from '@nestjs/ng-universal'
-import { connect } from 'mongoose'
-import { join } from 'path'
+import { AppConfig } from '@qb/app-config'
+import { join, resolve } from 'path'
+import { createConnection, ConnectionOptions } from 'typeorm'
 import { AdminController } from './domains/admin/admin.controller'
 import { DiscountController } from './domains/discount/discount.controller'
 import { DomainEventController } from './domains/domain-event/domain-event.controller'
@@ -21,7 +22,7 @@ applyDomino(global, join(BROWSER_DIR, 'index.html'))
   imports: [
     AngularUniversalModule.forRoot({
       viewsPath: BROWSER_DIR,
-      bundle: require('../../dist/web-ssr/main.js'),
+      bundle: require(AppConfig.path_to_web_ssr_from_module_root + '/main.js'),
     }),
   ],
   controllers: [
@@ -34,15 +35,13 @@ applyDomino(global, join(BROWSER_DIR, 'index.html'))
   providers: [
     {
       provide: DB_CONNECTION,
-      useFactory: () => {
-        return new Promise((resolve, reject) => {
-          const connection = connect(process.env.MONGODB_URI_TEST, (err) => {
-            console.log('Connected to database at ' + process.env.MONGODB_URI_TEST)
-            if (err) reject(err)
-            else resolve(connection)
-          })
-        })
-      },
+      useFactory: async () => createConnection({
+        type: 'mongodb',
+        url: process.env.MONGODB_URI_TEST,
+        entities: [
+          resolve(__dirname, AppConfig.path_to_entities_from_module_root)
+        ]
+      } as ConnectionOptions)
     },
     QbRepository,
     OrganizationService,

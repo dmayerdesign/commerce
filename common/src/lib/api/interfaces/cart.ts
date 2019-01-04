@@ -6,7 +6,7 @@ import { Ref } from './ref'
 
 export interface Cart extends Document {
     count?: number
-    items: Ref<CartItem>[]
+    products: Ref<CartItem>[]
     subTotal: Price
     total: Price
     discounts?: Ref<Discount>[]

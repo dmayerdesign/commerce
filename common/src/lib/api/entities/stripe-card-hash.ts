@@ -1,27 +1,27 @@
 import { prop, schema, MongooseDocument } from '../../goosetype'
 
 @schema()
-export class StripeCardHash extends MongooseDocument {
-    @prop() public id: string
-    @prop() public object: string
-    @prop() public number: number
-    @prop() public brand: string
-    @prop() public exp_month: number
-    @prop() public exp_year: number
-    @prop() public funding: string
-    @prop() public last4: string
-    @prop() public address_city: string
-    @prop() public address_country: string
-    @prop() public address_line1: string
-    @prop() public address_line1_check: string
-    @prop() public address_line2: string
-    @prop() public address_state: string
-    @prop() public address_zip: string
-    @prop() public address_zip_check: string
-    @prop() public country: string
-    @prop() public cvc_check: string
-    @prop() public dynamic_last4: string
-    @prop() public name: string
-    @prop() public fingerprint: string
-    @prop() public tokenization_method: string
+export class StripeCardHash {
+    @Column() public id: string
+    @Column() public object: string
+    @Column() public number: number
+    @Column() public brand: string
+    @Column() public exp_month: number
+    @Column() public exp_year: number
+    @Column() public funding: string
+    @Column() public last4: string
+    @Column() public address_city: string
+    @Column() public address_country: string
+    @Column() public address_line1: string
+    @Column() public address_line1_check: string
+    @Column() public address_line2: string
+    @Column() public address_state: string
+    @Column() public address_zip: string
+    @Column() public address_zip_check: string
+    @Column() public country: string
+    @Column() public cvc_check: string
+    @Column() public dynamic_last4: string
+    @Column() public name: string
+    @Column() public fingerprint: string
+    @Column() public tokenization_method: string
 }

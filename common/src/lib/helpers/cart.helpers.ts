@@ -1,31 +1,31 @@
 import { Cart } from '@qb/common/api/interfaces/cart'
-import { CartItem } from '@qb/common/api/interfaces/cart-item'
+import { CartProduct } from '@qb/common/api/interfaces/cart-item'
 import { Price } from '@qb/common/api/interfaces/price'
 import { Product } from '@qb/common/api/interfaces/product'
 import { Currency } from '@qb/common/constants/enums/currency'
 import { getPrice } from '@qb/common/helpers/product.helpers'
-import { CartDisplayItem } from '@qb/common/models/ui/cart-display-item'
+import { CartDisplayProduct } from '@qb/common/models/ui/cart-display-item'
 
-export function getDisplayItems(items: Product[]): CartDisplayItem<Product>[] {
-    const displayItems: CartDisplayItem<Product>[] = []
+export function getDisplayProducts(products: Product[]): CartDisplayProduct<Product>[] {
+    const displayProducts: CartDisplayProduct<Product>[] = []
 
-    items.forEach((item) => {
-        const duplicateItemIndex = displayItems.findIndex(displayItem => displayItem.data._id === item._id)
+    products.forEach((item) => {
+        const duplicateProductIndex = displayProducts.findIndex(displayProduct => displayProduct.data.id === item.id)
 
-        if (duplicateItemIndex > -1) {
-            const duplicateItem = displayItems.find(displayItem => displayItem.data._id === item._id)
+        if (duplicateProductIndex > -1) {
+            const duplicateProduct = displayProducts.find(displayProduct => displayProduct.data.id === item.id)
 
-            displayItems[duplicateItemIndex] = {
-                ...duplicateItem,
-                quantity: duplicateItem.quantity + 1,
+            displayProducts[duplicateProductIndex] = {
+                ...duplicateProduct,
+                quantity: duplicateProduct.quantity + 1,
                 subTotal: {
-                    amount: duplicateItem.subTotal.amount + (getPrice(item) as Price).amount,
-                    currency: duplicateItem.subTotal.currency,
+                    amount: duplicateProduct.subTotal.amount + (getPrice(item) as Price).amount,
+                    currency: duplicateProduct.subTotal.currency,
                 } as Price,
             }
         }
         else {
-            displayItems.push({
+            displayProducts.push({
                 quantity: 1,
                 data: item,
                 subTotal: getPrice(item) as Price,
@@ -33,11 +33,11 @@ export function getDisplayItems(items: Product[]): CartDisplayItem<Product>[] {
         }
     })
 
-    return displayItems
+    return displayProducts
 }
 
-export function getSubTotal(items: Product[]): Price {
-    return items
+export function getSubTotal(products: Product[]): Price {
+    return products
         .map((p) => {
             return (getPrice(p) as Price)
         })
@@ -63,8 +63,8 @@ export function getTotal(
     } as Price
 }
 
-export function getNumberAvailableToAdd(cart: Cart, item: CartItem): number {
+export function getNumberAvailableToAdd(cart: Cart, item: CartProduct): number {
     return !!cart ?
-        item.stockQuantity - cart.items.filter((_item: CartItem) => _item._id === item._id).length
+        item.stockQuantity - cart.products.filter((_item: CartProduct) => _item.id === item.id).length
         : 0
 }

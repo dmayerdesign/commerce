@@ -5,8 +5,7 @@ import { Currency } from '@qb/common/constants/enums/currency'
 import { RangeLimit } from '@qb/common/constants/enums/range-limit'
 
 export function isProduct(obj: any): boolean {
-    return obj.cartrefModelName === 'Product'
-        || (obj.isParent || obj.isVariation || obj.isStandalone)
+    return (obj.isParent || obj.isVariation || obj.isStandalone)
 }
 
 export function getBrand(product: Product): TaxonomyTerm {
@@ -50,7 +49,7 @@ export function getPriceString(product: Product): string {
 }
 
 export function getName(product: Product): string {
-    if (product.isParent || product.isStandalone || !product.parent || !(product.parent as Product)._id) {
+    if (product.isParent || product.isStandalone || !product.parent || !(product.parent as Product).id) {
         return product.name
     } else {
         return (product.parent as Product).name

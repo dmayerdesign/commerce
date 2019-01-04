@@ -25,5 +25,5 @@ export interface EmailOptions extends Document {
 
 export interface OrderEmailOptions extends EmailOptions {
     order?: Order
-    orderDisplayItems: CartDisplayItem<Product>[]
+    orderDisplayProducts: CartDisplayItem<Product>[]
 }

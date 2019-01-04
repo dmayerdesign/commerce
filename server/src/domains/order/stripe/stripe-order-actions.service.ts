@@ -45,7 +45,7 @@ export class StripeOrderActionsService {
      * @memberof StripeService
      */
     public async createOrder(order: IOrder): Promise<StripeCreateOrderResponse> {
-        let orderItems: IProduct[]
+        let orderProducts: IProduct[]
         let orderDiscounts: IDiscount[]
 
         if (!order.total
@@ -59,18 +59,18 @@ export class StripeOrderActionsService {
 
         try {
             const organization = await this.organizationService.getOrganization()
-            const orderItemsRequest = new ProductListRequest()
-            orderItemsRequest.ids = order.items as string[]
-            orderItems = await this._productRepository.list(orderItemsRequest)
-            order.subTotal = getSubTotal(orderItems)
+            const orderProductsRequest = new ProductListRequest()
+            orderProductsRequest.ids = order.products as string[]
+            orderProducts = await this._productRepository.list(orderProductsRequest)
+            order.subTotal = getSubTotal(orderProducts)
             order.total = getTotal(
                 order.subTotal,
                 organization.retailSettings.addSalesTax,
                 organization.retailSettings.salesTaxPercentage
             )
         }
-        catch (getItemsError) {
-            throw getItemsError
+        catch (getProductsError) {
+            throw getProductsError
         }
 
         try {
@@ -104,7 +104,7 @@ export class StripeOrderActionsService {
             stripeOrder.customer = order.customer.stripeCustomerId
         }
         stripeOrder.email = order.customer.email
-        stripeOrder.items = orderItems.map((product) => {
+        stripeOrder.products = orderProducts.map((product) => {
             return {
                 type: 'sku' as 'sku',
                 parent: product.sku, // Note: this does NOT mean "parent product". "Parent" here
@@ -141,7 +141,7 @@ export class StripeOrderActionsService {
     public async payOrder(order: Order): Promise<StripePayOrderResponse> {
         const payment: Stripe.orders.IOrderPayOptions = {
             metadata: {
-                orderID: order._id.toString(),
+                orderID: order.id.toString(),
             },
         }
 
@@ -176,11 +176,11 @@ export class StripeOrderActionsService {
         // Make the payment.
 
         const paidStripeOrder = await stripe.orders.pay(order.stripeOrderId, payment, {
-            idempotency_key: order._id.toString()
+            idempotency_key: order.id.toString()
         })
-        const unpaidDbOrder = await this._orderRepository.get(order._id)
+        const unpaidDbOrder = await this._orderRepository.get(order.id)
         const paidOrder = await this._orderRepository.update(new UpdateRequest({
-            id: unpaidDbOrder._id,
+            id: unpaidDbOrder.id,
             update: {
                 status: OrderStatus.Paid
             }

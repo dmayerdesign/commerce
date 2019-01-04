@@ -38,7 +38,7 @@ export class StripeOrderService {
     public async submitOrder(orderData: Order): Promise<StripeSubmitOrderResponse> {
         const variationAndStandaloneSkus: string[] = []
         const parentIds: string[] = []
-        orderData.items.forEach((orderProduct: Product) => {
+        orderData.products.forEach((orderProduct: Product) => {
             variationAndStandaloneSkus.push(orderProduct.sku)
         })
 
@@ -64,8 +64,8 @@ export class StripeOrderService {
                     if (typeof product.parent === 'string') {
                         parentIds.push(product.parent)
                     }
-                    else if (product.parent._id) {
-                        parentIds.push(product.parent._id)
+                    else if (product.parent.id) {
+                        parentIds.push(product.parent.id)
                     }
                 }
             })

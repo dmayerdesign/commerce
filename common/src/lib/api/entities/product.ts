@@ -40,59 +40,59 @@ import { Weight } from './weight'
 })
 @plugin(mongooseDelete)
 @model(MongooseSchemaOptions.timestamped)
-export class Product extends MongooseDocument {
+export class Product {
+    @ObjectIdColumn() public id: ObjectID
     // Aesthetic.
-    @prop() public name: string
-    @prop() public slug: string
-    @prop() public description: string
-    @arrayProp({ type: Image }) public featuredImages: Image[]
-    @arrayProp({ type: Image }) public images: Image[]
+    @Column() public name: string
+    @Column() public slug: string
+    @Column() public description: string
+    @OneToMany({ type: Image }) public featuredImages: Image[]
+    @OneToMany({ type: Image }) public images: Image[]
 
     // Organizational.
-    @prop({ unique: true }) public sku: string
-    @prop({ enum: ProductClass }) public class: ProductClass
-    @prop() public isStandalone: boolean
-    @prop() public isParent: boolean
-    @prop() public parentSku: string
-    @prop({ ref: Product }) public parent: Ref<Product>
-    @prop({ default: 'Product' }) public cartrefModelName: string
+    @Column({ unique: true }) public sku: string
+    @Column({ enum: ProductClass }) public class: ProductClass
+    @Column() public isStandalone: boolean
+    @Column() public isParent: boolean
+    @Column() public parentSku: string
+    @Column({ ref: Product }) public parent: Ref<Product>
 
     // Financial.
-    @prop() public price: Price
-    @arrayProp({ type: Price }) public priceRange: Price[]
-    @prop() public salePrice: Price
-    @arrayProp({ type: Price }) public salePriceRange: Price[]
-    @prop() public isOnSale: boolean
-    @arrayProp({ type: String }) public variationSkus: string[]
-    @arrayProp({ ref: Product }) public variations: Ref<Product>[]
-    @prop() public isVariation: boolean
-    @prop() public isDefaultVariation: boolean
+    @Column() public price: Price
+    @OneToMany({ type: Price }) public priceRange: Price[]
+    @Column() public salePrice: Price
+    @OneToMany({ type: Price }) public salePriceRange: Price[]
+    @Column() public isOnSale: boolean
+    @OneToMany({ type: String }) public variationSkus: string[]
+    @OneToMany({ ref: Product }) public variations: Ref<Product>[]
+    @Column() public isVariation: boolean
+    @Column() public isDefaultVariation: boolean
 
     // Attributes.
     /// Own attributes.
-    @arrayProp({ ref: AttributeValue }) public attributeValues: Ref<AttributeValue>[]
-    @arrayProp({ type: SimpleAttributeValue }) public simpleAttributeValues: SimpleAttributeValue[]
+    @OneToMany({ ref: AttributeValue }) public attributeValues: Ref<AttributeValue>[]
+    @OneToMany({ type: SimpleAttributeValue }) public simpleAttributeValues: SimpleAttributeValue[]
     /// Variation attributes.
-    @arrayProp({ type: String }) public variableProperties: string[]
-    @arrayProp({ ref: Attribute }) public variableAttributes: Ref<Attribute>[]
-    @arrayProp({ ref: AttributeValue }) public variableAttributeValues: Ref<AttributeValue>[]
-    @arrayProp({ type: SimpleAttributeValue }) public variableSimpleAttributeValues: SimpleAttributeValue[]
+    @OneToMany({ type: String }) public variableProperties: string[]
+    @OneToMany({ ref: Attribute }) public variableAttributes: Ref<Attribute>[]
+    @OneToMany({ ref: AttributeValue }) public variableAttributeValues: Ref<AttributeValue>[]
+    @OneToMany({ type: SimpleAttributeValue }) public variableSimpleAttributeValues: SimpleAttributeValue[]
 
     // Taxonomy.
-    @arrayProp({ ref: TaxonomyTerm }) public taxonomyTerms: Ref<TaxonomyTerm>[]
-    @arrayProp({ type: String }) public taxonomyTermSlugs: string[]
+    @OneToMany({ ref: TaxonomyTerm }) public taxonomyTerms: Ref<TaxonomyTerm>[]
+    @OneToMany({ type: String }) public taxonomyTermSlugs: string[]
 
     // Shipping.
-    @prop() public units: Units
-    @prop() public dimensions: Dimensions
-    @prop() public shippingWeight: Weight
-    @prop() public netWeight: Weight
+    @Column() public units: Units
+    @Column() public dimensions: Dimensions
+    @Column() public shippingWeight: Weight
+    @Column() public netWeight: Weight
 
     // Additional tax.
-    @prop() public additionalTax: number
+    @Column() public additionalTax: number
 
     // Sales.
-    @prop() public stockQuantity: number
-    @prop() public totalSales: number
-    @prop() public existsInStripe: boolean
+    @Column() public stockQuantity: number
+    @Column() public totalSales: number
+    @Column() public existsInStripe: boolean
 }

@@ -1,23 +1,23 @@
 import { TemplateRef } from '@angular/core'
-import { arrayProp, model, prop, MongooseDocument, Ref } from '../../goosetype'
+import { Column, Entity, JoinColumn, ObjectIdColumn, ObjectID, OneToMany } from 'typeorm'
 
 /**
  * A navigation item to be displayed in the UI
  * @description DO NOT "new up" this class from within a browser application. Default values are meant only to convey intent.
  */
-@model()
-export class NavigationItem extends MongooseDocument {
-    @prop() public text: string
-    @prop() public isTopLevel = true
-    @prop() public className?: string
-    @arrayProp({ type: String }) public routerLink: string[]
-    @arrayProp({ ref: NavigationItem }) public children: Ref<NavigationItem>[]
+@Entity()
+export class NavigationItem {
+    @ObjectIdColumn() public id: ObjectID
+    @Column() public text: string
+    @Column() public isTopLevel = true
+    @Column() public className?: string
+    @Column() public routerLink: string[]
 
+    @OneToMany(() => NavigationItem, navigationItem => navigationItem.id)
+    @JoinColumn()
+    public children: NavigationItem[]
+
+    // Browser-specific
     public template: TemplateRef<any>
     public context: any
 }
-
-export class CreateNavigationItemError extends Error { }
-export class FindNavigationItemError extends Error { }
-export class UpdateNavigationItemError extends Error { }
-export class DeleteNavigationItemError extends Error { }

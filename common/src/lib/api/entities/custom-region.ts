@@ -1,17 +1,18 @@
-import { arrayProp, prop, schema, MongooseDocument } from '../../goosetype'
+import { Column, Entity, ObjectIdColumn, ObjectID, OneToMany } from 'typeorm'
 
-@schema()
-export class CustomRegion extends MongooseDocument {
-    @prop({ default: true }) public isActive?: boolean
-    @prop() public isMetaRegion?: boolean
-    @arrayProp({ type: CustomRegion }) public childRegions?: CustomRegion[]
-    @prop() public key?: string
-    @prop() public className?: string
-    @prop() public apiModel?: string
-    @prop() public dataProperty?: string
-    @prop() public dataArrayProperty?: string
-    @prop() public pathToDataArrayPropertyLookupKey?: string
-    @prop() public dataArrayPropertyLookupValue?: string
-    @prop() public pathToDataPropertyValue?: string
-    @prop() public template?: string
+@Entity()
+export class CustomRegion {
+  @ObjectIdColumn() public id: ObjectID
+  @Column() public isActive?: boolean
+  @Column() public isMetaRegion?: boolean
+  @OneToMany(() => CustomRegion, customRegion => customRegion.id) public childRegions?: CustomRegion[]
+  @Column() public key?: string
+  @Column() public className?: string
+  @Column() public apiModel?: string
+  @Column() public dataProperty?: string
+  @Column() public dataArrayProperty?: string
+  @Column() public pathToDataArrayPropertyLookupKey?: string
+  @Column() public dataArrayPropertyLookupValue?: string
+  @Column() public pathToDataPropertyValue?: string
+  @Column() public template?: string
 }

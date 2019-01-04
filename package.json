@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "npm run qb dev ui & npm run qb dev server",
-    "start": "node dist/main.js",
+    "start": "node dist/server/main.js",
     "test": "npm run qb test ui && npm run qb test server",
     "lint": "tslint -p tsconfig.json -c tslint.json",
     "format": "prettier --write \"src/**/*.ts\"",
@@ -42,6 +42,7 @@
     "reflect-metadata": "^0.1.12",
     "rxjs": "~6.3.3",
     "stripe": "6.13.0",
+    "typeorm": "0.2.9",
     "typescript": "~3.1.1",
     "zone.js": "~0.8.26"
   },

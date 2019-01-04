@@ -26,7 +26,6 @@ export interface Product extends Document {
     isParent: boolean
     parentSku: string
     parent: Ref<Product>
-    cartrefModelName: string
 
     // Financial.
     price: Price

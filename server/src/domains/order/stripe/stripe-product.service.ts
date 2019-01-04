@@ -120,10 +120,10 @@ export class StripeProductService {
         parentProduct.variableAttributes.forEach((variableAttribute: Attribute) => {
             let attributeValue: AttributeValue | SimpleAttributeValue = product.attributeValues
                 .find((_attributeValue: AttributeValue) =>
-                    _attributeValue.attribute.toString() === variableAttribute._id.toString()) as AttributeValue
+                    _attributeValue.attribute.toString() === variableAttribute.id.toString()) as AttributeValue
             if (!attributeValue) {
                 attributeValue = product.simpleAttributeValues.find((_simpleAttributeValue) =>
-                    _simpleAttributeValue.attribute.toString() === variableAttribute._id.toString())
+                    _simpleAttributeValue.attribute.toString() === variableAttribute.id.toString())
             }
             if (attributeValue) {
                 attributeDictionary[variableAttribute.slug] = attributeValue.value

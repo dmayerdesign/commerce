@@ -7,37 +7,31 @@ import { Order } from './order'
 import { Wishlist } from './wishlist'
 
 @model(MongooseSchemaOptions.timestamped)
-export class User extends MongooseDocument {
-    @prop({ required: true }) public email: string
-    @prop() public emailIsVerified?: boolean
-    @prop() public emailVerificationToken?: string
-    @prop() public emailTokenExpires?: number
-    @prop() public password?: string
-    @prop() public passwordResetToken?: string
-    @prop() public passwordResetExpires?: string
-    @prop({ type: Number, enum: UserRole }) public role?: UserRole
+export class User {
+    @ObjectIdColumn() public id: ObjectID
+    @Column({ required: true }) public email: string
+    @Column() public emailIsVerified?: boolean
+    @Column() public emailVerificationToken?: string
+    @Column() public emailTokenExpires?: number
+    @Column() public password?: string
+    @Column() public passwordResetToken?: string
+    @Column() public passwordResetExpires?: string
+    @Column({ type: Number, enum: UserRole }) public role?: UserRole
 
-    @prop() public name?: string
-    @prop() public lastName?: string
-    @prop() public firstName?: string
-    @prop() public gender?: string
-    @prop() public avatar?: Image
-    @prop() public address?: Address
-    @prop() public phoneNumber?: string
+    @Column() public name?: string
+    @Column() public lastName?: string
+    @Column() public firstName?: string
+    @Column() public gender?: string
+    @Column() public avatar?: Image
+    @Column() public address?: Address
+    @Column() public phoneNumber?: string
 
-    @prop() public facebookId?: string
-    @prop() public googleId?: string
+    @Column() public facebookId?: string
+    @Column() public googleId?: string
 
-    @arrayProp({ ref: Order }) public orders?: Ref<Order>[]
-    @prop() public stripeCustomerId?: string
+    @OneToMany({ ref: Order }) public orders?: Ref<Order>[]
+    @Column() public stripeCustomerId?: string
 
-    @prop() public cart?: Cart
-    @prop({ ref: Wishlist }) public wishlist?: Ref<Wishlist>
+    @Column() public cart?: Cart
+    @Column({ ref: Wishlist }) public wishlist?: Ref<Wishlist>
 }
-
-// Errors.
-
-export class CreateUserError extends Error { }
-export class FindUserError extends Error { }
-export class UpdateUserError extends Error { }
-export class DeleteUserError extends Error { }

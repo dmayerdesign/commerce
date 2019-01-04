@@ -126,15 +126,15 @@ export class HyzershopMigrationService {
                                             const variableAttribute = await this._attributeRepository.upsert({
                                                 slug: variableAttributeSlug
                                             })
-                                            variableAttributeIds.push(variableAttribute._id)
+                                            variableAttributeIds.push(variableAttribute.id)
                                             for (const variableAttributeValueSlug of variableAttributeValueSlugs) {
                                                 try {
                                                     const variableAttributeValue = await this._attributeValueRepository.upsert({
-                                                        attribute: variableAttribute._id,
+                                                        attribute: variableAttribute.id,
                                                         slug: variableAttributeValueSlug,
                                                         value: variableAttributeValueValues[variableAttributeValueSlugs.indexOf(variableAttributeValueSlug)],
                                                     })
-                                                    variableAttributeValueIds.push(variableAttributeValue._id)
+                                                    variableAttributeValueIds.push(variableAttributeValue.id)
                                                 }
                                                 catch (error) {
                                                     throw error
@@ -154,11 +154,11 @@ export class HyzershopMigrationService {
                                                 slug: attributeSlug
                                             })
                                             const attributeValue = await this._attributeValueRepository.upsert({
-                                                attribute: attribute._id,
+                                                attribute: attribute.id,
                                                 slug: attributeValueSlug,
                                                 value,
                                             })
-                                            attributeValueIds.push(attributeValue._id)
+                                            attributeValueIds.push(attributeValue.id)
                                             delete newProduct[key]
                                         }
                                         catch (error) {
@@ -195,7 +195,7 @@ export class HyzershopMigrationService {
 
                             const speedGlideTurnFadeAttribute = await this._attributeRepository.upsert({ slug: key })
                             simpleAttributeValues.push({
-                                attribute: speedGlideTurnFadeAttribute._id,
+                                attribute: speedGlideTurnFadeAttribute.id,
                                 value: flightStats[key]
                             })
 
@@ -226,20 +226,20 @@ export class HyzershopMigrationService {
                                         slug: attributeSlug,
                                     })
                                     const attributeValue = await this._attributeValueRepository.upsert({
-                                        attribute: attribute._id,
+                                        attribute: attribute.id,
                                         slug: attributeValueSlug,
                                         value: stabilityValue,
                                     })
-                                    attributeValueIds.push(attributeValue._id)
+                                    attributeValueIds.push(attributeValue.id)
 
                                     const taxonomy = await this._taxonomyRepository.upsert({
                                         slug: taxonomySlug,
                                     })
                                     const taxonomyTerm = await this._taxonomyTermRepository.upsert({
-                                        taxonomy: taxonomy._id,
+                                        taxonomy: taxonomy.id,
                                         slug: taxonomyTermSlug,
                                     })
-                                    taxonomyTermIds.push(taxonomyTerm._id)
+                                    taxonomyTermIds.push(taxonomyTerm.id)
                                 }
                                 catch (error) {
                                     throw error
@@ -250,7 +250,7 @@ export class HyzershopMigrationService {
                         if (key === 'inboundsId') {
                             const inboundsIdAttribute = await this._attributeRepository.upsert({ slug: kebabCase(key) })
                             simpleAttributeValues.push({
-                                attribute: inboundsIdAttribute._id,
+                                attribute: inboundsIdAttribute.id,
                                 value: newProduct[key]
                             })
                         }
@@ -271,14 +271,14 @@ export class HyzershopMigrationService {
 
                                 taxonomyTermSlugs.forEach((taxonomyTermSlug) => {
                                     taxonomyTermPromises.push(this._taxonomyTermRepository.upsert({
-                                        taxonomy: taxonomy._id,
+                                        taxonomy: taxonomy.id,
                                         slug: taxonomyTermSlug
                                     }))
                                 })
 
                                 const taxonomyTerms = await Promise.all(taxonomyTermPromises)
 
-                                taxonomyTerms.forEach((taxonomyTerm) => taxonomyTermIds.push(taxonomyTerm._id))
+                                taxonomyTerms.forEach((taxonomyTerm) => taxonomyTermIds.push(taxonomyTerm.id))
                                 newProduct.taxonomyTermSlugs = taxonomyTermSlugs
 
                                 delete newProduct[key]
@@ -458,7 +458,7 @@ export class HyzershopMigrationService {
             for (let i = 0; i < parentProducts.length; i++) {
                 const parentProduct = parentProducts[i]
                 const variations = allProducts.filter((p) => p.parentSku === parentProduct.sku)
-                parentProduct.variations = variations.map((v) => v._id)
+                parentProduct.variations = variations.map((v) => v.id)
                 await parentProduct.save()
             }
 
@@ -587,7 +587,7 @@ console.log(`SKU: ${JSON.stringify(product)}`)
                 }
 
                 // Add the parent to the variation.
-                variation.parent = parent._id
+                variation.parent = parent.id
 
                 if (!parent.variableAttributes) {
                     parent.variableAttributes = []
@@ -633,7 +633,7 @@ console.log(`SKU: ${JSON.stringify(product)}`)
                 const pluralName = pluralize(name)
 
                 await this._taxonomyTermRepository.update(new UpdateRequest({
-                    id: discType._id,
+                    id: discType.id,
                     update: {
                         singularName,
                         pluralName,
@@ -669,7 +669,7 @@ console.log(`SKU: ${JSON.stringify(product)}`)
                 const pluralName = `${brandName} Discs`
 
                 await this._taxonomyTermRepository.update(new UpdateRequest({
-                    id: brand._id,
+                    id: brand.id,
                     update: {
                         singularName,
                         pluralName,

@@ -70,7 +70,7 @@
 //         @request() req: Request,
 //         @response() res: Response,
 //     ): void {
-//         this.handleApiResponse(this._userService.updateUser(req.user._id, req.body), res)
+//         this.handleApiResponse(this._userService.updateUser(req.user.id, req.body), res)
 //     }
 
 //     @httpDelete('/:id', Types.isOwner)

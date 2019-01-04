@@ -4,7 +4,6 @@ import { OrderCustomer } from '../api/interfaces/order-customer'
 import { Price } from '../api/interfaces/price'
 import { OrderStatus } from '../constants/enums/order-status'
 
-// @dynamic
 export class OrderBuilder {
     public discounts: string[]
     public total: Price
@@ -28,7 +27,7 @@ export class OrderBuilder {
     public stripeTokenObject: Stripe.tokens.ICardToken
     public customer: OrderCustomer
 
-    constructor(public items: string[]) {
+    constructor(public products: string[]) {
         this.status = OrderStatus.Pending
     }
 }

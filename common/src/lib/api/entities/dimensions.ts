@@ -1,8 +1,7 @@
-import { prop, schema, MongooseDocument } from '../../goosetype'
+import { Column } from 'typeorm'
 
-@schema()
-export class Dimensions extends MongooseDocument {
-    @prop() public length: number
-    @prop() public width: number
-    @prop() public height: number
+export class Dimensions {
+  @Column() public length: number
+  @Column() public width: number
+  @Column() public height: number
 }

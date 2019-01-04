@@ -1,13 +1,16 @@
-import * as findOrCreate from 'mongoose-findorcreate'
-import { model, plugin, prop, MongooseDocument, Ref } from '../../goosetype'
+import { Column, Entity, JoinColumn, ManyToOne, ObjectIdColumn, ObjectID } from 'typeorm'
 import { Attribute } from './attribute'
 
-@plugin(findOrCreate)
-@model()
-export class AttributeValue extends MongooseDocument {
-    @prop({ ref: Attribute }) public attribute: Ref<Attribute>
-    @prop() public name: string
-    @prop() public slug: string
-    @prop() public description: string
-    @prop() public value: any
+@Entity()
+export class AttributeValue {
+  @ObjectIdColumn() public id: ObjectID
+
+  @ManyToOne(() => Attribute, attribute => attribute.id)
+  @JoinColumn()
+  public attribute: Attribute
+
+  @Column() public name: string
+  @Column() public slug: string
+  @Column() public description: string
+  @Column() public value: any
 }

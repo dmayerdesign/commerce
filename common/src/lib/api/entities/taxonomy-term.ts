@@ -8,28 +8,24 @@ import { Taxonomy } from './taxonomy'
 
 @plugin(findOrCreate)
 @model(MongooseSchemaOptions.timestamped)
-export class TaxonomyTerm extends MongooseDocument {
-    @prop({ ref: Taxonomy }) public taxonomy: Ref<Taxonomy>
-    @prop() public singularName: string
-    @prop() public pluralName: string
-    @prop() public slug: string
-    @prop() public description: string
+export class TaxonomyTerm {
+    @ObjectIdColumn() public id: ObjectID
+    @Column({ ref: Taxonomy }) public taxonomy: Ref<Taxonomy>
+    @Column() public singularName: string
+    @Column() public pluralName: string
+    @Column() public slug: string
+    @Column() public description: string
 
     // Tree properties.
-    @prop({ ref: TaxonomyTerm }) public parent: Ref<TaxonomyTerm>
-    @arrayProp({ ref: TaxonomyTerm }) public children: Ref<TaxonomyTerm>[]
+    @Column({ ref: TaxonomyTerm }) public parent: Ref<TaxonomyTerm>
+    @OneToMany({ ref: TaxonomyTerm }) public children: Ref<TaxonomyTerm>[]
 
     // Defaults.
-    @arrayProp({ ref: Attribute }) public defaultAttributes: Ref<Attribute>[]
-    @arrayProp({ ref: AttributeValue }) public defaultAttributeValues: Ref<AttributeValue>[]
+    @OneToMany({ ref: Attribute }) public defaultAttributes: Ref<Attribute>[]
+    @OneToMany({ ref: AttributeValue }) public defaultAttributeValues: Ref<AttributeValue>[]
 
     // Page settings.
-    @prop() public pageSettings: PageSettings
-    @prop({ ref: Taxonomy }) public archiveGroupsTaxonomy: Ref<Taxonomy>
-    @arrayProp({ ref: TaxonomyTerm }) public archiveTermGroups: Ref<TaxonomyTerm>[]
+    @Column() public pageSettings: PageSettings
+    @Column({ ref: Taxonomy }) public archiveGroupsTaxonomy: Ref<Taxonomy>
+    @OneToMany({ ref: TaxonomyTerm }) public archiveTermGroups: Ref<TaxonomyTerm>[]
 }
-
-export class CreateTaxonomyTermError extends Error { }
-export class FindTaxonomyTermError extends Error { }
-export class UpdateTaxonomyTermError extends Error { }
-export class DeleteTaxonomyTermError extends Error { }

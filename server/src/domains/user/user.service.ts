@@ -66,10 +66,10 @@ export class UserService extends CrudService<User> {
                 // Create a wishlist for the user.
 
                 const newWishlist = new Wishlist({
-                    user: savedUser._id
+                    user: savedUser.id
                 })
                 const savedWishlist = await this.repository.save(newWishlist)
-                savedUser.wishlist = savedWishlist._id
+                savedUser.wishlist = savedWishlist.id
                 savedUser = await this.repository.save(savedUser)
 
                 // Create the JWT token and the JWT cookie.

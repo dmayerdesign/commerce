@@ -1,8 +1,7 @@
-import { arrayProp, schema, MongooseDocument } from '../../goosetype'
+import { OneToMany } from 'typeorm'
 import { CustomRegion } from './custom-region'
 
-@schema()
-export class CustomRegions extends MongooseDocument {
-    @arrayProp({ type: CustomRegion }) public productDetailInfoHeader: CustomRegion[]
-    @arrayProp({ type: CustomRegion }) public productDetailMid: CustomRegion[]
+export class CustomRegions {
+  @OneToMany(() => CustomRegion, customRegion => customRegion.id) public productDetailInfoHeader: CustomRegion[]
+  @OneToMany(() => CustomRegion, customRegion => customRegion.id) public productDetailMid: CustomRegion[]
 }

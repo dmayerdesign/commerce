@@ -10,19 +10,20 @@ import { Taxonomy } from './taxonomy'
 import { UiContent } from './ui-content'
 
 @model(MongooseSchemaOptions.timestamped)
-export class Organization extends MongooseDocument {
-    @prop({ enum: OrganizationType }) public type?: OrganizationType
-    @prop() public name: string
-    @arrayProp({ type: String }) public dbaNames: string[]
-    @prop() public retailSettings: OrganizationRetailSettings
-    @prop() public branding: OrganizationBranding
-    @prop() public storeUrl: string
-    @prop() public storeUiContent: UiContent
-    @prop() public blogUiContent?: UiContent
-    @prop() public storeUiSettings?: StoreUiSettings
-    @arrayProp({ ref: Taxonomy }) public searchableTaxonomies?: Ref<ITaxonomy>[]
-    @prop() public globalStyles?: GlobalStyles
-    @prop() public defaultsHaveBeenSet: boolean
+export class Organization {
+    @ObjectIdColumn() public id: ObjectID
+    @Column({ enum: OrganizationType }) public type?: OrganizationType
+    @Column() public name: string
+    @OneToMany({ type: String }) public dbaNames: string[]
+    @Column() public retailSettings: OrganizationRetailSettings
+    @Column() public branding: OrganizationBranding
+    @Column() public storeUrl: string
+    @Column() public storeUiContent: UiContent
+    @Column() public blogUiContent?: UiContent
+    @Column() public storeUiSettings?: StoreUiSettings
+    @OneToMany({ ref: Taxonomy }) public searchableTaxonomies?: Ref<ITaxonomy>[]
+    @Column() public globalStyles?: GlobalStyles
+    @Column() public defaultsHaveBeenSet: boolean
 }
 
 // Errors.

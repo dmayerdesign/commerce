@@ -59,7 +59,7 @@ console.log('===== New customer =====')
 console.log(customer)
 
                 await this._userRepository.update(new UpdateRequest({
-                    id: user._id,
+                    id: user.id,
                     update: {
                         stripeCustomerId: customer.id
                     }

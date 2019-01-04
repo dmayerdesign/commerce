@@ -1,8 +1,7 @@
-import { prop, schema, MongooseDocument } from '../../goosetype'
+import { Column } from 'typeorm'
 import { ShoppingCartIcons } from './shopping-cart-icons'
 
-@schema()
-export class GlobalStyles extends MongooseDocument {
-    @prop() public backgroundPatternImageSrc: string
-    @prop() public shoppingCartIcons: ShoppingCartIcons
+export class GlobalStyles {
+    @Column() public backgroundPatternImageSrc: string
+    @Column() public shoppingCartIcons: ShoppingCartIcons
 }

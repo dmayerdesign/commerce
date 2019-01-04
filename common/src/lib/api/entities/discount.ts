@@ -1,25 +1,20 @@
-import { arrayProp, model, prop, schema, MongooseDocument, Ref } from '../../goosetype'
+import { Column, Entity, ObjectIdColumn, ObjectID, OneToMany } from 'typeorm'
 import { Price } from './price'
 import { Product } from './product'
 import { TaxonomyTerm } from './taxonomy-term'
 
-@schema()
-export class DiscountExceptions extends MongooseDocument {
-    @arrayProp({ ref: Product }) public products: Ref<Product>[]
-    @arrayProp({ ref: TaxonomyTerm }) public taxonomyTerms: Ref<TaxonomyTerm>[]
+export class DiscountExceptions {
+  @OneToMany(() => Product, product => product.id) public products: Product[]
+  @OneToMany(() => TaxonomyTerm, taxonomyTerm => taxonomyTerm.id) public taxonomyTerms: TaxonomyTerm[]
 }
 
-@model()
-export class Discount extends MongooseDocument {
-    @prop() public code: string
-    @prop() public total: Price
-    @prop() public percentage: number // `20` for a 20% discount
-    @prop() public freeShipping: boolean
-    @prop() public includes: DiscountExceptions
-    @prop() public excludes: DiscountExceptions
+@Entity()
+export class Discount {
+  @ObjectIdColumn() public id: ObjectID
+  @Column() public code: string
+  @Column() public total: Price
+  @Column() public percentage: number // `20` for a 20% discount
+  @Column() public freeShipping: boolean
+  @Column() public includes: DiscountExceptions
+  @Column() public excludes: DiscountExceptions
 }
-
-export class CreateDiscountError extends Error { }
-export class FindDiscountError extends Error { }
-export class UpdateDiscountError extends Error { }
-export class DeleteDiscountError extends Error { }
