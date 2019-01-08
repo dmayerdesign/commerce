@@ -17,17 +17,18 @@ export class ProductController extends QbController<IProduct> {
     @Inject(ProductService) protected readonly _productService: ProductService,
   ) {
     super()
-    this._repository.configureForGoosetypeEntity(Product)
+    this._repository.configureForTypeOrmEntity(Product)
   }
 
-  @Get('stream')
-  public stream(
-    @Query(Crud.Params.listRequest) query: string,
-    @Response() response: IResponse,
-  ): Promise<void> {
-    const request: ListRequest<IProduct> = JSON.parse(query)
-    return this._productService.getProducts(request, response)
-  }
+  // TODO: Figure out streaming with TypeORM.
+  // @Get('stream')
+  // public stream(
+  //   @Query(Crud.Params.listRequest) query: string,
+  //   @Response() response: IResponse,
+  // ): Promise<void> {
+  //   const request: ListRequest<IProduct> = JSON.parse(query)
+  //   return this._productService.getProducts(request, response)
+  // }
 
   /**
    * Get the product along with any variations.

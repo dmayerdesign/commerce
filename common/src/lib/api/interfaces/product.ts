@@ -1,17 +1,16 @@
-import { Document } from '@qb/common/goosetype/interfaces'
 import { ProductClass } from '../../constants/enums/product-class'
 import { Attribute } from './attribute'
 import { AttributeValue } from './attribute-value'
 import { Dimensions } from './dimensions'
+import { Entity } from './entity'
 import { Image } from './image'
 import { Price } from './price'
-import { Ref } from './ref'
 import { SimpleAttributeValue } from './simple-attribute-value'
 import { TaxonomyTerm } from './taxonomy-term'
 import { Units } from './units'
 import { Weight } from './weight'
 
-export interface Product extends Document {
+export interface Product extends Entity {
     // Aesthetic.
     name: string
     slug: string
@@ -25,7 +24,7 @@ export interface Product extends Document {
     isStandalone: boolean
     isParent: boolean
     parentSku: string
-    parent: Ref<Product>
+    parent: Product
 
     // Financial.
     price: Price
@@ -34,22 +33,22 @@ export interface Product extends Document {
     salePriceRange: Price[]
     isOnSale: boolean
     variationSkus: string[]
-    variations: Ref<Product>[]
+    variations: Product[]
     isVariation: boolean
     isDefaultVariation: boolean
 
     // Attributes.
     /// Own attributes.
-    attributeValues: Ref<AttributeValue>[]
+    attributeValues: AttributeValue[]
     simpleAttributeValues: SimpleAttributeValue[]
     /// Variation attributes.
     variableProperties: string[]
-    variableAttributes: Ref<Attribute>[]
-    variableAttributeValues: Ref<AttributeValue>[]
+    variableAttributes: Attribute[]
+    variableAttributeValues: AttributeValue[]
     variableSimpleAttributeValues: SimpleAttributeValue[]
 
     // Taxonomy.
-    taxonomyTerms: Ref<TaxonomyTerm>[]
+    taxonomyTerms: TaxonomyTerm[]
     taxonomyTermSlugs: string[] // TODO: remove (used for convenience in HyzerShop migration for building image urls)
 
     // Shipping.

@@ -1,6 +1,4 @@
-import { Document } from '@qb/common/goosetype/interfaces'
-
-export interface Address extends Document {
+export interface Address {
     name?: string
     company?: string
     street1: string

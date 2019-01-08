@@ -1,7 +1,6 @@
-import { Document } from './document'
 import { ProductListFilterUi } from './product-list-filter-ui'
 
-export interface StoreUiSettings extends Document {
+export interface StoreUiSettings {
     orderOfVariableAttributeSelects?: string[]
     combinedVariableAttributeSelects?: string[][]
     productListFilterUis?: ProductListFilterUi[]

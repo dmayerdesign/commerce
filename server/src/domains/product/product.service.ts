@@ -37,8 +37,8 @@ export class ProductService {
         @Inject(QbRepository) private _taxonomyTermsRepository: QbRepository<ITaxonomyTerm>,
         @Inject(OrganizationService) private _organizationService: OrganizationService,
     ) {
-        this._productRepository.configureForGoosetypeEntity(Product)
-        this._taxonomyTermsRepository.configureForGoosetypeEntity(TaxonomyTerm)
+        this._productRepository.configureForTypeOrmEntity(Product)
+        this._taxonomyTermsRepository.configureForTypeOrmEntity(TaxonomyTerm)
     }
 
     /**
@@ -128,7 +128,7 @@ export class ProductService {
             'variableAttributeValues', // TODO: Might not be necessary, maybe remove.
         ]
 
-        return this._productRepository.stream(listRequest, response)
+        return this._productRepository.list(listRequest, response)
     }
 
     public async getPriceRangeForShop(): Promise<Price[]> {

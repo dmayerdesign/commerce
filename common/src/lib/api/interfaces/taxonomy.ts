@@ -1,6 +1,6 @@
-import { Document } from '@qb/common/goosetype/interfaces'
+import { Entity } from './entity'
 
-export interface Taxonomy extends Document {
+export interface Taxonomy extends Entity {
     singularName: string
     pluralName: string
     slug: string

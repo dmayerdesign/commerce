@@ -1,6 +1,4 @@
-import { Document } from '@qb/common/goosetype/interfaces'
-
-export interface Dimensions extends Document {
+export interface Dimensions {
     length: number
     width: number
     height: number

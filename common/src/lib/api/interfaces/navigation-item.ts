@@ -1,13 +1,12 @@
 import { TemplateRef } from '@angular/core'
-import { Document } from '@qb/common/goosetype/interfaces'
-import { Ref } from './ref'
+import { Entity } from './entity'
 
-export interface NavigationItem extends Document {
+export interface NavigationItem extends Entity {
     text: string
     isTopLevel?: boolean
     className?: string
     routerLink: string[]
-    children: Ref<NavigationItem>[]
+    children: NavigationItem[]
     template: TemplateRef<any>
     context: any
 }

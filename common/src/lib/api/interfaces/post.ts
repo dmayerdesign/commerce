@@ -1,8 +1,8 @@
-import { Document } from '@qb/common/goosetype/interfaces'
-import { Ref } from './ref'
+import { Entity } from './entity'
+import { Image } from './image'
 import { User } from './user'
 
-export interface LinkEmbed extends Document {
+export interface LinkEmbed {
     url: string
     type: string
     thumbnail_url: string
@@ -11,33 +11,33 @@ export interface LinkEmbed extends Document {
     provider_url: string
 }
 
-export interface Author extends Document {
+export interface Author {
     userId: string
     firstName: string
     lastName: string
 }
 
-export interface Reactions extends Document {
-    up: Ref<User>[]
-    down: Ref<User>[]
+export interface Reactions {
+    up: User[]
+    down: User[]
 }
 
-export interface Comment extends Document {
+export interface Comment {
     author: Author
     content: string
-    images: string[]
+    images: Image[]
     linkEmbed: LinkEmbed
     reactions: Reactions
 }
 
-export interface Post extends Document {
+export interface Post extends Entity {
     author: Author
     type: string
     content: Author
     eventDate: Date
     eventLocation: string
     tags: string[]
-    images: string[]
+    images: Image[]
     linkEmbed: LinkEmbed
     comments: Comment[]
     reactions: Reactions

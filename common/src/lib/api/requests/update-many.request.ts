@@ -1,6 +1,8 @@
+import { DeepPartial } from 'typeorm'
+
 export class UpdateManyRequest<EntityType> {
   public ids: string[]
-  public update: Partial<EntityType>
+  public update: DeepPartial<EntityType>
   public unsafeArrayUpdates?: boolean
 
   constructor(request?: UpdateManyRequest<EntityType>) {

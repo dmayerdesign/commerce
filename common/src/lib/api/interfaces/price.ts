@@ -1,7 +1,6 @@
-import { Document } from '@qb/common/goosetype/interfaces'
 import { Currency } from '../../constants/enums/currency'
 
-export interface Price extends Document {
+export interface Price {
     amount: number
     currency: Currency
 }

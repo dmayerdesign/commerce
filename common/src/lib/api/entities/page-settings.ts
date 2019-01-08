@@ -1,6 +1,5 @@
-import { arrayProp, prop, schema, MongooseDocument } from '../../goosetype'
+import { Column } from 'typeorm'
 
-@schema()
 export class PageSettings {
     @Column() public banner: string
     @Column() public bannerOverlay: string

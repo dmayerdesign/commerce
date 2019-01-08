@@ -13,7 +13,7 @@ export class OrganizationController extends QbController<IOrganization> {
     @Inject(QbRepository) protected readonly _organizationService: OrganizationService,
   ) {
     super()
-    this._repository.configureForGoosetypeEntity(Organization)
+    this._repository.configureForTypeOrmEntity(Organization)
   }
 
   @Get('primary')

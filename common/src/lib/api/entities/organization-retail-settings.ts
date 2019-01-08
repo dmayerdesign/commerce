@@ -1,9 +1,9 @@
-import { prop, schema, MongooseDocument } from '../../goosetype'
+import { Column } from 'typeorm'
+import { OrganizationRetailSettings as IOrganizationRetailSettings } from '../interfaces/organization-retail-settings'
 import { Address } from './address'
 import { Price } from './price'
 
-@schema()
-export class OrganizationRetailSettings {
+export class OrganizationRetailSettings implements IOrganizationRetailSettings {
     @Column() public shippingAddress: Address
     @Column() public billingAddress: Address
     @Column() public salesTaxPercentage: number

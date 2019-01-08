@@ -1,7 +1,6 @@
-import { Document } from '@qb/common/goosetype/interfaces'
 import { CustomRegion } from './custom-region'
 
-export interface CustomRegions extends Document {
+export interface CustomRegions {
     productDetailInfoHeader: CustomRegion[]
     productDetailMid: CustomRegion[]
 }

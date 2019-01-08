@@ -1,8 +1,7 @@
 import { Attribute } from './attribute'
-import { Document } from './document'
-import { Ref } from './ref'
+import { Entity } from './entity'
 
-export interface SimpleAttributeValue extends Document {
-    attribute: Ref<Attribute>
+export interface SimpleAttributeValue extends Entity {
+    attribute: Attribute
     value: any
 }

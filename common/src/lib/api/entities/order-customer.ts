@@ -1,7 +1,8 @@
 import { Column, ObjectIdColumn, ObjectID } from 'typeorm'
+import { OrderCustomer as IOrderCustomer } from '../interfaces/order-customer'
 import { Address } from './address'
 
-export class OrderCustomer {
+export class OrderCustomer implements IOrderCustomer {
     @ObjectIdColumn() public userId: ObjectID
     @Column() public stripeCustomerId: string
     @Column() public email: string

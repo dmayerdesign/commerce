@@ -43,16 +43,14 @@ generate() {
 
 prebuild() {
     local env=$2
-    if [ -z "$env" ]; then
-        env=development
-    fi
+    [[ -z "$env" ]] && env=development
     export ENVIRONMENT=$env
 
     if [ "$1" = "ui" ]; then
         generate app-config
         generate angular-data-services
         
-        if [ "$2" = "production" ]; then
+        if [ "$env" = "production" ]; then
             test ui
         fi
     fi
@@ -60,7 +58,7 @@ prebuild() {
         generate app-config
         generate angular-data-services
         
-        if [ "$2" = "production" ]; then
+        if [ "$env" = "production" ]; then
             test server
         fi
     fi
@@ -68,34 +66,27 @@ prebuild() {
 
 build() {
     local env=$2
-    if [ -z "$env" ]; then
-        env=development
-    fi
+    [[ -z "$env" ]] && env=development
     export ENVIRONMENT=$env
 
     prebuild $1 $2 $3
 
     if [ "$1" = "common" ]; then
-        # TODO: split into environments.
         generate
         ng build common
     elif [ "$1" = "ui" ]; then
-        if [ "$2" = "development" ]; then
-            export ENVIRONMENT=development
+        if [ "$env" = "development" ]; then
             ng build web --configuration=development && ng run web:ssr:development
-        elif [ "$2" = "production" ]; then
-            export ENVIRONMENT=production
+        elif [ "$env" = "production" ]; then
             ng build web --configuration=production && ng run web:ssr:production
         fi
     elif [ "$1" = "server" ]; then
         # For the server, environment only matters in the prebuild step.
         tsc -p server/tsconfig.server.json
     else
-        if [ "$2" = "development" ]; then
-            export ENVIRONMENT=development
+        if [ "$env" = "development" ]; then
             build ui development && build server development
-        elif [ "$2" = "production" ]; then
-            export ENVIRONMENT=production
+        elif [ "$env" = "production" ]; then
             build ui production && build server production
         fi
     fi

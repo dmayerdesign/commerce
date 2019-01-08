@@ -1,6 +1,4 @@
-import { Document } from '@qb/common/goosetype/interfaces'
-
-export interface Login extends Document {
+export interface Login {
     email: string
     password: string
 }

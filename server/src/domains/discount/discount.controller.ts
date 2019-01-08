@@ -11,6 +11,6 @@ export class DiscountController extends QbController<IDiscount> {
     @Inject(QbRepository) protected readonly _repository: QbRepository<IDiscount>
   ) {
     super()
-    this._repository.configureForGoosetypeEntity(Discount)
+    this._repository.configureForTypeOrmEntity(Discount)
   }
 }

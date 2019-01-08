@@ -1,7 +1,8 @@
 import { Column, Entity, ObjectIdColumn, ObjectID } from 'typeorm'
+import { Attribute as IAttribute } from '../interfaces/attribute'
 
 @Entity()
-export class Attribute {
+export class Attribute implements IAttribute {
   @ObjectIdColumn() public id: ObjectID
   @Column() public singularName: string
   @Column() public pluralName: string

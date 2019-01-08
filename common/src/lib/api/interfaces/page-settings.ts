@@ -1,6 +1,4 @@
-import { Document } from '@qb/common/goosetype/interfaces'
-
-export interface PageSettings extends Document {
+export interface PageSettings {
     banner: string
     bannerOverlay: string
 }

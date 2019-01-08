@@ -1,13 +1,12 @@
-import { Document } from '@qb/common/goosetype/interfaces'
 import { UserRole } from '../../constants/enums/user-role'
 import { Address } from './address'
 import { Cart } from './cart'
+import { Entity } from './entity'
 import { Image } from './image'
 import { Order } from './order'
-import { Ref } from './ref'
 import { Wishlist } from './wishlist'
 
-export interface User extends Document {
+export interface User extends Entity {
     email: string
     emailIsVerified?: boolean
     emailVerificationToken?: string
@@ -28,9 +27,9 @@ export interface User extends Document {
     facebookId?: string
     googleId?: string
 
-    orders?: Ref<Order>[]
+    orders?: Order[]
     stripeCustomerId?: string
 
     cart?: Cart
-    wishlist?: Ref<Wishlist>
+    wishlist?: Wishlist
 }

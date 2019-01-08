@@ -26,14 +26,15 @@ export abstract class QbBaseController<EntityType extends any> {
     return this._repository.list(request)
   }
 
-  @Get('stream')
-  public stream(
-    @Query(Crud.Params.listRequest) query: string,
-    @Response() response: IResponse,
-  ): Promise<void> {
-    const request: ListRequest<EntityType> = query ? JSON.parse(query) : new ListRequest()
-    return this._repository.stream(request, response)
-  }
+  // TODO: Figure out streaming with TypeORM.
+  // @Get('stream')
+  // public stream(
+  //   @Query(Crud.Params.listRequest) query: string,
+  //   @Response() response: IResponse,
+  // ): Promise<void> {
+  //   const request: ListRequest<EntityType> = query ? JSON.parse(query) : new ListRequest()
+  //   return this._repository.stream(request, response)
+  // }
 
   @Post()
   public create(

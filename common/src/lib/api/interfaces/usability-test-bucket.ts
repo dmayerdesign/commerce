@@ -1,9 +1,7 @@
-import { Document } from './document'
-import { Ref } from './ref'
 import { UsabilityExperience } from './usability-experience'
 
-export interface UsabilityTestBucket extends Document {
+export interface UsabilityTestBucket {
     description: string
-    usabilityExperience: Ref<UsabilityExperience>
+    usabilityExperience: UsabilityExperience
     likelihood: number
 }

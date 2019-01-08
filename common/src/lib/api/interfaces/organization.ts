@@ -1,14 +1,13 @@
-import { Document } from '@qb/common/goosetype/interfaces'
 import { OrganizationType } from '../../constants/enums/organization-type'
+import { Entity } from './entity'
 import { GlobalStyles } from './global-styles'
 import { OrganizationBranding } from './organization-branding'
 import { OrganizationRetailSettings } from './organization-retail-settings'
-import { Ref } from './ref'
 import { StoreUiSettings } from './store-ui-settings'
 import { Taxonomy } from './taxonomy'
 import { UiContent } from './ui-content'
 
-export interface Organization extends Document {
+export interface Organization extends Entity {
     type?: OrganizationType
     name: string
     dbaNames: string[]
@@ -18,7 +17,7 @@ export interface Organization extends Document {
     storeUiContent: UiContent
     blogUiContent?: UiContent
     storeUiSettings?: StoreUiSettings
-    searchableTaxonomies?: Ref<Taxonomy>[]
+    searchableTaxonomies?: Taxonomy[]
     globalStyles?: GlobalStyles
     defaultsHaveBeenSet: boolean
 }

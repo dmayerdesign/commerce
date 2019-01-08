@@ -1,52 +1,48 @@
 import { Injectable } from '@nestjs/common'
-import { PopulateOptions } from '@qb/common/api/interfaces/populate-options'
 import { QbRepository as IQbRepository } from '@qb/common/api/interfaces/repository'
 import { ListRequest } from '@qb/common/api/requests/list.request'
 import { UpdateManyRequest } from '@qb/common/api/requests/update-many.request'
 import { UpdateRequest } from '@qb/common/api/requests/update.request'
-import { MongooseDocument } from '@qb/common/goosetype/models/mongoose-document'
 import { isArrayLike, toArray } from '@qb/common/helpers/mongoose.helpers'
-import * as JSONStream from 'JSONStream'
-import { Response as IResponse } from 'express'
-import { Document, DocumentQuery, Model } from 'mongoose'
+import { getMongoRepository, DeepPartial, DeleteWriteOpResultObject, FindManyOptions, MongoRepository, ObjectID, UpdateWriteOpResult } from 'typeorm'
+
+interface QbEntityType {
+  id: ObjectID
+}
 
 @Injectable()
-export class QbRepository<EntityType extends Document> implements IQbRepository<EntityType> {
-  private _model: Model<EntityType>
+export class QbRepository<EntityType extends QbEntityType> implements IQbRepository<EntityType> {
+  private _repository: MongoRepository<EntityType>
 
-  public configureForGoosetypeEntity(entityConstructor: typeof MongooseDocument): void {
-    this.configureForMongooseModel(entityConstructor.getModel())
-  }
-
-  public configureForMongooseModel(model: Model<EntityType>): void {
-    this._model = model
+  public configureForTypeOrmEntity(entityType: any): void {
+    this._repository = getMongoRepository(entityType)
   }
 
   public get(id: string): Promise<EntityType> {
-    return this._model.findById(id).exec()
+    return this._repository.findOne(id)
   }
 
   public async list(listRequest: ListRequest<EntityType>): Promise<EntityType[]> {
-    return this._model.find(this._createListQuery(listRequest)).exec()
+    return this._repository.find(this._createFindManyOptions(listRequest))
   }
 
-  public async stream(
-    listRequest: ListRequest<EntityType>,
-    response: IResponse,
-  ): Promise<void> {
-    return this._createListQuery(listRequest)
-      .cursor()
-      .pipe(JSONStream.stringify())
-      .pipe(response.contentType('json'))
+  // TODO: Figure out streaming with TypeORM.
+  // public async stream(
+  //   listRequest: ListRequest<EntityType>,
+  //   response: IResponse,
+  // ): Promise<void> {
+  //   const cursor = this._repository.createCursor<EntityType>(query as Query<EntityType>)
+  //   return cursor
+  //     .pipe(JSONStream.stringify())
+  //     .pipe(response.contentType('json'))
+  // }
+
+  public async insert(body: DeepPartial<EntityType>[]): Promise<DeepPartial<EntityType>[]> {
+    const documents = body.map((value) => this._repository.create(value))
+    return this._repository.save<DeepPartial<EntityType>>(documents as any[])
   }
 
-  public async insert(body: Partial<EntityType>[]): Promise<EntityType[]> {
-    console.log(body)
-    const documents = body.map((value) => new this._model(value))
-    return Promise.all(documents.map((document) => document.save()))
-  }
-
-  public async updateMany(updateManyRequest: UpdateManyRequest<EntityType>): Promise<EntityType[]> {
+  public async updateMany(updateManyRequest: UpdateManyRequest<EntityType>): Promise<UpdateWriteOpResult> {
     const { ids, update, unsafeArrayUpdates } = updateManyRequest
     const updateManyOperation: { $set: any, $addToSet?: any } = {
       $set: update
@@ -67,15 +63,12 @@ export class QbRepository<EntityType extends Document> implements IQbRepository<
       if (includeAddToSet) {
         updateManyOperation.$addToSet = $addToSet
       }
+    }
 
-      return this._model.updateMany({ _id: { $in: ids } }, updateManyOperation).exec()
-    }
-    else {
-      return this._model.updateMany({ _id: { $in: ids } }, updateManyOperation).exec()
-    }
+    return this._repository.updateMany({ id: { $in: ids } }, updateManyOperation)
   }
 
-  public async update(updateRequest: UpdateRequest<EntityType>): Promise<EntityType> {
+  public async update(updateRequest: UpdateRequest<EntityType>): Promise<UpdateWriteOpResult> {
     const { id, update, unsafeArrayUpdates } = updateRequest
     const updateOperation: { $set: any, $addToSet?: any } = {
       $set: update
@@ -97,38 +90,33 @@ export class QbRepository<EntityType extends Document> implements IQbRepository<
         updateOperation.$addToSet = $addToSet
       }
 
-      return this._model.update({ _id: id }, updateOperation).exec()
     }
-    else {
-      return this._model.update({ _id: id }, updateOperation).exec()
-    }
+
+    return this._repository.updateOne(id, updateOperation)
   }
 
-  public deleteMany(primaryKeys: string[]): Promise<EntityType[]> {
-    return this._model.remove({ _id: { $in: primaryKeys } }).exec()
+  public deleteMany(primaryKeys: ObjectID[]): Promise<DeleteWriteOpResultObject> {
+    return this._repository.deleteMany({ _id: { $in: primaryKeys } })
   }
 
-  public delete(primaryKey: string): Promise<EntityType> {
-    return this._model.findByIdAndRemove(primaryKey).exec()
+  public delete(primaryKey: ObjectID): Promise<DeleteWriteOpResultObject> {
+    return this._repository.deleteOne(primaryKey)
   }
 
   // Convenience methods.
 
-  public lookup(key: string, value: any, populates?: PopulateOptions[]): Promise<EntityType> {
-    const query = this._model.findOne({ [key]: value })
-    if (populates) {
-      populates.forEach((populateOptions) => {
-        query.populate(populateOptions)
-      })
-    }
-    return query.exec()
+  public lookup(key: string, value: any): Promise<EntityType> {
+    return this._repository.findOne({ [key]: value })
   }
 
-  public textSearch(
-    _model: typeof MongooseDocument,
-    { search, searchFields, skip, limit, sortBy, sortDirection }: ListRequest<EntityType>,
-    response: IResponse
-  ): Promise<void> {
+  public textSearch({
+    search,
+    searchFields,
+    skip,
+    limit,
+    sortBy,
+    sortDirection,
+  }: ListRequest<EntityType>): Promise<EntityType[]> {
     const searchQuery = { $and: [] }
     const searchRegExp = search ? new RegExp(search, 'gi') : undefined
     const searchQueryElements: {
@@ -154,41 +142,25 @@ export class QbRepository<EntityType extends Document> implements IQbRepository<
       query: searchQuery
     })
 
-    return this.stream(request, response)
+    return this.list(request)
   }
 
-  public async upsert(body: Partial<EntityType>): Promise<EntityType> {
-    const doc = await this.get(body.id)
-    if (doc) {
-      return doc
-    }
-    else {
-      const docs = await this.insert([ body ])
-      return docs[0]
-    }
-  }
-
-  private _createListQuery(listRequest: ListRequest<EntityType>): DocumentQuery<EntityType[], EntityType> {
+  private _createFindManyOptions(listRequest: ListRequest<EntityType>): FindManyOptions<EntityType> {
     const {
       skip,
       limit,
       sortBy,
       sortDirection,
-      query,
-      populates
+      query
     } = listRequest
 
-    const findQuery = this._model.find(query)
-      .skip(skip)
-      .limit(limit)
-      .sort({ [sortBy]: sortDirection })
-
-    if (populates) {
-      populates.forEach((populateOptions) => {
-        findQuery.populate(populateOptions)
-      })
+    return {
+      skip,
+      take: limit,
+      where: query,
+      order: {
+        [sortBy]: sortDirection
+      } as { [P in keyof EntityType]?: 1 | -1; }
     }
-
-    return findQuery
   }
 }

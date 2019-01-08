@@ -1,9 +1,8 @@
-import { Document } from '@qb/common/goosetype/interfaces'
 import { Attribute } from './attribute'
-import { Ref } from './ref'
+import { Entity } from './entity'
 
-export interface AttributeValue extends Document {
-    attribute: Ref<Attribute>
+export interface AttributeValue extends Entity {
+    attribute: Attribute
     name: string
     slug: string
     description: string

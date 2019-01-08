@@ -1,27 +1,26 @@
-import { Document } from '@qb/common/goosetype/interfaces'
 import { Attribute } from './attribute'
 import { AttributeValue } from './attribute-value'
+import { Entity } from './entity'
 import { PageSettings } from './page-settings'
-import { Ref } from './ref'
 import { Taxonomy } from './taxonomy'
 
-export interface TaxonomyTerm extends Document {
-    taxonomy: Ref<Taxonomy>
+export interface TaxonomyTerm extends Entity {
+    taxonomy: Taxonomy
     singularName: string
     pluralName: string
     slug: string
     description: string
 
     // Tree properties.
-    parent: Ref<TaxonomyTerm>
-    children: Ref<TaxonomyTerm>[]
+    parent: TaxonomyTerm
+    children: TaxonomyTerm[]
 
     // Defaults.
-    defaultAttributes: Ref <Attribute>[]
-    defaultAttributeValues: Ref<AttributeValue>[]
+    defaultAttributes: Attribute[]
+    defaultAttributeValues: AttributeValue[]
 
     // Page settings.
     pageSettings: PageSettings
-    archiveGroupsTaxonomy: Ref<Taxonomy>
-    archiveTermGroups: Ref<TaxonomyTerm>[]
+    archiveGroupsTaxonomy: Taxonomy
+    archiveTermGroups: TaxonomyTerm[]
 }

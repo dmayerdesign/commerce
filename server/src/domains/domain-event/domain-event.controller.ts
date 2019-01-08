@@ -11,6 +11,6 @@ export class DomainEventController extends QbController<IDomainEvent> {
     @Inject(QbRepository) protected readonly _repository: QbRepository<IDomainEvent>
   ) {
     super()
-    this._repository.configureForGoosetypeEntity(DomainEvent)
+    this._repository.configureForTypeOrmEntity(DomainEvent)
   }
 }

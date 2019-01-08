@@ -1,9 +1,8 @@
-import { Document } from './document'
-import { Ref } from './ref'
+import { Entity } from './entity'
 import { UsabilityExperience } from './usability-experience'
 
-export interface UsabilityTest extends Document {
-    usabilityExperience: Ref<UsabilityExperience>
+export interface UsabilityTest extends Entity {
+    usabilityExperience: UsabilityExperience
     description: string
     buckets: number
 }

@@ -1,6 +1,6 @@
-import { Document } from './document'
+import { Entity } from './entity'
 
-export interface Timer extends Document {
+export interface Timer extends Entity {
     name: string
     url: string
     method: string

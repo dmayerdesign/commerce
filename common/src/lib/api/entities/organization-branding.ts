@@ -1,14 +1,14 @@
-import { Column } from 'typeorm';
+import { Column } from 'typeorm'
+import {
+    OrganizationBranding as IOrganizationBranding,
+    OrganizationBrandingColors as IOrganizationBrandingColors
+} from '../interfaces/organization-branding'
 
-// Brand colors.
-
-export class OrganizationBrandingColors {
+export class OrganizationBrandingColors implements IOrganizationBrandingColors {
     @Column() public primary: string
 }
 
-// Branding.
-
-export class OrganizationBranding {
+export class OrganizationBranding implements IOrganizationBranding {
     @Column() public displayName: string
     @Column() public logo: string
     @Column() public colors: OrganizationBrandingColors

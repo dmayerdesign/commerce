@@ -1,7 +1,9 @@
-import { arrayProp, model, prop, schema, MongooseDocument, MongooseSchemaOptions, Ref } from '../../goosetype'
+import { Column, CreateDateColumn, Entity, ObjectIdColumn, ObjectID, OneToMany, UpdateDateColumn } from 'typeorm'
+import { Comment as IComment } from '../interfaces/post'
+import { Post as IPost } from '../interfaces/post'
+import { Image } from './image'
 import { User } from './user'
 
-@schema()
 export class LinkEmbed {
     @Column() public url: string
     @Column() public type: string
@@ -11,40 +13,40 @@ export class LinkEmbed {
     @Column() public provider_url: string
 }
 
-@schema()
 export class Author {
     @Column() public userId: string
     @Column() public firstName: string
     @Column() public lastName: string
 }
 
-@schema()
 export class Reactions {
-    @OneToMany({ ref: User }) public up: Ref<User>[]
-    @OneToMany({ ref: User }) public down: Ref<User>[]
+    @OneToMany(() => User, user => user.id) public up: User[]
+    @OneToMany(() => User, user => user.id) public down: User[]
 }
 
-@model(MongooseSchemaOptions.timestamped)
-export class Comment {
+@Entity()
+export class Comment implements IComment {
     @ObjectIdColumn() public id: ObjectID
     @Column() public author: Author
     @Column() public content: string
-    @OneToMany({ type: String }) public images: string[]
+    @OneToMany(() => Image, image => image.id) public images: string[]
     @Column() public linkEmbed: LinkEmbed
     @Column() public reactions: Reactions
 }
 
-@model(MongooseSchemaOptions.timestamped)
-export class Post {
+@Entity()
+export class Post implements IPost {
     @ObjectIdColumn() public id: ObjectID
     @Column() public author: Author
     @Column({ default: 'normal' }) public type: string
     @Column() public content: Author
     @Column() public eventDate: Date
     @Column() public eventLocation: string
-    @OneToMany({ type: String }) public tags: string[]
-    @OneToMany({ type: String }) public images: string[]
+    @Column() public tags: string[]
+    @OneToMany(() => Image, image => image.id) public images: Image[]
     @Column() public linkEmbed: LinkEmbed
-    @OneToMany({ type: Comment }) public comments: Comment[]
+    @OneToMany(() => Comment, comment => comment.id) public comments: Comment[]
     @Column() public reactions: Reactions
+    @CreateDateColumn({ type: 'timestamp' }) public createdAt: Date
+    @UpdateDateColumn({ type: 'timestamp' }) public updatedAt: Date
 }

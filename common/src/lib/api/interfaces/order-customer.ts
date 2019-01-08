@@ -1,8 +1,8 @@
-import { Document } from '@qb/common/goosetype/interfaces'
+import { ObjectID } from 'typeorm'
 import { Address } from './address'
 
-export interface OrderCustomer extends Document {
-    userId: string
+export interface OrderCustomer {
+    userId: ObjectID
     stripeCustomerId: string
     email: string
     lastName: string

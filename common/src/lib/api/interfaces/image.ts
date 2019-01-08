@@ -1,6 +1,6 @@
-import { Document } from '@qb/common/goosetype/interfaces'
+import { Entity } from './entity'
 
-export interface Image extends Document {
+export interface Image extends Entity {
     large?: string
     medium?: string
     thumbnail?: string

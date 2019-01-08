@@ -1,6 +1,7 @@
 import { Column } from 'typeorm'
+import { Address as IAddress } from '../interfaces/address'
 
-export class Address {
+export class Address implements IAddress {
   @Column() public name?: string
   @Column() public company?: string
   @Column() public street1: string

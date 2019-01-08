@@ -32,11 +32,11 @@ export class HyzershopMigrationService {
         @Inject(QbRepository) private readonly _taxonomyRepository: QbRepository<ITaxonomy>,
         @Inject(QbRepository) private readonly _taxonomyTermRepository: QbRepository<ITaxonomyTerm>,
     ) {
-        this._productRepository.configureForGoosetypeEntity(Product)
-        this._attributeRepository.configureForGoosetypeEntity(Attribute)
-        this._attributeValueRepository.configureForGoosetypeEntity(AttributeValue)
-        this._taxonomyRepository.configureForGoosetypeEntity(Taxonomy)
-        this._taxonomyTermRepository.configureForGoosetypeEntity(TaxonomyTerm)
+        this._productRepository.configureForTypeOrmEntity(Product)
+        this._attributeRepository.configureForTypeOrmEntity(Attribute)
+        this._attributeValueRepository.configureForTypeOrmEntity(AttributeValue)
+        this._taxonomyRepository.configureForTypeOrmEntity(Taxonomy)
+        this._taxonomyTermRepository.configureForTypeOrmEntity(TaxonomyTerm)
     }
 
     public async createProductsFromExportedJSON(): Promise<IProduct[]> {

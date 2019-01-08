@@ -1,7 +1,6 @@
-import { Document } from '@qb/common/goosetype/interfaces'
 import { ShoppingCartIcons } from './shopping-cart-icons'
 
-export interface GlobalStyles extends Document {
+export interface GlobalStyles {
     backgroundPatternImageSrc: string
     shoppingCartIcons: ShoppingCartIcons
 }

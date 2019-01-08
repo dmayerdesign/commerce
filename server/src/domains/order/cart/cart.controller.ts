@@ -12,7 +12,7 @@ export class CartController {
     constructor(
         @Inject(QbRepository) protected readonly _productRepository: QbRepository<IProduct>
     ) {
-        this._productRepository.configureForGoosetypeEntity(Product)
+        this._productRepository.configureForTypeOrmEntity(Product)
     }
 
     @Get('refresh')

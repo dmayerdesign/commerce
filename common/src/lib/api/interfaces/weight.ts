@@ -1,7 +1,6 @@
 import { WeightUnit } from '../../constants/enums/weight-unit'
-import { Document } from './document'
 
-export interface Weight extends Document {
+export interface Weight {
     amount: number
     unitOfMeasurement: WeightUnit
 }

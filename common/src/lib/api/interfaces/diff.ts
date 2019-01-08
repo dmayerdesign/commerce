@@ -1,8 +1,8 @@
-import { Document } from '@qb/common/goosetype/interfaces'
-import { Ref } from './ref'
+import { ObjectID } from 'typeorm'
+import { Entity } from './entity'
 
-export interface Diff extends Document {
-  recordId: Ref<Document>
+export interface Diff extends Entity {
+  recordId: ObjectID
   previousValue: any
   currentValue: any
 }

@@ -13,7 +13,7 @@ export class OrderController extends QbController<IOrder> {
     @Inject(OrderService) protected readonly _orderService: OrderService,
   ) {
     super()
-    this._repository.configureForGoosetypeEntity(Order)
+    this._repository.configureForTypeOrmEntity(Order)
   }
 
   @Post()

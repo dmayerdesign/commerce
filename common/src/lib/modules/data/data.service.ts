@@ -21,13 +21,14 @@ export abstract class DataService<EntityType extends any> {
       .toPromise()
   }
 
-  public stream(request: ListRequest<EntityType>): Promise<EntityType[]> {
-    return this._httpClient
-      .get<EntityType[]>(`${this.baseEndpoint}/stream`, {
-        params: new HttpParams().set(Crud.Params.listRequest, JSON.stringify(request))
-      })
-      .toPromise()
-  }
+  // TODO: Figure out streaming with TypeORM.
+  // public stream(request: ListRequest<EntityType>): Promise<EntityType[]> {
+  //   return this._httpClient
+  //     .get<EntityType[]>(`${this.baseEndpoint}/stream`, {
+  //       params: new HttpParams().set(Crud.Params.listRequest, JSON.stringify(request))
+  //     })
+  //     .toPromise()
+  // }
 
   public create(body: EntityType[]): Promise<EntityType[]> {
     return this._httpClient

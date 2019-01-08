@@ -1,6 +1,4 @@
-import { Document } from './document'
-
-export interface StripeCardHash extends Document {
+export interface StripeCardHash {
     id: string
     object: string
     number: number

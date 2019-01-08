@@ -1,5 +1,3 @@
-import { Document } from './document'
-
-export interface Test extends Document {
+export interface Test {
     name: string
 }

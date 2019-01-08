@@ -1,16 +1,15 @@
-import { Document } from '@qb/common/goosetype/interfaces'
 import { OrderStatus } from '../../constants/enums/order-status'
 import { Discount } from './discount'
 import { EasypostRate } from './easypost-rate'
+import { Entity } from './entity'
 import { OrderCustomer } from './order-customer'
 import { Price } from './price'
 import { Product } from './product'
-import { Ref } from './ref'
 import { StripeCardToken } from './stripe-card-token'
 
-export interface Order extends Document {
-    products: Ref<Product>[]
-    discounts: Ref<Discount>[]
+export interface Order extends Entity {
+    products: Product[]
+    discounts: Discount[]
     subTotal: Price
     total: Price
     taxPercent: number

@@ -1,6 +1,4 @@
-import { Document } from '@qb/common/goosetype/interfaces'
-
-export interface CustomRegion extends Document {
+export interface CustomRegion {
     isActive?: boolean
     isMetaRegion?: boolean
     childRegions?: CustomRegion[]

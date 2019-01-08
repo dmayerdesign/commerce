@@ -1,8 +1,7 @@
-import { Document } from '@qb/common/goosetype/interfaces'
 import { Address } from './address'
 import { Price } from './price'
 
-export interface OrganizationRetailSettings extends Document {
+export interface OrganizationRetailSettings {
     shippingAddress: Address
     billingAddress: Address
     salesTaxPercentage: number

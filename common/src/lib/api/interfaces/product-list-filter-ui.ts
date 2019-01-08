@@ -1,7 +1,6 @@
 import { ProductListFilterType } from '../requests/models/product-list-filter'
 import { AttributeValue } from './attribute-value'
 import { ProductListFilterUiDisplayWhen } from './product-list-filter-ui-display-when'
-import { Ref } from './ref'
 import { SimpleAttributeValue } from './simple-attribute-value'
 import { TaxonomyTerm } from './taxonomy-term'
 
@@ -11,6 +10,6 @@ export interface ProductListFilterUi {
     displayAlways?: boolean
     displayWhen?: ProductListFilterUiDisplayWhen
     label?: string
-    taxonomyTermOptions?: Ref<TaxonomyTerm>[]
-    attributeValueOptions?: (Ref<AttributeValue> | SimpleAttributeValue)[]
+    taxonomyTermOptions?: TaxonomyTerm[]
+    attributeValueOptions?: (AttributeValue | SimpleAttributeValue)[]
 }

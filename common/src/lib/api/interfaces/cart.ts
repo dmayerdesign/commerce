@@ -1,13 +1,11 @@
-import { Document } from '@qb/common/goosetype/interfaces'
 import { CartItem } from './cart-item'
 import { Discount } from './discount'
 import { Price } from './price'
-import { Ref } from './ref'
 
-export interface Cart extends Document {
+export interface Cart {
     count?: number
-    products: Ref<CartItem>[]
+    products: CartItem[]
     subTotal: Price
     total: Price
-    discounts?: Ref<Discount>[]
+    discounts?: Discount[]
 }

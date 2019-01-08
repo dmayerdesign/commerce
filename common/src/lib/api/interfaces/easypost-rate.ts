@@ -1,6 +1,4 @@
-import { Document } from '@qb/common/goosetype/interfaces'
-
-export interface EasypostRate extends Document {
+export interface EasypostRate {
     created_at: string
     updated_at: string
     mode: string /* "test" or "production" */

@@ -1,6 +1,5 @@
+import { ObjectID } from 'typeorm'
 import { Crud } from '../../constants/crud'
-import { Ref } from '../../goosetype'
-import { PopulateOptions } from '../interfaces/populate-options'
 
 export class ListRequest<EntityType> {
   public skip ?= 0
@@ -8,10 +7,9 @@ export class ListRequest<EntityType> {
   public sortBy ?= Crud.Sorting.defaultSortField
   public sortDirection ?= Crud.Sorting.defaultSortDirection
   public query?: object = {}
-  public ids?: string[] | Ref<EntityType>[]
+  public ids?: (string | ObjectID)[]
   public search?: string
   public searchFields?: string[]
-  public populates?: PopulateOptions[]
 
   constructor(request?: ListRequest<EntityType>) {
     if (request) {

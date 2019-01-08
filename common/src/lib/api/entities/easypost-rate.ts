@@ -1,7 +1,8 @@
 import { Column } from 'typeorm'
 import { Currency } from '../../constants/enums/currency'
+import { EasypostRate as IEasypostRate } from '../interfaces/easypost-rate'
 
-export class EasypostRate {
+export class EasypostRate implements IEasypostRate {
     @Column() public readonly created_at: string
     @Column() public readonly updated_at: string
     @Column({ enum: ['test', 'production'] }) public readonly mode: string /* "test" or "production" */

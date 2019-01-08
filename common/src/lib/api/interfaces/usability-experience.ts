@@ -1,5 +1,3 @@
-import { Document } from './document'
-
-export interface UsabilityExperience extends Document {
+export interface UsabilityExperience {
     description: string
 }

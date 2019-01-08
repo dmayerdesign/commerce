@@ -1,14 +1,8 @@
-import { Document } from '@qb/common/goosetype/interfaces'
-
-// Brand colors.
-
-export interface OrganizationBrandingColors extends Document {
+export interface OrganizationBrandingColors {
     primary: string
 }
 
-// Branding.
-
-export interface OrganizationBranding extends Document {
+export interface OrganizationBranding {
     displayName: string
     logo: string
     colors: OrganizationBrandingColors

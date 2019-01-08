@@ -1,5 +1,6 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ObjectIdColumn, ObjectID, OneToMany, UpdateDateColumn } from 'typeorm'
 import { OrderStatus } from '../../constants/enums/order-status'
+import { Order as IOrder } from '../interfaces/order'
 import { Discount } from './discount'
 import { EasypostRate } from './easypost-rate'
 import { OrderCustomer } from './order-customer'
@@ -8,7 +9,7 @@ import { Product } from './product'
 import { StripeCardToken } from './stripe-card-token'
 
 @Entity()
-export class Order {
+export class Order implements IOrder {
     @ObjectIdColumn() public id: ObjectID
 
     @OneToMany(() => Product, product => product.id)

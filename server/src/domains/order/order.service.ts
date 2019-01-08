@@ -34,8 +34,8 @@ export class OrderService implements IOrderService {
         @Inject(EmailService) private _emailService: EmailService,
         @Inject(OrganizationService) private _organizationService: OrganizationService,
     ) {
-        this._repository.configureForGoosetypeEntity(Order)
-        this._productRepository.configureForGoosetypeEntity(Product)
+        this._repository.configureForTypeOrmEntity(Order)
+        this._productRepository.configureForTypeOrmEntity(Product)
     }
 
     public async place(newOrder: Partial<IOrder>): Promise<IOrder> {

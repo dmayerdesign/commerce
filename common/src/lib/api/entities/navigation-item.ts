@@ -1,12 +1,13 @@
 import { TemplateRef } from '@angular/core'
 import { Column, Entity, JoinColumn, ObjectIdColumn, ObjectID, OneToMany } from 'typeorm'
+import { NavigationItem as INavigationItem } from '../interfaces/navigation-item'
 
 /**
  * A navigation item to be displayed in the UI
  * @description DO NOT "new up" this class from within a browser application. Default values are meant only to convey intent.
  */
 @Entity()
-export class NavigationItem {
+export class NavigationItem implements INavigationItem {
     @ObjectIdColumn() public id: ObjectID
     @Column() public text: string
     @Column() public isTopLevel = true

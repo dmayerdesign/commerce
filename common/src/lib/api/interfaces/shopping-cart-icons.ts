@@ -1,6 +1,4 @@
-import { Document } from './document'
-
-export interface ShoppingCartIcons extends Document {
+export interface ShoppingCartIcons {
     empty: string
     1: string
     2: string
