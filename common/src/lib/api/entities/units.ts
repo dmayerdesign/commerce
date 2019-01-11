@@ -1,9 +1,9 @@
+import { Column } from 'typeorm'
 import { LengthUnit } from '../../constants/enums/length-unit'
 import { WeightUnit } from '../../constants/enums/weight-unit'
-import { prop, schema, MongooseDocument } from '../../goosetype'
+import { Units as IUnits } from '../interfaces/units'
 
-@schema()
-export class Units {
+export class Units implements IUnits {
     @Column({ enum: WeightUnit }) public weight: WeightUnit
     @Column({ enum: LengthUnit }) public length: LengthUnit
 }

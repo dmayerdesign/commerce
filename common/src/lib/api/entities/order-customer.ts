@@ -8,7 +8,7 @@ export class OrderCustomer implements IOrderCustomer {
     @Column() public email: string
     @Column() public lastName: string
     @Column() public firstName: string
-    @Column() public shippingAddress: Address
-    @Column() public billingAddress: Address
+    @Column(() => Address) public shippingAddress: Address
+    @Column(() => Address) public billingAddress: Address
     @Column() public savePaymentInfo: boolean
 }

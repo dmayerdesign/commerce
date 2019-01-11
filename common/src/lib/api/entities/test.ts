@@ -1,7 +1,10 @@
-import { model, prop, MongooseDocument, MongooseSchemaOptions } from '../../goosetype'
+import { Column, CreateDateColumn, Entity, ObjectIdColumn, ObjectID, UpdateDateColumn } from 'typeorm'
+import { Test as ITest } from '../interfaces/test'
 
-@model(MongooseSchemaOptions.timestamped)
-export class Test {
+@Entity()
+export class Test implements ITest {
     @ObjectIdColumn() public id: ObjectID
     @Column() public name: string
+    @CreateDateColumn({ type: 'timestamp' }) public createdAt?: Date
+    @UpdateDateColumn({ type: 'timestamp' }) public updatedAt?: Date
 }

@@ -1,7 +1,6 @@
 import { Attribute } from './attribute'
-import { Entity } from './entity'
 
-export interface SimpleAttributeValue extends Entity {
+export interface SimpleAttributeValue {
     attribute: Attribute
     value: any
 }

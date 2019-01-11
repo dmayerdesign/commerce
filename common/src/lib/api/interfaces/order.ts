@@ -9,25 +9,25 @@ import { StripeCardToken } from './stripe-card-token'
 
 export interface Order extends Entity {
     products: Product[]
-    discounts: Discount[]
     subTotal: Price
     total: Price
     taxPercent: number
-    shippingCost: Price
-    shippingRates: EasypostRate[]
-    selectedShippingRateId: string
-    shippingInsuranceAmt: number
-    carrier: string
-    trackingCode: string
-    estDeliveryDays: number
-    postageLabelUrl: string
     paymentMethod: string
-    savePaymentInfo: boolean
-    shipmentId: string
     status: OrderStatus
-    stripeCardId: string
-    stripeOrderId: string
-    stripeSource: string
-    stripeToken: StripeCardToken
-    customer: OrderCustomer
+    discounts?: Discount[]
+    shippingCost?: Price
+    shippingRates?: EasypostRate[]
+    selectedShippingRateId?: string
+    shippingInsuranceAmt?: number
+    carrier?: string
+    trackingCode?: string
+    estDeliveryDays?: number
+    postageLabelUrl?: string
+    savePaymentInfo?: boolean
+    shipmentId?: string
+    stripeCardId?: string
+    stripeOrderId?: string
+    stripeSource?: string
+    stripeToken?: StripeCardToken
+    customer?: OrderCustomer
 }

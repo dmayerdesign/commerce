@@ -16,30 +16,31 @@ export class Order implements IOrder {
     @JoinColumn()
     public products: Product[]
 
+    @Column(() => Price) public subTotal: Price
+    @Column(() => Price) public total: Price
+    @Column() public taxPercent: number
+    @Column() public paymentMethod: string
+    @Column({ enum: OrderStatus }) public status: OrderStatus
+
     @OneToMany(() => Discount, discount => discount.id)
     @JoinColumn()
-    public discounts: Discount[]
+    public discounts?: Discount[]
 
-    @Column() public subTotal: Price
-    @Column() public total: Price
-    @Column() public taxPercent: number
-    @Column() public shippingCost: Price
-    @Column(() => EasypostRate) public shippingRates: EasypostRate[]
-    @Column() public selectedShippingRateId: string
-    @Column() public shippingInsuranceAmt: number
-    @Column() public carrier: string
-    @Column() public trackingCode: string
-    @Column() public estDeliveryDays: number
-    @Column() public postageLabelUrl: string
-    @Column() public paymentMethod: string
-    @Column() public savePaymentInfo: boolean
-    @Column() public shipmentId: string
-    @Column({ enum: OrderStatus }) public status: OrderStatus
-    @Column() public stripeCardId: string
-    @Column() public stripeOrderId: string
-    @Column() public stripeSource: string
-    @Column() public stripeToken: StripeCardToken
-    @Column() public customer: OrderCustomer
-    @CreateDateColumn({ type: 'timestamp' }) public createdAt: Date
-    @UpdateDateColumn({ type: 'timestamp' }) public updatedAt: Date
+    @Column(() => Price) public shippingCost?: Price
+    @Column(() => EasypostRate) public shippingRates?: EasypostRate[]
+    @Column() public selectedShippingRateId?: string
+    @Column() public shippingInsuranceAmt?: number
+    @Column() public carrier?: string
+    @Column() public trackingCode?: string
+    @Column() public estDeliveryDays?: number
+    @Column() public postageLabelUrl?: string
+    @Column() public savePaymentInfo?: boolean
+    @Column() public shipmentId?: string
+    @Column() public stripeCardId?: string
+    @Column() public stripeOrderId?: string
+    @Column() public stripeSource?: string
+    @Column(() => StripeCardToken) public stripeToken?: StripeCardToken
+    @Column(() => OrderCustomer) public customer?: OrderCustomer
+    @CreateDateColumn({ type: 'timestamp' }) public createdAt?: Date
+    @UpdateDateColumn({ type: 'timestamp' }) public updatedAt?: Date
 }

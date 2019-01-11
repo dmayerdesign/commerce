@@ -1,7 +1,8 @@
-import { model, prop, MongooseDocument, MongooseSchemaOptions } from '../../goosetype'
+import { Column, CreateDateColumn, Entity, ObjectIdColumn, ObjectID, UpdateDateColumn } from 'typeorm'
+import { Timer as ITimer } from '../interfaces/timer'
 
-@model(MongooseSchemaOptions.timestamped)
-export class Timer {
+@Entity()
+export class Timer implements ITimer {
     @ObjectIdColumn() public id: ObjectID
     @Column() public name: string
     @Column() public url: string
@@ -9,4 +10,6 @@ export class Timer {
     @Column() public startedAt: number
     @Column() public duration: number
     @Column() public jsonData: string
+    @CreateDateColumn({ type: 'timestamp' }) public createdAt?: Date
+    @UpdateDateColumn({ type: 'timestamp' }) public updatedAt?: Date
 }

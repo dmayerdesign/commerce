@@ -1,6 +1,5 @@
-import { prop, schema, MongooseDocument } from '../../goosetype'
+import { Column } from 'typeorm'
 
-@schema()
 export class StripeCardHash {
     @Column() public id: string
     @Column() public object: string

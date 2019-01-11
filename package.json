@@ -5,8 +5,8 @@
   "author": "",
   "license": "MIT",
   "scripts": {
-    "dev": "npm run qb dev ui & npm run qb dev server",
-    "start": "node dist/server/main.js",
+    "dev": "source ./.vars; npm run qb dev ui & npm run qb dev server",
+    "start": "source ./.vars; node dist/server/main.js",
     "test": "npm run qb test ui && npm run qb test server",
     "lint": "tslint -p tsconfig.json -c tslint.json",
     "format": "prettier --write \"src/**/*.ts\"",

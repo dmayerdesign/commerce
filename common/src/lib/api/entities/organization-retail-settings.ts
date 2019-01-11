@@ -4,9 +4,9 @@ import { Address } from './address'
 import { Price } from './price'
 
 export class OrganizationRetailSettings implements IOrganizationRetailSettings {
-    @Column() public shippingAddress: Address
-    @Column() public billingAddress: Address
+    @Column(() => Address) public shippingAddress: Address
+    @Column(() => Address) public billingAddress: Address
     @Column() public salesTaxPercentage: number
     @Column() public addSalesTax?: boolean
-    @Column() public shippingFlatRate?: Price
+    @Column(() => Price) public shippingFlatRate?: Price
 }

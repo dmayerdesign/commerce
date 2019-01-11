@@ -1,12 +1,14 @@
-import * as findOrCreate from 'mongoose-findorcreate'
-import { model, plugin, prop, MongooseDocument, MongooseSchemaOptions } from '../../goosetype'
+import { Column, CreateDateColumn, Entity, ObjectIdColumn, ObjectID, UpdateDateColumn } from 'typeorm'
+import { Taxonomy as ITaxonomy } from '../interfaces/taxonomy'
 
-@plugin(findOrCreate)
-@model(MongooseSchemaOptions.timestamped)
-export class Taxonomy {
+@Entity()
+export class Taxonomy implements ITaxonomy {
     @ObjectIdColumn() public id: ObjectID
-    @Column() public singularName: string
-    @Column() public pluralName: string
     @Column() public slug: string
-    @Column() public description: string
+    @Column() public singularName?: string
+    @Column() public pluralName?: string
+    @Column() public description?: string
+
+    @CreateDateColumn({ type: 'timestamp' }) public createdAt?: Date
+    @UpdateDateColumn({ type: 'timestamp' }) public updatedAt?: Date
 }

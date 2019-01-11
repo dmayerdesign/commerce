@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# If a .env file exists, use it.
-[[ -f ./.env ]] && source ./.env
+# If a .vars file exists, use it.
+[[ -f ./.vars ]] && source ./.vars
 
 test() {
     if [ "$1" = "ui" ]; then

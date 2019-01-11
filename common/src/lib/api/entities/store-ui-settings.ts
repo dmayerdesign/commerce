@@ -1,9 +1,8 @@
-import { arrayProp, schema, MongooseDocument } from '../../goosetype'
+import { Column } from 'typeorm'
 import { ProductListFilterUi } from './product-list-filter-ui'
 
-@schema()
 export class StoreUiSettings {
-    @OneToMany({ type: String }) public orderOfVariableAttributeSelects?: string[]
-    @OneToMany({ type: [String] }) public combinedVariableAttributeSelects?: string[][]
-    @OneToMany({ type: ProductListFilterUi }) public productListFilterUis?: ProductListFilterUi[]
+    @Column() public orderOfVariableAttributeSelects?: string[]
+    @Column() public combinedVariableAttributeSelects?: string[][]
+    @Column(() => ProductListFilterUi) public productListFilterUis?: ProductListFilterUi[]
 }

@@ -1,6 +1,6 @@
-import { prop, schema, MongooseDocument } from '../../goosetype'
+import { Column } from 'typeorm'
+import { ProductListFilterUiDisplayWhen as IProductListFilterUiDisplayWhen } from '../interfaces/product-list-filter-ui-display-when'
 
-@schema()
-export class ProductListFilterUiDisplayWhen {
+export class ProductListFilterUiDisplayWhen implements IProductListFilterUiDisplayWhen {
     @Column() public taxonomyTermSlug: string
 }

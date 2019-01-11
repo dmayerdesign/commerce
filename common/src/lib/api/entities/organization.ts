@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, ObjectIdColumn, ObjectID, OneToMany, UpdateDateColumn } from 'typeorm'
+import { Column, CreateDateColumn, Entity, JoinColumn, ObjectIdColumn, ObjectID, OneToMany, UpdateDateColumn } from 'typeorm'
 import { OrganizationType } from '../../constants/enums/organization-type'
 import { Organization as IOrganization } from '../interfaces/organization'
 import { GlobalStyles } from './global-styles'
@@ -11,18 +11,22 @@ import { UiContent } from './ui-content'
 @Entity()
 export class Organization implements IOrganization {
     @ObjectIdColumn() public id: ObjectID
-    @Column({ enum: OrganizationType }) public type?: OrganizationType
     @Column() public name: string
-    @Column() public dbaNames: string[]
-    @Column() public retailSettings: OrganizationRetailSettings
-    @Column() public branding: OrganizationBranding
+    @Column(() => OrganizationRetailSettings) public retailSettings: OrganizationRetailSettings
+    @Column(() => OrganizationBranding) public branding: OrganizationBranding
     @Column() public storeUrl: string
-    @Column() public storeUiContent: UiContent
-    @Column() public blogUiContent?: UiContent
-    @Column() public storeUiSettings?: StoreUiSettings
-    @OneToMany(() => Taxonomy, taxonomy => taxonomy.id) public searchableTaxonomies?: Taxonomy[]
-    @Column() public globalStyles?: GlobalStyles
-    @Column() public defaultsHaveBeenSet: boolean
-    @CreateDateColumn({ type: 'timestamp' }) public createdAt: Date
-    @UpdateDateColumn({ type: 'timestamp' }) public updatedAt: Date
+    @Column(() => UiContent) public storeUiContent: UiContent
+    @Column({ enum: OrganizationType }) public type?: OrganizationType
+    @Column() public dbaNames?: string[]
+    @Column(() => UiContent) public blogUiContent?: UiContent
+    @Column(() => StoreUiSettings) public storeUiSettings?: StoreUiSettings
+
+    @OneToMany(() => Taxonomy, taxonomy => taxonomy.id)
+    @JoinColumn()
+    public searchableTaxonomies?: Taxonomy[]
+
+    @Column(() => GlobalStyles) public globalStyles?: GlobalStyles
+    @Column() public defaultsHaveBeenSet?: boolean
+    @CreateDateColumn({ type: 'timestamp' }) public createdAt?: Date
+    @UpdateDateColumn({ type: 'timestamp' }) public updatedAt?: Date
 }

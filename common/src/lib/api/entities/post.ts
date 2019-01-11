@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, ObjectIdColumn, ObjectID, OneToMany, UpdateDateColumn } from 'typeorm'
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToMany, ObjectIdColumn, ObjectID, OneToMany, UpdateDateColumn } from 'typeorm'
 import { Comment as IComment } from '../interfaces/post'
 import { Post as IPost } from '../interfaces/post'
 import { Image } from './image'
@@ -20,33 +20,50 @@ export class Author {
 }
 
 export class Reactions {
-    @OneToMany(() => User, user => user.id) public up: User[]
-    @OneToMany(() => User, user => user.id) public down: User[]
+    @OneToMany(() => User, user => user.id)
+    @JoinColumn()
+    public up: User[]
+
+    @OneToMany(() => User, user => user.id)
+    @JoinColumn()
+    public down: User[]
 }
 
 @Entity()
 export class Comment implements IComment {
     @ObjectIdColumn() public id: ObjectID
-    @Column() public author: Author
+    @Column(() => Author) public author: Author
     @Column() public content: string
-    @OneToMany(() => Image, image => image.id) public images: string[]
-    @Column() public linkEmbed: LinkEmbed
-    @Column() public reactions: Reactions
+
+    @ManyToMany(() => Image, image => image.id)
+    @JoinColumn()
+    public images: Image[]
+
+    @Column(() => LinkEmbed) public linkEmbed: LinkEmbed
+    @Column(() => Reactions) public reactions: Reactions
 }
 
 @Entity()
 export class Post implements IPost {
     @ObjectIdColumn() public id: ObjectID
-    @Column() public author: Author
+    @Column(() => Author) public author: Author
     @Column({ default: 'normal' }) public type: string
-    @Column() public content: Author
+    @Column(() => Author) public content: Author
     @Column() public eventDate: Date
     @Column() public eventLocation: string
     @Column() public tags: string[]
-    @OneToMany(() => Image, image => image.id) public images: Image[]
-    @Column() public linkEmbed: LinkEmbed
-    @OneToMany(() => Comment, comment => comment.id) public comments: Comment[]
-    @Column() public reactions: Reactions
-    @CreateDateColumn({ type: 'timestamp' }) public createdAt: Date
-    @UpdateDateColumn({ type: 'timestamp' }) public updatedAt: Date
+
+    @ManyToMany(() => Image, image => image.id)
+    @JoinColumn()
+    public images: Image[]
+
+    @Column(() => LinkEmbed) public linkEmbed: LinkEmbed
+
+    @OneToMany(() => Comment, comment => comment.id)
+    @JoinColumn()
+    public comments: Comment[]
+
+    @Column(() => Reactions) public reactions: Reactions
+    @CreateDateColumn({ type: 'timestamp' }) public createdAt?: Date
+    @UpdateDateColumn({ type: 'timestamp' }) public updatedAt?: Date
 }

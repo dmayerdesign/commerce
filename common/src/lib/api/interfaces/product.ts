@@ -1,4 +1,3 @@
-import { ProductClass } from '../../constants/enums/product-class'
 import { Attribute } from './attribute'
 import { AttributeValue } from './attribute-value'
 import { Dimensions } from './dimensions'
@@ -20,7 +19,6 @@ export interface Product extends Entity {
 
     // Organizational.
     sku: string
-    class: ProductClass
     isStandalone: boolean
     isParent: boolean
     parentSku: string

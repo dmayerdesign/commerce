@@ -145,7 +145,8 @@ export class QbRepository<EntityType extends QbEntityType> implements IQbReposit
     return this.list(request)
   }
 
-  private _createFindManyOptions(listRequest: ListRequest<EntityType>): FindManyOptions<EntityType> {
+  private _createFindManyOptions(listRequest: ListRequest<EntityType>):
+    FindManyOptions<EntityType> {
     const {
       skip,
       limit,

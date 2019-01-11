@@ -1,9 +1,12 @@
-import { arrayProp, prop, schema, MongooseDocument, Ref } from '../../goosetype'
+import { Column, JoinColumn, ManyToMany } from 'typeorm'
+import { UiContent as IUiContent } from '../interfaces/ui-content'
 import { CustomRegions } from './custom-regions'
 import { NavigationItem } from './navigation-item'
 
-@schema()
-export class UiContent {
-    @OneToMany({ ref: NavigationItem }) public primaryNavigation: Ref<NavigationItem>[]
-    @Column() public customRegions?: CustomRegions
+export class UiContent implements IUiContent {
+    @ManyToMany(() => NavigationItem, x => x.id)
+    @JoinColumn()
+    public primaryNavigation?: NavigationItem[]
+
+    @Column(() => CustomRegions) public customRegions?: CustomRegions
 }

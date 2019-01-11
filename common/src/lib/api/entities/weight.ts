@@ -1,8 +1,8 @@
-import { WeightUnit } from '../../constants/enums/weight-unit'
-import { prop, schema, MongooseDocument } from '../../goosetype'
+import { WeightUnit } from '@qb/common/constants/enums/weight-unit'
+import { Column } from 'typeorm'
+import { Weight as IWeight } from '../interfaces/weight'
 
-@schema({ _id: false })
-export class Weight {
+export class Weight implements IWeight {
     @Column() public amount: number
-    @Column({ enum: WeightUnit, type: String }) public unitOfMeasurement: WeightUnit
+    @Column({ type: String, enum: WeightUnit }) public unitOfMeasurement: WeightUnit
 }

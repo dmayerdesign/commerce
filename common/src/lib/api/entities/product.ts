@@ -1,6 +1,5 @@
-import * as mongooseDelete from 'mongoose-delete'
-import { ProductClass } from '../../constants/enums/product-class'
-import { arrayProp, model, plugin, pre, prop, MongooseDocument, MongooseSchemaOptions, Ref } from '../../goosetype'
+import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, ObjectIdColumn, ObjectID, OneToMany, UpdateDateColumn, ManyToMany } from 'typeorm'
+import { Product as IProduct } from '../interfaces/product'
 import { Attribute } from './attribute'
 import { AttributeValue } from './attribute-value'
 import { Dimensions } from './dimensions'
@@ -11,82 +10,82 @@ import { TaxonomyTerm } from './taxonomy-term'
 import { Units } from './units'
 import { Weight } from './weight'
 
-@pre('find', function() {
-    this.populate('parent')
-})
-@pre('findOne', function() {
-    this.populate('parent')
-})
-@pre('save', function(next) {
-    const product = this
-    if (!product.slug && product.isNew) {
-        product.slug = product.name.trim().toLowerCase().replace(/[^a-z0-9]/g, '-')
-    }
-    if (product.slug && (product.isNew || product.isModified('slug'))) {
-        product.slug = product.slug.trim().toLowerCase().replace(/[^a-z0-9]/g, '-')
-    }
-    if (product.isNew || product.isModified('class')) {
-        product.isStandalone = product.class === 'standalone'
-        product.isParent = product.class === 'parent'
-        product.isVariation = product.class === 'variation'
-    } else if (
-        product.isModified('isStandalone') ||
-        product.isModified('isParent') ||
-        product.isModified('isVariation')
-    ) {
-        product.class = product.isVariation ? 'variation' : product.isParent ? 'parent' : 'standalone'
-    }
-    next()
-})
-@plugin(mongooseDelete)
-@model(MongooseSchemaOptions.timestamped)
-export class Product {
+@Entity()
+export class Product implements IProduct {
     @ObjectIdColumn() public id: ObjectID
     // Aesthetic.
     @Column() public name: string
     @Column() public slug: string
     @Column() public description: string
-    @OneToMany({ type: Image }) public featuredImages: Image[]
-    @OneToMany({ type: Image }) public images: Image[]
+
+    @ManyToMany(() => Image, image => image.id)
+    @JoinColumn()
+    public featuredImages: Image[]
+
+    @ManyToMany(() => Image, image => image.id)
+    @JoinColumn()
+    public images: Image[]
 
     // Organizational.
     @Column({ unique: true }) public sku: string
-    @Column({ enum: ProductClass }) public class: ProductClass
     @Column() public isStandalone: boolean
     @Column() public isParent: boolean
     @Column() public parentSku: string
-    @Column({ ref: Product }) public parent: Ref<Product>
+
+    @ManyToOne(() => Product, product => product.id)
+    @JoinColumn()
+    public parent: Product
 
     // Financial.
-    @Column() public price: Price
-    @OneToMany({ type: Price }) public priceRange: Price[]
-    @Column() public salePrice: Price
-    @OneToMany({ type: Price }) public salePriceRange: Price[]
+    @Column(() => Price) public price: Price
+    @Column(() => Price) public priceRange: Price[]
+    @Column(() => Price) public salePrice: Price
+    @Column(() => Price) public salePriceRange: Price[]
     @Column() public isOnSale: boolean
-    @OneToMany({ type: String }) public variationSkus: string[]
-    @OneToMany({ ref: Product }) public variations: Ref<Product>[]
+    @Column() public variationSkus: string[]
+
+    @OneToMany(() => Product, product => product.id)
+    @JoinColumn()
+    public variations: Product[]
+
     @Column() public isVariation: boolean
     @Column() public isDefaultVariation: boolean
 
     // Attributes.
-    /// Own attributes.
-    @OneToMany({ ref: AttributeValue }) public attributeValues: Ref<AttributeValue>[]
-    @OneToMany({ type: SimpleAttributeValue }) public simpleAttributeValues: SimpleAttributeValue[]
-    /// Variation attributes.
-    @OneToMany({ type: String }) public variableProperties: string[]
-    @OneToMany({ ref: Attribute }) public variableAttributes: Ref<Attribute>[]
-    @OneToMany({ ref: AttributeValue }) public variableAttributeValues: Ref<AttributeValue>[]
-    @OneToMany({ type: SimpleAttributeValue }) public variableSimpleAttributeValues: SimpleAttributeValue[]
+    // Own attributes.
+    @ManyToMany(() => AttributeValue, attributeValue => attributeValue.id)
+    @JoinColumn()
+    public attributeValues: AttributeValue[]
+
+    @Column(() => SimpleAttributeValue)
+    public simpleAttributeValues: SimpleAttributeValue[]
+
+    // Variation attributes.
+    @Column() public variableProperties: string[]
+
+    @ManyToMany(() => Attribute, attribute => attribute.id)
+    @JoinColumn()
+    public variableAttributes: Attribute[]
+
+    @ManyToMany(() => AttributeValue, attributeValue => attributeValue.id)
+    @JoinColumn()
+    public variableAttributeValues: AttributeValue[]
+
+    @Column(() => SimpleAttributeValue)
+    public variableSimpleAttributeValues: SimpleAttributeValue[]
 
     // Taxonomy.
-    @OneToMany({ ref: TaxonomyTerm }) public taxonomyTerms: Ref<TaxonomyTerm>[]
-    @OneToMany({ type: String }) public taxonomyTermSlugs: string[]
+    @ManyToMany(() => TaxonomyTerm, taxonomyTerm => taxonomyTerm.id)
+    @JoinColumn()
+    public taxonomyTerms: TaxonomyTerm[]
+
+    @Column() public taxonomyTermSlugs: string[]
 
     // Shipping.
-    @Column() public units: Units
-    @Column() public dimensions: Dimensions
-    @Column() public shippingWeight: Weight
-    @Column() public netWeight: Weight
+    @Column(() => Units) public units: Units
+    @Column(() => Dimensions) public dimensions: Dimensions
+    @Column(() => Weight) public shippingWeight: Weight
+    @Column(() => Weight) public netWeight: Weight
 
     // Additional tax.
     @Column() public additionalTax: number
@@ -95,4 +94,19 @@ export class Product {
     @Column() public stockQuantity: number
     @Column() public totalSales: number
     @Column() public existsInStripe: boolean
+
+    @CreateDateColumn({ type: 'timestamp' }) public createdAt?: Date
+    @UpdateDateColumn({ type: 'timestamp' }) public updatedAt?: Date
+
+    @BeforeInsert()
+    @BeforeUpdate()
+    public normalizeSlug(): void {
+        const product = this
+        if (!product.slug) {
+            product.slug = product.name.trim().toLowerCase().replace(/[^a-z0-9]/g, '-')
+        }
+        if (product.slug) {
+            product.slug = product.slug.trim().toLowerCase().replace(/[^a-z0-9]/g, '-')
+        }
+    }
 }

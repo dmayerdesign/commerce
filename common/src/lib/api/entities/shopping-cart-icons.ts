@@ -1,6 +1,5 @@
-import { prop, schema, MongooseDocument } from '../../goosetype'
+import { Column } from 'typeorm'
 
-@schema()
 export class ShoppingCartIcons {
     @Column() public empty: string
     @Column() public 1: string

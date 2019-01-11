@@ -14,7 +14,6 @@ import { TaxonomyTerm as ITaxonomyTerm } from '@qb/common/api/interfaces/taxonom
 import { ListRequest } from '@qb/common/api/requests/list.request'
 import { UpdateRequest } from '@qb/common/api/requests/update.request'
 import { Currency } from '@qb/common/constants/enums/currency'
-import { ProductClass } from '@qb/common/constants/enums/product-class'
 import { RangeLimit } from '@qb/common/constants/enums/range-limit'
 import { WeightUnit } from '@qb/common/constants/enums/weight-unit'
 import * as productsJSON from '@qb/common/work-files/migration/hyzershop-products'
@@ -43,11 +42,12 @@ export class HyzershopMigrationService {
         const newProducts = []
 
         const dropAllProductRelatedCollections = async () => {
-            await Product.getModel().collection.drop()
-            await Attribute.getModel().collection.drop()
-            await AttributeValue.getModel().collection.drop()
-            await Taxonomy.getModel().collection.drop()
-            await TaxonomyTerm.getModel().collection.drop()
+            console.warn('Skipping drops for product, attribute, attribute value, taxonomy, and taxonomy term.')
+            // await Product.getModel().collection.drop()
+            // await Attribute.getModel().collection.drop()
+            // await AttributeValue.getModel().collection.drop()
+            // await Taxonomy.getModel().collection.drop()
+            // await TaxonomyTerm.getModel().collection.drop()
         }
 
         await dropAllProductRelatedCollections()
@@ -87,15 +87,15 @@ export class HyzershopMigrationService {
                 const taxonomyTermIds: string[] = []
 
                 const flightStats: {
-                    fade: number
-                    glide: number
-                    speed: number
-                    turn: number
+                    fade:  number | undefined
+                    glide: number | undefined
+                    speed: number | undefined
+                    turn:  number | undefined
                 } = {
-                    fade: undefined,
+                    fade:  undefined,
                     glide: undefined,
                     speed: undefined,
-                    turn: undefined,
+                    turn:  undefined,
                 }
 
                 for (const key of Object.keys(product)) {
@@ -343,15 +343,12 @@ export class HyzershopMigrationService {
                         if (key === 'type') {
                             if ((newProduct as any).type === 'Variable') {
                                 newProduct.isParent = true
-                                newProduct.class = ProductClass.Parent
                             }
                             if ((newProduct as any).type === 'Variation') {
                                 newProduct.isVariation = true
-                                newProduct.class = ProductClass.Variation
                             }
                             if ((newProduct as any).type === 'Simple Product') {
                                 newProduct.isStandalone = true
-                                newProduct.class = ProductClass.Standalone
                             }
                             delete newProduct[key]
                         }
@@ -476,8 +473,8 @@ export class HyzershopMigrationService {
                     let imageBaseUrl = `/product-images/`
 
                     if (product.taxonomyTermSlugs) {
-                        product.taxonomyTermSlugs.forEach(term => {
-                            if (term.indexOf('brand') === 0) {
+                        product.taxonomyTermSlugs.forEach((term) => {
+                            if (term && term.indexOf('brand') === 0) {
                                 if (term.match(/mvp/ig)) {
                                     imageBaseUrl += 'mvp-'
                                 }

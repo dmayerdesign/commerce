@@ -8,6 +8,7 @@
 
 # environment variables
 .env
+.vars
 
 # dependencies
 /node_modules

@@ -1,9 +1,13 @@
-import { arrayProp, model, prop, MongooseDocument, MongooseSchemaOptions, Ref } from '../../goosetype'
+import { Column, Entity, JoinColumn, ManyToMany, ObjectIdColumn, ObjectID } from 'typeorm'
+import { Wishlist as IWishlist } from '../interfaces/wishlist'
 import { Product } from './product'
 
-@model(MongooseSchemaOptions.timestamped)
-export class Wishlist {
+@Entity()
+export class Wishlist implements IWishlist {
     @ObjectIdColumn() public id: ObjectID
     @Column() public userId: string
-    @OneToMany({ ref: Product }) public products: Ref<Product>[]
+
+    @ManyToMany(() => Product, x => x.id)
+    @JoinColumn()
+    public products: Product[]
 }

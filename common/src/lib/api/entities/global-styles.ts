@@ -4,5 +4,5 @@ import { ShoppingCartIcons } from './shopping-cart-icons'
 
 export class GlobalStyles implements IGlobalStyles {
     @Column() public backgroundPatternImageSrc: string
-    @Column() public shoppingCartIcons: ShoppingCartIcons
+    @Column(() => ShoppingCartIcons) public shoppingCartIcons: ShoppingCartIcons
 }

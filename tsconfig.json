@@ -12,6 +12,8 @@
         "lib": [
             "es2015",
             "dom"
-        ]
+        ],
+        "noUnusedLocals": true,
+        "strictNullChecks": true
     }
 }

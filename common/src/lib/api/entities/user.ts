@@ -1,15 +1,16 @@
+import { Column, CreateDateColumn, Entity, JoinColumn, ObjectIdColumn, ObjectID, OneToMany, UpdateDateColumn } from 'typeorm'
 import { UserRole } from '../../constants/enums/user-role'
-import { arrayProp, model, prop, MongooseDocument, MongooseSchemaOptions, Ref } from '../../goosetype'
+import { User as IUser } from '../interfaces/user'
 import { Address } from './address'
 import { Cart } from './cart'
 import { Image } from './image'
 import { Order } from './order'
 import { Wishlist } from './wishlist'
 
-@model(MongooseSchemaOptions.timestamped)
-export class User {
+@Entity()
+export class User implements IUser {
     @ObjectIdColumn() public id: ObjectID
-    @Column({ required: true }) public email: string
+    @Column() public email: string
     @Column() public emailIsVerified?: boolean
     @Column() public emailVerificationToken?: string
     @Column() public emailTokenExpires?: number
@@ -22,16 +23,22 @@ export class User {
     @Column() public lastName?: string
     @Column() public firstName?: string
     @Column() public gender?: string
-    @Column() public avatar?: Image
-    @Column() public address?: Address
+    @Column(() => Image) public avatar?: Image
+    @Column(() => Address) public address?: Address
     @Column() public phoneNumber?: string
 
     @Column() public facebookId?: string
     @Column() public googleId?: string
 
-    @OneToMany({ ref: Order }) public orders?: Ref<Order>[]
+    @OneToMany(() => Order, x => x.id)
+    @JoinColumn()
+    public orders?: Order[]
+
     @Column() public stripeCustomerId?: string
 
-    @Column() public cart?: Cart
-    @Column({ ref: Wishlist }) public wishlist?: Ref<Wishlist>
+    @Column(() => Cart) public cart?: Cart
+    @Column(() => Wishlist) public wishlist?: Wishlist
+
+    @CreateDateColumn({ type: 'timestamp' }) public createdAt?: Date
+    @UpdateDateColumn({ type: 'timestamp' }) public updatedAt?: Date
 }

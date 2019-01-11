@@ -1,10 +1,10 @@
-import { model, prop, MongooseDocument, MongooseSchemaOptions, Ref } from '../../goosetype'
+import { Column, ObjectIdColumn, ObjectID } from 'typeorm'
+import { UsabilityTestBucket as IUsabilityTestBucket } from '../interfaces/usability-test-bucket'
 import { UsabilityExperience } from './usability-experience'
 
-@model(MongooseSchemaOptions.timestamped)
-export class UsabilityTestBucket {
+export class UsabilityTestBucket implements IUsabilityTestBucket {
     @ObjectIdColumn() public id: ObjectID
     @Column() public description: string
-    @Column({ ref: UsabilityExperience }) public usabilityExperience: Ref<UsabilityExperience>
+    @Column(() => UsabilityExperience) public usabilityExperience: UsabilityExperience
     @Column() public likelihood: number
 }

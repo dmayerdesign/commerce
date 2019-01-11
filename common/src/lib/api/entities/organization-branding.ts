@@ -11,6 +11,9 @@ export class OrganizationBrandingColors implements IOrganizationBrandingColors {
 export class OrganizationBranding implements IOrganizationBranding {
     @Column() public displayName: string
     @Column() public logo: string
-    @Column() public colors: OrganizationBrandingColors
+
+    @Column(() => OrganizationBrandingColors)
+    public colors: OrganizationBrandingColors
+
     @Column() public cartName: string
 }

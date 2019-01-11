@@ -1,4 +1,4 @@
-import { Column, Entity, ObjectIdColumn, ObjectID, OneToMany } from 'typeorm'
+import { Column, Entity, JoinColumn, ObjectIdColumn, ObjectID, OneToMany } from 'typeorm'
 import { CustomRegion as ICustomRegion } from '../interfaces/custom-region'
 
 @Entity()
@@ -6,7 +6,11 @@ export class CustomRegion implements ICustomRegion {
   @ObjectIdColumn() public id: ObjectID
   @Column() public isActive?: boolean
   @Column() public isMetaRegion?: boolean
-  @OneToMany(() => CustomRegion, customRegion => customRegion.id) public childRegions?: CustomRegion[]
+
+  @OneToMany(() => CustomRegion, customRegion => customRegion.id)
+  @JoinColumn()
+  public childRegions?: CustomRegion[]
+
   @Column() public key?: string
   @Column() public className?: string
   @Column() public apiModel?: string

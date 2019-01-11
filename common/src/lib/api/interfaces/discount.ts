@@ -12,6 +12,6 @@ export interface Discount {
     total: Price
     percentage: number // `20` for a 20% discount
     freeShipping: boolean
-    includes: DiscountExceptions
-    excludes: DiscountExceptions
-}
+    includes?: DiscountExceptions
+    excludes?: DiscountExceptions
+}?

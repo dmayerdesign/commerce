@@ -1,8 +1,8 @@
 import { Entity } from './entity'
 
 export interface Attribute extends Entity {
-    singularName: string
-    pluralName: string
-    slug: string
-    description: string
+  slug: string
+  singularName?: string
+  pluralName?: string
+  description?: string
 }

@@ -5,7 +5,7 @@ export interface Address {
     street2?: string
     city: string
     state: string
-    country: string
+    country?: string
     zip: string
     phone?: string
 }

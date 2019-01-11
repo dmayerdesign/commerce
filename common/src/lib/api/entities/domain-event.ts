@@ -11,7 +11,7 @@ export class DomainEvent implements IDomainEvent {
     @Column({ enum: HttpVerb }) public httpVerb?: HttpVerb
     @Column() public httpRequest?: any
     @Column() public httpResponse?: any
-    @Column() public diff: Diff
-    @CreateDateColumn({ type: 'timestamp' }) public createdAt: Date
-    @UpdateDateColumn({ type: 'timestamp' }) public updatedAt: Date
+    @Column(() => Diff) public diff: Diff
+    @CreateDateColumn({ type: 'timestamp' }) public createdAt?: Date
+    @UpdateDateColumn({ type: 'timestamp' }) public updatedAt?: Date
 }
