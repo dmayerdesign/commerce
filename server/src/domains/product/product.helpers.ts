@@ -2,13 +2,14 @@ import { ProductListFilter } from '@qb/common/api/requests/models/product-list-f
 import { RangeLimit } from '@qb/common/constants/enums/range-limit'
 import { queryWithAndOperation } from '@qb/common/helpers/mongoose.helpers'
 import { cloneDeep } from 'lodash'
+import { ObjectID } from 'typeorm'
 
 export function propertyFilter(filter: ProductListFilter, query: typeof queryWithAndOperation): typeof queryWithAndOperation {
   const newQuery = cloneDeep(query)
   if (filter.values && filter.values.length) {
     const propertyVOs = filter.values.map(val => {
       return {
-        [filter.key]: val
+        [filter.key as string]: val
       }
     })
     newQuery.$and.push({ $or: propertyVOs })
@@ -59,12 +60,12 @@ export function simpleAttributeValueFilter(filter: ProductListFilter, query: typ
     }
     if (filter.range) {
         const lowerLimit: any = {
-            [filter.key]: {
+            [filter.key as string]: {
                 value: { $gte: filter.range[RangeLimit.Min] },
             }
         }
         const upperLimit: any = {
-            [filter.key]: {
+            [filter.key as string]: {
                 value: { $lte: filter.range[RangeLimit.Max] },
             }
         }
@@ -113,7 +114,7 @@ export function attributeValueFilter(filter: ProductListFilter, query: typeof qu
 
 // Note: Parents and variations must share the same taxonomy terms.
 // TODO: Should be deriving a variation's taxonomy terms from its parent.
-export function taxonomyTermFilter(ids: string[], query: typeof queryWithAndOperation): typeof queryWithAndOperation {
+export function taxonomyTermFilter(ids: ObjectID[], query: typeof queryWithAndOperation): typeof queryWithAndOperation {
     const newQuery = cloneDeep(query)
 
     if (ids && ids.length) {

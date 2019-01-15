@@ -1,12 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common'
-import { Order } from '@qb/common/api/interfaces/order'
-import { Product } from '@qb/common/api/interfaces/product'
+import { Order } from '@qb/common/api/entities/order'
+import { Product } from '@qb/common/api/entities/product'
 import { ListRequest } from '@qb/common/api/requests/list.request'
 import { ApiErrorResponse } from '@qb/common/api/responses/api-error.response'
 import { StripeSubmitOrderResponse } from '@qb/common/api/responses/stripe/stripe-submit-order.response'
 import { Copy } from '@qb/common/constants/copy'
 import { HttpStatus } from '@qb/common/constants/http-status'
-import 'stripe'
+import { customers } from 'stripe'
 import { QbRepository } from '../../../shared/data-access/repository'
 import { StripeCustomerService } from './stripe-customer.service'
 import { StripeOrderActionsService } from './stripe-order-actions.service'
@@ -45,11 +45,7 @@ export class StripeOrderService {
         try {
             const request = new ListRequest({
                 query: { sku: { $in: variationAndStandaloneSkus } },
-                limit: 0,
-                populates: [
-                    'attributeValues',
-                    'simpleAttributeValues',
-                ]
+                limit: 0
             })
             const variationsAndStandalones = await this._productRepository.list(request)
             const variations = variationsAndStandalones.filter((variationOrStandalone) => variationOrStandalone.isVariation)
@@ -73,11 +69,7 @@ export class StripeOrderService {
             // Use the new `products` array to create the products and SKUs in Stripe, if they don't exist.
             const findParentsRequest = new ListRequest({
                 ids: parentIds,
-                limit: 0,
-                populates: [
-                    'variableAttributes',
-                    'variableAttributeValues',
-                ]
+                limit: 0
             })
             const parents = await this._productRepository.list(findParentsRequest)
 
@@ -89,8 +81,9 @@ export class StripeOrderService {
             const createOrderResponse = await this.stripeOrderActionsService.createOrder(orderData)
             const { order } = createOrderResponse
             // If the customer opted to save their payment info, create the customer in Stripe.
-            if (order.customer.savePaymentInfo) {
-                const stripeCustomer = await this.stripeCustomerService.createCustomer(order)
+            if (order.customer && order.customer.savePaymentInfo) {
+                const stripeCustomer = await this.stripeCustomerService
+                    .createCustomer(order) as customers.ICustomer
                 // Update the order with the Stripe customer info.
                 order.customer.stripeCustomerId = stripeCustomer.id
             }

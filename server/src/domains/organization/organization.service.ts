@@ -1,11 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common'
-import { Attribute } from '@qb/common/api/entities/attribute'
-import { AttributeValue } from '@qb/common/api/entities/attribute-value'
-import { NavigationItem } from '@qb/common/api/entities/navigation-item'
 import { Organization } from '@qb/common/api/entities/organization'
-import { Taxonomy } from '@qb/common/api/entities/taxonomy'
-import { TaxonomyTerm } from '@qb/common/api/entities/taxonomy-term'
-import { Organization as IOrganization } from '@qb/common/api/interfaces/organization'
 import { ListRequest } from '@qb/common/api/requests/list.request'
 import { ApiErrorResponse } from '@qb/common/api/responses/api-error.response'
 import { Copy } from '@qb/common/constants/copy'
@@ -19,37 +13,12 @@ export class OrganizationService {
     protected model = Organization
 
     constructor(
-        @Inject(QbRepository) private _repository: QbRepository<IOrganization>
+        @Inject(QbRepository) private _repository: QbRepository<Organization>
     ) { }
 
-    public async getOrganization(): Promise<IOrganization> {
+    public async getOrganization(): Promise<Organization> {
       const organizations = await this._repository.list(new ListRequest({
-        query: {},
-        populates: [
-          {
-            path: 'storeUiContent.primaryNavigation',
-            model: NavigationItem.getModel(),
-            populate: {
-              path: 'children',
-            },
-          },
-          {
-            path: 'storeUiSettings.productListFilterUis.taxonomyTermOptions',
-            model: TaxonomyTerm.getModel(),
-            populate: {
-              path: 'taxonomy',
-              model: Taxonomy.getModel(),
-            },
-          },
-          {
-            path: 'storeUiSettings.productListFilterUis.attributeValueOptions',
-            model: AttributeValue.getModel(),
-            populate: {
-              path: 'attribute',
-              model: Attribute.getModel(),
-            },
-          },
-        ]
+        query: {}
       }))
 
       if (!organizations || !organizations.length) {
@@ -60,7 +29,7 @@ export class OrganizationService {
     }
 
     public create(): any {
-        return this._repository.insert([ hyzershop ])
+        return this._repository.insert(hyzershop)
 
         /*
         RAW (possibly more up to date):

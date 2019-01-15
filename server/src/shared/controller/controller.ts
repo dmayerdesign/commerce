@@ -1,11 +1,10 @@
-import { Body, Delete, Get, Param, Post, Put, Query, Response } from '@nestjs/common'
+import { Body, Delete, Get, Param, Post, Put, Query } from '@nestjs/common'
+import { Entity } from '@qb/common/api/interfaces/entity'
 import { QbBaseRepository, QbReadOnlyRepository, QbRepository } from '@qb/common/api/interfaces/repository'
 import { ListRequest } from '@qb/common/api/requests/list.request'
 import { UpdateManyRequest } from '@qb/common/api/requests/update-many.request'
 import { UpdateRequest } from '@qb/common/api/requests/update.request'
 import { Crud } from '@qb/common/constants/crud'
-import { Document } from '@qb/common/goosetype/interfaces'
-import { Response as IResponse } from 'express'
 
 export abstract class QbBaseController<EntityType extends any> {
 
@@ -14,7 +13,7 @@ export abstract class QbBaseController<EntityType extends any> {
   @Get(':id')
   public get(
     @Param('id') id: string,
-  ): Promise<EntityType> {
+  ): Promise<EntityType | undefined> {
     return this._repository.get(id)
   }
 
@@ -37,10 +36,10 @@ export abstract class QbBaseController<EntityType extends any> {
   // }
 
   @Post()
-  public create(
+  public insertMany(
     @Body() body: EntityType[],
   ): Promise<EntityType[]> {
-    return this._repository.insert(body)
+    return this._repository.insertMany(body)
   }
 
   @Put()
@@ -85,17 +84,17 @@ export abstract class QbReadOnlyController<EntityType extends any> {
   }
 
   @Get(':id')
-  public get?(
+  public async get?(
     @Param('id') id: string,
-  ): Promise<EntityType> {
-    return this._repository.get(id)
+  ): Promise<EntityType | undefined> {
+    return !!this._repository.get ? this._repository.get(id) : undefined
   }
 }
 
 export abstract class QbThirdPartyController<EntityType extends any>
   extends QbBaseController<EntityType> { }
 
-export abstract class QbController<EntityType extends Document>
+export abstract class QbController<EntityType extends Entity>
   extends QbBaseController<EntityType> {
   protected abstract _repository: QbRepository<EntityType>
 }

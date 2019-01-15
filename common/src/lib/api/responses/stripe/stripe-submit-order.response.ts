@@ -1,5 +1,5 @@
 import * as Stripe from 'stripe'
-import { Order } from '../../interfaces/order'
+import { Order } from '../../entities/order'
 
 export class StripeSubmitOrderResponse {
     public order: Order

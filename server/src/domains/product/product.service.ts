@@ -1,14 +1,9 @@
 import { Inject } from '@nestjs/common'
-import { Attribute } from '@qb/common/api/entities/attribute'
-import { AttributeValue } from '@qb/common/api/entities/attribute-value'
+import { Order } from '@qb/common/api/entities/order'
+import { Organization } from '@qb/common/api/entities/organization'
+import { Price } from '@qb/common/api/entities/price'
 import { Product } from '@qb/common/api/entities/product'
-import { Taxonomy } from '@qb/common/api/entities/taxonomy'
 import { TaxonomyTerm } from '@qb/common/api/entities/taxonomy-term'
-import { Order } from '@qb/common/api/interfaces/order'
-import { Organization } from '@qb/common/api/interfaces/organization'
-import { Price } from '@qb/common/api/interfaces/price'
-import { Product as IProduct } from '@qb/common/api/interfaces/product'
-import { TaxonomyTerm as ITaxonomyTerm } from '@qb/common/api/interfaces/taxonomy-term'
 import { ListRequest } from '@qb/common/api/requests/list.request'
 import { ProductListFilterType } from '@qb/common/api/requests/models/product-list-filter'
 import { UpdateRequest } from '@qb/common/api/requests/update.request'
@@ -16,7 +11,7 @@ import { ApiErrorResponse } from '@qb/common/api/responses/api-error.response'
 import { Currency } from '@qb/common/constants/enums/currency'
 import { RangeLimit } from '@qb/common/constants/enums/range-limit'
 import { getPrice } from '@qb/common/helpers/product.helpers'
-import { Response } from 'express'
+import { ObjectID } from 'typeorm'
 import { QbRepository } from '../../shared/data-access/repository'
 import { OrganizationService } from '../organization/organization.service'
 import { attributeValueFilter, propertyFilter, simpleAttributeValueFilter, taxonomyTermFilter } from '../product/product.helpers'
@@ -33,8 +28,8 @@ import { ProductListRequest } from './product.list-request'
 export class ProductService {
 
     constructor(
-        @Inject(QbRepository) private _productRepository: QbRepository<IProduct>,
-        @Inject(QbRepository) private _taxonomyTermsRepository: QbRepository<ITaxonomyTerm>,
+        @Inject(QbRepository) private _productRepository: QbRepository<Product>,
+        @Inject(QbRepository) private _taxonomyTermsRepository: QbRepository<TaxonomyTerm>,
         @Inject(OrganizationService) private _organizationService: OrganizationService,
     ) {
         this._productRepository.configureForTypeOrmEntity(Product)
@@ -47,88 +42,15 @@ export class ProductService {
      * @param {string} slug The `slug` of the product to be retrieved
      * @return {Promise<Product>}
      */
-    public getOneSlug(slug: string): Promise<IProduct> {
+    public getOneSlug(slug: string): Promise<Product | undefined> {
         return this._productRepository.lookup('slug', slug)
     }
 
     /**
      * Get a fully populated product by slug.
      */
-    public async getProductDetail(slug: string): Promise<IProduct> {
-        return this._productRepository.lookup('slug', slug, [
-            {
-                path: 'taxonomyTerms',
-                model: TaxonomyTerm.getModel(),
-                populate: {
-                    path: 'taxonomy',
-                    model: Taxonomy.getModel(),
-                }
-            },
-            {
-                path: 'simpleAttributeValues.attribute',
-                model: Attribute.getModel(),
-            },
-            {
-                path: 'attributeValues',
-                model: AttributeValue.getModel(),
-                populate: {
-                    path: 'attribute',
-                    model: Attribute.getModel(),
-                },
-            },
-            {
-                path: 'variableAttributes',
-                model: Attribute.getModel(),
-            },
-            {
-                path: 'variableAttributeValues',
-                model: AttributeValue.getModel(),
-                populate: {
-                    path: 'attribute',
-                    model: Attribute.getModel(),
-                }
-            },
-            {
-                path: 'variableSimpleAttributeValues.attribute',
-                model: Attribute.getModel(),
-            },
-            {
-                path: 'variations',
-                populate: {
-                    path: 'attributeValues',
-                    model: AttributeValue.getModel(),
-                    populate: {
-                        path: 'attribute',
-                        model: Attribute.getModel(),
-                    }
-                },
-            },
-            {
-                path: 'variations.simpleAttributeValues.attribute',
-                model: Attribute.getModel(),
-            },
-        ])
-    }
-
-    /**
-     * Get an unfiltered list of parent & standalone products,
-     * or use a search/filter query
-     */
-    public async getProducts(body: ProductListRequest, response: Response): Promise<void> {
-        const listRequest = await this._createProductListRequestQuery(body)
-
-        if (!listRequest.populates) {
-            listRequest.populates = []
-        }
-
-        listRequest.populates = [
-            ...listRequest.populates,
-            'taxonomyTerms',
-            'attributeValues', // TODO: Might not be necessary, maybe remove.
-            'variableAttributeValues', // TODO: Might not be necessary, maybe remove.
-        ]
-
-        return this._productRepository.list(listRequest, response)
+    public async getProductDetail(slug: string): Promise<Product | undefined> {
+        return this._productRepository.lookup('slug', slug)
     }
 
     public async getPriceRangeForShop(): Promise<Price[]> {
@@ -168,19 +90,23 @@ export class ProductService {
         }
     }
 
-    public updateInventory(products: IProduct[], order: Order): Promise<IProduct[]> {
-        const productPromises: Promise<IProduct>[] = []
+    public updateInventory(products: Product[], order: Order): Promise<Product[]> {
+        const productPromises: Promise<Product>[] = []
 
         products.forEach((product) => {
             let qty = 0
             if (product.isParent) {
                 const variations = products.filter((p) => p.parentSku === product.sku)
                 const variationSkus = variations.map((v) => v.sku)
-                const orderVariations = order.products.filter((op: IProduct) => variationSkus.indexOf(op.sku) > -1)
+                const orderVariations = order.products.filter(
+                    (op: Product) => variationSkus.indexOf(op.sku) > -1
+                )
                 qty = orderVariations.length
             }
             else {
-                const orderProducts = order.products.filter((op: IProduct) => op.sku === product.sku) as IProduct[]
+                const orderProducts = order.products.filter(
+                    (op: Product) => op.sku === product.sku
+                ) as Product[]
                 qty = orderProducts.length
             }
 
@@ -191,7 +117,7 @@ export class ProductService {
             const newTotalSales = Math.floor((product.totalSales || 0) + qty)
             productPromises.push(
                 this._productRepository.update(
-                    new UpdateRequest({
+                    new UpdateRequest<Product>({
                         id: product.id,
                         update: {
                             stockQuantity: newStockQuantity,
@@ -205,41 +131,39 @@ export class ProductService {
         return Promise.all(productPromises)
     }
 
-    public async getParentProducts(products: IProduct[]): Promise<IProduct[]> {
-        const parentProducts: IProduct[] = []
+    public async getParentProducts(products: Product[]): Promise<Product[]> {
+        const parentProducts: Product[] = []
         for (const product of products) {
             if (!product.isVariation) {
                 continue
             }
             if (!parentProducts.find((_parentProduct) => _parentProduct.sku === product.parentSku)) {
-                const parentProduct = await this._productRepository.lookup('sku', product.parentSku)
+                const parentProduct = await this._productRepository
+                    .lookup('sku', product.parentSku) as Product
                 parentProducts.push(parentProduct)
             }
         }
         return parentProducts
     }
 
-    public async getParentProduct(product: IProduct): Promise<IProduct> {
+    public async getParentProduct(product: Product): Promise<Product | undefined> {
         if (!product.isVariation) {
-            return null
+            return undefined
         }
-        return this._productRepository.lookup('sku', product.parentSku, [
-            'variableAttributes',
-            'variableAttributeValues',
-        ])
+        return this._productRepository.lookup('sku', product.parentSku)
     }
 
     // Helpers.
 
-    public getPrice(product: IProduct): Price | Price[] {
+    public getPrice(product: Product): Price | Price[] {
         return getPrice(product)
     }
 
-    public determinePrice(product: IProduct): Price | Price[] {
+    public determinePrice(product: Product): Price | Price[] {
         return getPrice(product)
     }
 
-    private async _createProductListRequestQuery(body: ProductListRequest): Promise<ListRequest<IProduct>> {
+    private async _createProductListRequestQuery(body: ProductListRequest): Promise<ListRequest<Product>> {
         const {
             limit,
             skip,
@@ -248,15 +172,15 @@ export class ProductService {
             sortBy,
             sortDirection,
         } = new ProductListRequest(body)
-        let taxonomyTermIdsToSearch: string[]
+        let taxonomyTermIdsToSearch: ObjectID[]
         const searchRegExp = search ? new RegExp(search, 'gi') : undefined
         const searchOr: {
             $or: {
-                [key: string]: { $regex: RegExp } | { $in: string[] }
+                [key: string]: { $regex: RegExp } | { $in: ObjectID[] }
             }[]
         } = { $or: [] }
         let allQuery: any
-        let searchQuery: { $and: object[] }
+        let searchQuery: { $and: object[] } = { $and: [] }
         let query: any
 
         // If it's a search or filter, create a basic `$and` query for parent and standalone products.
@@ -301,7 +225,10 @@ export class ProductService {
             searchOr.$or.push({ description: { $regex: searchRegExp } })
             searchOr.$or.push({ taxonomyTerms: { $in: taxonomyTermIdsToSearch } })
 
-            searchQuery.$and.push(searchOr)
+            // @ts-ignore
+            if (searchQuery) {
+                searchQuery.$and.push(searchOr)
+            }
         }
 
         // If there are filters, convert each filter to MongoDB query syntax and add it to

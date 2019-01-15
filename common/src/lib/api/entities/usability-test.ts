@@ -11,7 +11,7 @@ export class UsabilityTest implements IUsabilityTest {
 
     @ManyToMany(() => UsabilityTestBucket, x => x.id)
     @JoinColumn()
-    public buckets: number
+    public buckets: UsabilityTestBucket
 
     @CreateDateColumn({ type: 'timestamp' }) public createdAt?: Date
     @UpdateDateColumn({ type: 'timestamp' }) public updatedAt?: Date

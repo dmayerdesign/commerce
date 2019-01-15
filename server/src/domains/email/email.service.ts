@@ -3,7 +3,7 @@ import { AppConfig } from '@qb/app-config'
 import { EmailOptions, OrderEmailOptions } from '@qb/common/api/interfaces/email-options'
 import { EmailBuilder } from '@qb/common/builders/email.builder'
 import { calculateEstArrival } from '../order/order.helpers'
-import { EmailService as IEmailService } from './email.service.interfaces'
+import { EmailService as IEmailService } from './email.service.interface'
 const receipt = require('@qb/common/emails/templates/receipt')
 const shippingNotification = require('@qb/common/emails/templates/shippingNotification')
 const emailVerification = require('@qb/common/emails/templates/emailVerification')
@@ -49,6 +49,9 @@ export class EmailService implements IEmailService {
      * @param {OrderEmailOptions} options
      */
     public sendReceipt(options: Partial<OrderEmailOptions>): Promise<void> {
+        if (!options.organization) {
+            throw new Error(`Invalid options passed to EmailService#sendReceipt: ${options}`)
+        }
         const emailBuilder = new EmailBuilder()
             .setOptions({
                 ...options,
@@ -66,6 +69,9 @@ export class EmailService implements IEmailService {
      * @param {OrderEmailOptions} options
      */
     public sendShippingNotification(options: OrderEmailOptions): Promise<any> {
+        if (!options.organization) {
+            throw new Error(`Invalid options passed to EmailService#sendReceipt: ${options}`)
+        }
         const emailBuilder = new EmailBuilder()
             .setOptions({
                 ...options,
@@ -73,7 +79,7 @@ export class EmailService implements IEmailService {
                 preheader: `It's on the way! View the shipping details from your recent order`,
             } as OrderEmailOptions)
             .setCustomData({
-                estArrivalDate: calculateEstArrival(options.order.estDeliveryDays),
+                estArrivalDate: calculateEstArrival(options.order.estDeliveryDays || 0),
             })
             .setHtml(shippingNotification)
 

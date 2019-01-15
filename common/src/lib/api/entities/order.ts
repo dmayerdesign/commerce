@@ -43,4 +43,10 @@ export class Order implements IOrder {
     @Column(() => OrderCustomer) public customer?: OrderCustomer
     @CreateDateColumn({ type: 'timestamp' }) public createdAt?: Date
     @UpdateDateColumn({ type: 'timestamp' }) public updatedAt?: Date
+
+    constructor(orderObject: IOrder) {
+        for (const key in orderObject) {
+            this[key] = orderObject[key]
+        }
+    }
 }

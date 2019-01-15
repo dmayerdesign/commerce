@@ -1,4 +1,4 @@
-import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, ObjectIdColumn, ObjectID, OneToMany, UpdateDateColumn, ManyToMany } from 'typeorm'
+import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, JoinColumn, ManyToMany, ManyToOne, ObjectIdColumn, ObjectID, OneToMany, UpdateDateColumn } from 'typeorm'
 import { Product as IProduct } from '../interfaces/product'
 import { Attribute } from './attribute'
 import { AttributeValue } from './attribute-value'

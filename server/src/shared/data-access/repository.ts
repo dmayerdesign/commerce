@@ -1,24 +1,21 @@
 import { Injectable } from '@nestjs/common'
-import { QbRepository as IQbRepository } from '@qb/common/api/interfaces/repository'
+import { Entity } from '@qb/common/api/interfaces/entity'
+import { InclusivePartial, QbRepository as IQbRepository } from '@qb/common/api/interfaces/repository'
 import { ListRequest } from '@qb/common/api/requests/list.request'
 import { UpdateManyRequest } from '@qb/common/api/requests/update-many.request'
 import { UpdateRequest } from '@qb/common/api/requests/update.request'
 import { isArrayLike, toArray } from '@qb/common/helpers/mongoose.helpers'
-import { getMongoRepository, DeepPartial, DeleteWriteOpResultObject, FindManyOptions, MongoRepository, ObjectID, UpdateWriteOpResult } from 'typeorm'
-
-interface QbEntityType {
-  id: ObjectID
-}
+import { getMongoRepository, DeepPartial, DeleteWriteOpResultObject, FindManyOptions, MongoRepository, ObjectID } from 'typeorm'
 
 @Injectable()
-export class QbRepository<EntityType extends QbEntityType> implements IQbRepository<EntityType> {
+export class QbRepository<EntityType extends Entity> implements IQbRepository<EntityType> {
   private _repository: MongoRepository<EntityType>
 
   public configureForTypeOrmEntity(entityType: any): void {
     this._repository = getMongoRepository(entityType)
   }
 
-  public get(id: string): Promise<EntityType> {
+  public get(id: string | ObjectID): Promise<EntityType | undefined> {
     return this._repository.findOne(id)
   }
 
@@ -36,13 +33,25 @@ export class QbRepository<EntityType extends QbEntityType> implements IQbReposit
   //     .pipe(JSONStream.stringify())
   //     .pipe(response.contentType('json'))
   // }
-
-  public async insert(body: DeepPartial<EntityType>[]): Promise<DeepPartial<EntityType>[]> {
-    const documents = body.map((value) => this._repository.create(value))
-    return this._repository.save<DeepPartial<EntityType>>(documents as any[])
+  public create(body: DeepPartial<EntityType>): EntityType {
+    return this._repository.create(body)
   }
 
-  public async updateMany(updateManyRequest: UpdateManyRequest<EntityType>): Promise<UpdateWriteOpResult> {
+  public async insert(body: DeepPartial<EntityType>): Promise<EntityType> {
+    const document = this.create(body)
+    const insertOneResult = await this._repository.insertOne(document)
+    return this.get(insertOneResult.insertedId) as Promise<EntityType>
+  }
+
+  public async insertMany(body: DeepPartial<EntityType>[]): Promise<EntityType[]> {
+    const documents = body.map((value) => this.create(value))
+    const insertManyResult = await this._repository.insertMany(documents as any[])
+    return this._repository.find(this._createFindManyOptions(
+      new ListRequest({ ids: insertManyResult.insertedIds })
+    ))
+  }
+
+  public async updateMany(updateManyRequest: UpdateManyRequest<EntityType>): Promise<EntityType[]> {
     const { ids, update, unsafeArrayUpdates } = updateManyRequest
     const updateManyOperation: { $set: any, $addToSet?: any } = {
       $set: update
@@ -65,10 +74,17 @@ export class QbRepository<EntityType extends QbEntityType> implements IQbReposit
       }
     }
 
-    return this._repository.updateMany({ id: { $in: ids } }, updateManyOperation)
+    await this._repository.updateMany(
+      { id: { $in: ids } },
+      updateManyOperation
+    )
+
+    return this.list(new ListRequest({ ids }))
   }
 
-  public async update(updateRequest: UpdateRequest<EntityType>): Promise<UpdateWriteOpResult> {
+  public async update(
+    updateRequest: UpdateRequest<EntityType>
+  ): Promise<EntityType> {
     const { id, update, unsafeArrayUpdates } = updateRequest
     const updateOperation: { $set: any, $addToSet?: any } = {
       $set: update
@@ -89,10 +105,12 @@ export class QbRepository<EntityType extends QbEntityType> implements IQbReposit
       if (includeAddToSet) {
         updateOperation.$addToSet = $addToSet
       }
-
     }
 
-    return this._repository.updateOne(id, updateOperation)
+    const { upsertedId } = await this._repository
+      .updateOne(id, updateOperation)
+
+    return this.get(upsertedId._id) as Promise<EntityType>
   }
 
   public deleteMany(primaryKeys: ObjectID[]): Promise<DeleteWriteOpResultObject> {
@@ -105,7 +123,16 @@ export class QbRepository<EntityType extends QbEntityType> implements IQbReposit
 
   // Convenience methods.
 
-  public lookup(key: string, value: any): Promise<EntityType> {
+  public async getOrCreate(docOrQuery: object): Promise<EntityType> {
+    const existingDoc = await this._repository.findOne(docOrQuery as InclusivePartial<EntityType>)
+    if (existingDoc) {
+      return existingDoc
+    }
+    const newDocs = await this.insert(docOrQuery)
+    return newDocs[0]
+  }
+
+  public lookup(key: keyof EntityType, value: any): Promise<EntityType | undefined> {
     return this._repository.findOne({ [key]: value })
   }
 
@@ -117,13 +144,14 @@ export class QbRepository<EntityType extends QbEntityType> implements IQbReposit
     sortBy,
     sortDirection,
   }: ListRequest<EntityType>): Promise<EntityType[]> {
-    const searchQuery = { $and: [] }
-    const searchRegExp = search ? new RegExp(search, 'gi') : undefined
-    const searchQueryElements: {
+    interface SearchQueryElement {
       [key: string]: { $regex: RegExp }
-    }[] = []
+    }
+    const searchQuery = { $and: [] as SearchQueryElement[] }
+    const searchRegExp = search ? new RegExp(search, 'gi') : undefined
+    const searchQueryElements: SearchQueryElement[] = []
 
-    if (searchRegExp) {
+    if (searchRegExp && searchFields) {
       searchFields.forEach((searchField) => {
         searchQueryElements.push({
           [searchField]: {
@@ -147,6 +175,9 @@ export class QbRepository<EntityType extends QbEntityType> implements IQbReposit
 
   private _createFindManyOptions(listRequest: ListRequest<EntityType>):
     FindManyOptions<EntityType> {
+    type OrderFindMany = {
+      [P in keyof EntityType]?: 1 | -1
+    }
     const {
       skip,
       limit,
@@ -154,14 +185,19 @@ export class QbRepository<EntityType extends QbEntityType> implements IQbReposit
       sortDirection,
       query
     } = listRequest
+    let order: OrderFindMany | undefined
+
+    if (sortBy) {
+      order = {
+        [sortBy as keyof EntityType]: sortDirection
+      } as OrderFindMany
+    }
 
     return {
       skip,
       take: limit,
       where: query,
-      order: {
-        [sortBy]: sortDirection
-      } as { [P in keyof EntityType]?: 1 | -1; }
+      order
     }
   }
 }

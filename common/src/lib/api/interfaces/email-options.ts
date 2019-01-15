@@ -10,6 +10,18 @@ export interface EmailStyleOptions {
     innerBgColor: string
 }
 
+export interface EmailServiceOptions {
+    fromName?: string
+    fromEmail?: string
+    toName?: string
+    toEmail: string
+    subject?: string
+    preheader?: string
+    html?: string
+    text?: string
+    organization: Organization
+}
+
 export interface EmailOptions {
     fromName: string
     fromEmail: string
@@ -19,10 +31,10 @@ export interface EmailOptions {
     preheader?: string
     html?: string
     text?: string
-    organization?: Organization
+    organization: Organization
 }
 
-export interface OrderEmailOptions extends EmailOptions {
-    order?: Order
+export interface OrderEmailOptions extends EmailServiceOptions {
+    order: Order
     orderDisplayProducts: CartDisplayItem<Product>[]
 }

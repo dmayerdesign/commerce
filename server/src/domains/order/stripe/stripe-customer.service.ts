@@ -6,7 +6,7 @@ import { ApiErrorResponse } from '@qb/common/api/responses/api-error.response'
 import * as Stripe from 'stripe'
 import { QbRepository } from '../../../shared/data-access/repository'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string)
 
 /**
  * Methods for interacting with the Stripe API
@@ -21,16 +21,16 @@ export class StripeCustomerService {
      *
      * @param {Order} order - The order from which the customer's information is being collected
      */
-    public async createCustomer(order: Order): Promise<Stripe.customers.ICustomer> {
-        if (order.customer.userId && order.stripeToken && order.stripeToken.card) {
-            let user: User
+    public async createCustomer(order: Order): Promise<Stripe.customers.ICustomer | undefined> {
+        if (order.customer && order.customer.userId && order.stripeToken && order.stripeToken.card) {
+            let user: User | undefined
             try {
                 user = await this._userRepository.get(order.customer.userId)
             }
             catch (findUserError) {
                 throw findUserError
             }
-            if (!user) return null
+            if (!user) return user
 
             if (order.customer.stripeCustomerId) {
                 try {
@@ -58,7 +58,7 @@ console.log(customer)
 console.log('===== New customer =====')
 console.log(customer)
 
-                await this._userRepository.update(new UpdateRequest({
+                await this._userRepository.update(new UpdateRequest<User>({
                     id: user.id,
                     update: {
                         stripeCustomerId: customer.id

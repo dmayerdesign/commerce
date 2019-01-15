@@ -1,16 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { Attribute } from '@qb/common/api/entities/attribute'
 import { AttributeValue } from '@qb/common/api/entities/attribute-value'
+import { Image } from '@qb/common/api/entities/image'
 import { Price } from '@qb/common/api/entities/price'
 import { Product } from '@qb/common/api/entities/product'
 import { Taxonomy } from '@qb/common/api/entities/taxonomy'
 import { TaxonomyTerm } from '@qb/common/api/entities/taxonomy-term'
-import { Attribute as IAttribute } from '@qb/common/api/interfaces/attribute'
-import { AttributeValue as IAttributeValue } from '@qb/common/api/interfaces/attribute-value'
-import { Image } from '@qb/common/api/interfaces/image'
-import { Product as IProduct } from '@qb/common/api/interfaces/product'
-import { Taxonomy as ITaxonomy } from '@qb/common/api/interfaces/taxonomy'
-import { TaxonomyTerm as ITaxonomyTerm } from '@qb/common/api/interfaces/taxonomy-term'
 import { ListRequest } from '@qb/common/api/requests/list.request'
 import { UpdateRequest } from '@qb/common/api/requests/update.request'
 import { Currency } from '@qb/common/constants/enums/currency'
@@ -19,17 +14,18 @@ import { WeightUnit } from '@qb/common/constants/enums/weight-unit'
 import * as productsJSON from '@qb/common/work-files/migration/hyzershop-products'
 import { pluralize, singularize, titleize } from 'inflection'
 import { camelCase, cloneDeep, kebabCase } from 'lodash'
+import { ObjectID } from 'typeorm'
 import { QbRepository } from '../../shared/data-access/repository'
 
 @Injectable()
 export class HyzershopMigrationService {
 
     constructor(
-        @Inject(QbRepository) private readonly _productRepository: QbRepository<IProduct>,
-        @Inject(QbRepository) private readonly _attributeRepository: QbRepository<IAttribute>,
-        @Inject(QbRepository) private readonly _attributeValueRepository: QbRepository<IAttributeValue>,
-        @Inject(QbRepository) private readonly _taxonomyRepository: QbRepository<ITaxonomy>,
-        @Inject(QbRepository) private readonly _taxonomyTermRepository: QbRepository<ITaxonomyTerm>,
+        @Inject(QbRepository) private readonly _productRepository: QbRepository<Product>,
+        @Inject(QbRepository) private readonly _attributeRepository: QbRepository<Attribute>,
+        @Inject(QbRepository) private readonly _attributeValueRepository: QbRepository<AttributeValue>,
+        @Inject(QbRepository) private readonly _taxonomyRepository: QbRepository<Taxonomy>,
+        @Inject(QbRepository) private readonly _taxonomyTermRepository: QbRepository<TaxonomyTerm>,
     ) {
         this._productRepository.configureForTypeOrmEntity(Product)
         this._attributeRepository.configureForTypeOrmEntity(Attribute)
@@ -38,8 +34,8 @@ export class HyzershopMigrationService {
         this._taxonomyTermRepository.configureForTypeOrmEntity(TaxonomyTerm)
     }
 
-    public async createProductsFromExportedJSON(): Promise<IProduct[]> {
-        const newProducts = []
+    public async createProductsFromExportedJSON(): Promise<Product[]> {
+        const newProducts = [] as Product[]
 
         const dropAllProductRelatedCollections = async () => {
             console.warn('Skipping drops for product, attribute, attribute value, taxonomy, and taxonomy term.')
@@ -80,11 +76,11 @@ export class HyzershopMigrationService {
 
                 const newProduct: Product = cloneDeep(product)
 
-                const variableAttributeIds: string[] = []
-                const variableAttributeValueIds: string[] = []
-                const attributeValueIds: string[] = []
-                const simpleAttributeValues: { attribute: string, value: any }[] = []
-                const taxonomyTermIds: string[] = []
+                const variableAttributeIds: ObjectID[] = []
+                const variableAttributeValueIds: ObjectID[] = []
+                const attributeValueIds: ObjectID[] = []
+                const simpleAttributeValues: { attribute: ObjectID, value: any }[] = []
+                const taxonomyTermIds: ObjectID[] = []
 
                 const flightStats: {
                     fade:  number | undefined
@@ -123,13 +119,14 @@ export class HyzershopMigrationService {
                                         const variableAttributeValueValues = product[key].split('|')
                                         const variableAttributeSlug = kebabCase(theKey)
                                         try {
-                                            const variableAttribute = await this._attributeRepository.upsert({
-                                                slug: variableAttributeSlug
-                                            })
+                                            const variableAttribute = await this._attributeRepository
+                                                .getOrCreate({
+                                                    slug: variableAttributeSlug
+                                                })
                                             variableAttributeIds.push(variableAttribute.id)
                                             for (const variableAttributeValueSlug of variableAttributeValueSlugs) {
                                                 try {
-                                                    const variableAttributeValue = await this._attributeValueRepository.upsert({
+                                                    const variableAttributeValue = await this._attributeValueRepository.getOrCreate({
                                                         attribute: variableAttribute.id,
                                                         slug: variableAttributeValueSlug,
                                                         value: variableAttributeValueValues[variableAttributeValueSlugs.indexOf(variableAttributeValueSlug)],
@@ -150,10 +147,10 @@ export class HyzershopMigrationService {
                                         const attributeValueSlug = kebabCase(theKey + '-' + newProduct[key].replace(/\s/g, '-').replace(/[\(\)]/g, '').toLowerCase())
                                         const attributeSlug = kebabCase(theKey)
                                         try {
-                                            const attribute = await this._attributeRepository.upsert({
+                                            const attribute = await this._attributeRepository.getOrCreate({
                                                 slug: attributeSlug
                                             })
-                                            const attributeValue = await this._attributeValueRepository.upsert({
+                                            const attributeValue = await this._attributeValueRepository.getOrCreate({
                                                 attribute: attribute.id,
                                                 slug: attributeValueSlug,
                                                 value,
@@ -193,7 +190,7 @@ export class HyzershopMigrationService {
 
                             // Add speed/glide/turn/fade Attribute.
 
-                            const speedGlideTurnFadeAttribute = await this._attributeRepository.upsert({ slug: key })
+                            const speedGlideTurnFadeAttribute = await this._attributeRepository.getOrCreate({ slug: key })
                             simpleAttributeValues.push({
                                 attribute: speedGlideTurnFadeAttribute.id,
                                 value: flightStats[key]
@@ -201,7 +198,7 @@ export class HyzershopMigrationService {
 
                             // Add stability AttributeValue and TaxonomyTerm.
 
-                            const getStability = function(stabilityStats): 'overstable'|'stable'|'understable' {
+                            const getStability = function(stabilityStats): 'overstable'|'stable'|'understable'|undefined {
                                 const fadePlusTurn = parseFloat(`${stabilityStats.fade}`) + parseFloat(`${stabilityStats.turn}`)
                                 if (fadePlusTurn >= 3) {
                                     return 'overstable'
@@ -222,20 +219,20 @@ export class HyzershopMigrationService {
                                     const attributeValueSlug = attributeSlug + '-' + stabilityValue
                                     const taxonomyTermSlug = taxonomySlug + '-' + stabilityValue
 
-                                    const attribute = await this._attributeRepository.upsert({
+                                    const attribute = await this._attributeRepository.getOrCreate({
                                         slug: attributeSlug,
                                     })
-                                    const attributeValue = await this._attributeValueRepository.upsert({
+                                    const attributeValue = await this._attributeValueRepository.getOrCreate({
                                         attribute: attribute.id,
                                         slug: attributeValueSlug,
                                         value: stabilityValue,
                                     })
                                     attributeValueIds.push(attributeValue.id)
 
-                                    const taxonomy = await this._taxonomyRepository.upsert({
+                                    const taxonomy = await this._taxonomyRepository.getOrCreate({
                                         slug: taxonomySlug,
                                     })
-                                    const taxonomyTerm = await this._taxonomyTermRepository.upsert({
+                                    const taxonomyTerm = await this._taxonomyTermRepository.getOrCreate({
                                         taxonomy: taxonomy.id,
                                         slug: taxonomyTermSlug,
                                     })
@@ -248,7 +245,7 @@ export class HyzershopMigrationService {
                         }
 
                         if (key === 'inboundsId') {
-                            const inboundsIdAttribute = await this._attributeRepository.upsert({ slug: kebabCase(key) })
+                            const inboundsIdAttribute = await this._attributeRepository.getOrCreate({ slug: kebabCase(key) })
                             simpleAttributeValues.push({
                                 attribute: inboundsIdAttribute.id,
                                 value: newProduct[key]
@@ -260,17 +257,17 @@ export class HyzershopMigrationService {
                             key === 'discType' ||
                             key === 'productType'
                         ) {
-                            const taxonomyTermPromises: Promise<ITaxonomyTerm>[] = []
+                            const taxonomyTermPromises: Promise<TaxonomyTerm>[] = []
                             const taxonomySlug = kebabCase(singularize(key))
                             const taxonomyTermSlugs = product[key].split('|').map((originalTaxonomyTermSlug) => {
                                 return kebabCase(taxonomySlug + '-' + originalTaxonomyTermSlug.replace(/\s/g, '-').toLowerCase()).trim()
                             })
 
                             try {
-                                const taxonomy = await this._taxonomyRepository.upsert({ slug: taxonomySlug })
+                                const taxonomy = await this._taxonomyRepository.getOrCreate({ slug: taxonomySlug })
 
                                 taxonomyTermSlugs.forEach((taxonomyTermSlug) => {
-                                    taxonomyTermPromises.push(this._taxonomyTermRepository.upsert({
+                                    taxonomyTermPromises.push(this._taxonomyTermRepository.getOrCreate({
                                         taxonomy: taxonomy.id,
                                         slug: taxonomyTermSlug
                                     }))
@@ -420,11 +417,11 @@ export class HyzershopMigrationService {
 
                 /////////////////////
 
-                newProduct.variableAttributes = variableAttributeIds
-                newProduct.variableAttributeValues = variableAttributeValueIds
-                newProduct.attributeValues = attributeValueIds
-                newProduct.simpleAttributeValues = simpleAttributeValues
-                newProduct.taxonomyTerms = taxonomyTermIds
+                newProduct.variableAttributes = variableAttributeIds as any[]
+                newProduct.variableAttributeValues = variableAttributeValueIds as any[]
+                newProduct.attributeValues = attributeValueIds as any[]
+                newProduct.simpleAttributeValues = simpleAttributeValues as any[]
+                newProduct.taxonomyTerms = taxonomyTermIds as any[]
 
                 delete (newProduct as any).images
                 delete (newProduct as any).featuredImage
@@ -446,7 +443,7 @@ export class HyzershopMigrationService {
          * The switch
          ******* -> */
         try {
-            const allProducts = await this._productRepository.insert(newProducts)
+            const allProducts = await this._productRepository.insertMany(newProducts)
             const parentProducts = allProducts.filter((p) => p.isParent)
             const variationProducts = allProducts.filter((p) => p.isVariation)
 
@@ -455,8 +452,14 @@ export class HyzershopMigrationService {
             for (let i = 0; i < parentProducts.length; i++) {
                 const parentProduct = parentProducts[i]
                 const variations = allProducts.filter((p) => p.parentSku === parentProduct.sku)
-                parentProduct.variations = variations.map((v) => v.id)
-                await parentProduct.save()
+                parentProduct.variations = variations.map((v) => v.id) as any[]
+                await this._productRepository.update(
+                    new UpdateRequest<Product>({
+                        id: parentProduct.id,
+                        update: parentProduct,
+                        unsafeArrayUpdates: true
+                    })
+                )
             }
 
             // Populate the images.
@@ -468,8 +471,8 @@ export class HyzershopMigrationService {
 
                 if (!product.isParent) {
                     let isDisc = false
-                    let attributeValues: IAttributeValue[]
-                    let taxonomyTerms: ITaxonomyTerm[]
+                    let attributeValues: AttributeValue[]
+                    let taxonomyTerms: TaxonomyTerm[]
                     let imageBaseUrl = `/product-images/`
 
                     if (product.taxonomyTermSlugs) {
@@ -490,9 +493,11 @@ export class HyzershopMigrationService {
 
                     try {
                         attributeValues = await this._attributeValueRepository.list(
-                            new ListRequest({ ids: product.attributeValues })
+                            new ListRequest({ ids: product.attributeValues.map(x => x.id) })
                         )
-                        taxonomyTerms = await this._taxonomyTermRepository.list(new ListRequest({ ids: product.taxonomyTerms }))
+                        taxonomyTerms = await this._taxonomyTermRepository.list(
+                            new ListRequest({ ids: product.taxonomyTerms.map(x => x.id) })
+                        )
                         isDisc = taxonomyTerms && taxonomyTerms.some((taxTerm) => taxTerm.slug === 'product-type-discs')
                     }
                     catch (error) {
@@ -554,14 +559,20 @@ console.log(`SKU: ${JSON.stringify(product)}`)
                     product.images.push(productImage)
                 }
 
-                await product.save()
+                await this._productRepository.update(
+                    new UpdateRequest<Product>({
+                        id: product.id,
+                        update: product,
+                        unsafeArrayUpdates: true
+                    })
+                )
             }
 
             // Populate parent product images with variation images.
 
             for (let i = 0; i < parentProducts.length; i++) {
                 const product = parentProducts[i]
-                let variations = []
+                let variations = [] as any[]
                 if (product.isParent) {
                     variations = allProducts.filter(p => product.sku === p.parentSku)
                     variations.forEach((pv) => {
@@ -570,7 +581,13 @@ console.log(`SKU: ${JSON.stringify(product)}`)
                     })
                 }
 
-                await product.save()
+                await this._productRepository.update(
+                    new UpdateRequest<Product>({
+                        id: product.id,
+                        update: product,
+                        unsafeArrayUpdates: true
+                    })
+                )
             }
 
             // Populate parent products with variation attributes and attribute values.
@@ -584,7 +601,7 @@ console.log(`SKU: ${JSON.stringify(product)}`)
                 }
 
                 // Add the parent to the variation.
-                variation.parent = parent.id
+                variation.parent = parent.id as any
 
                 if (!parent.variableAttributes) {
                     parent.variableAttributes = []
@@ -608,8 +625,21 @@ console.log(`SKU: ${JSON.stringify(product)}`)
                 variation.variableAttributes = []
                 variation.variableAttributeValues = []
 
-                await variation.save()
-                await parent.save()
+                await this._productRepository.update(
+                    new UpdateRequest<Product>({
+                        id: variation.id,
+                        update: variation,
+                        unsafeArrayUpdates: true
+                    })
+                )
+
+                await this._productRepository.update(
+                    new UpdateRequest<Product>({
+                        id: parent.id,
+                        update: parent,
+                        unsafeArrayUpdates: true
+                    })
+                )
             }
 
             // Fill out taxonomy terms.
@@ -629,17 +659,19 @@ console.log(`SKU: ${JSON.stringify(product)}`)
                 const singularName = singularize(name)
                 const pluralName = pluralize(name)
 
-                await this._taxonomyTermRepository.update(new UpdateRequest({
-                    id: discType.id,
-                    update: {
-                        singularName,
-                        pluralName,
-                        pageSettings: {
-                            banner: `/page-images/${partialSlug}-banner.jpg`,
-                            bannerOverlay: `/page-images/${slug}.png`,
-                        },
-                    } as ITaxonomyTerm
-                }))
+                if (discType) {
+                    await this._taxonomyTermRepository.update(new UpdateRequest({
+                        id: discType.id,
+                        update: {
+                            singularName,
+                            pluralName,
+                            pageSettings: {
+                                banner: `/page-images/${partialSlug}-banner.jpg`,
+                                bannerOverlay: `/page-images/${slug}.png`,
+                            },
+                        } as TaxonomyTerm
+                    }))
+                }
             }
 
             const brands = [
@@ -665,17 +697,19 @@ console.log(`SKU: ${JSON.stringify(product)}`)
                 const singularName = singularize(name)
                 const pluralName = `${brandName} Discs`
 
-                await this._taxonomyTermRepository.update(new UpdateRequest({
-                    id: brand.id,
-                    update: {
-                        singularName,
-                        pluralName,
-                        pageSettings: {
-                            banner: `/page-images/${partialSlug}-banner.jpg`,
-                            bannerOverlay: `/page-images/${slug}.png`,
-                        },
-                    } as ITaxonomyTerm
-                }))
+                if (brand) {
+                    await this._taxonomyTermRepository.update(new UpdateRequest({
+                        id: brand.id,
+                        update: {
+                            singularName,
+                            pluralName,
+                            pageSettings: {
+                                banner: `/page-images/${partialSlug}-banner.jpg`,
+                                bannerOverlay: `/page-images/${slug}.png`,
+                            },
+                        } as TaxonomyTerm
+                    }))
+                }
             }
 
             return allProducts

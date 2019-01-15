@@ -1,19 +1,15 @@
-import { Controller, Get, Inject, Param, Query, Response } from '@nestjs/common'
+import { Controller, Get, Inject, Param } from '@nestjs/common'
 import { Product } from '@qb/common/api/entities/product'
 import { Price } from '@qb/common/api/interfaces/price'
-import { Product as IProduct } from '@qb/common/api/interfaces/product'
-import { ListRequest } from '@qb/common/api/requests/list.request'
 import { products } from '@qb/common/constants/api-endpoints'
-import { Crud } from '@qb/common/constants/crud'
-import { Response as IResponse } from 'express'
 import { QbController } from '../../shared/controller/controller'
 import { QbRepository } from '../../shared/data-access/repository'
 import { ProductService } from './product.service'
 
 @Controller(products)
-export class ProductController extends QbController<IProduct> {
+export class ProductController extends QbController<Product> {
   constructor(
-    @Inject(QbRepository) protected readonly _repository: QbRepository<IProduct>,
+    @Inject(QbRepository) protected readonly _repository: QbRepository<Product>,
     @Inject(ProductService) protected readonly _productService: ProductService,
   ) {
     super()
@@ -26,7 +22,7 @@ export class ProductController extends QbController<IProduct> {
   //   @Query(Crud.Params.listRequest) query: string,
   //   @Response() response: IResponse,
   // ): Promise<void> {
-  //   const request: ListRequest<IProduct> = JSON.parse(query)
+  //   const request: ListRequest<Product> = JSON.parse(query)
   //   return this._productService.getProducts(request, response)
   // }
 
@@ -36,7 +32,7 @@ export class ProductController extends QbController<IProduct> {
   @Get(':slug/detail')
   public getDetail(
     @Param('slug') slug: string
-  ): Promise<IProduct> {
+  ): Promise<Product | undefined> {
     return this._productService.getProductDetail(slug)
   }
 

@@ -1,14 +1,12 @@
+import { Inject, Injectable } from '@nestjs/common'
+import { AppConfig } from '@qb/app-config'
+import { Product } from '@qb/common/api/entities/product'
+import { UpdateRequest } from '@qb/common/api/requests/update.request'
 import * as AWS from 'aws-sdk'
 import * as fs from 'fs-extra'
-import { Inject, Injectable } from '@nestjs/common'
 import * as multer from 'multer'
 import * as path from 'path'
-import sharp from 'sharp'
-
-import { AppConfig } from '@qb/app-config'
-import { DomainEvent } from '@qb/common/api/entities/domain-event'
-import { Product } from '@qb/common/api/entities/product'
-import { Types } from '@qb/common/constants/inversify/types'
+import * as sharp from 'sharp'
 import { QbRepository } from '../../shared/data-access/repository'
 
 /**
@@ -16,10 +14,10 @@ import { QbRepository } from '../../shared/data-access/repository'
  */
 AWS.config.region = AppConfig.aws_region
 
-@injectable()
+@Injectable()
 export class UploadService {
     constructor(
-        @Inject(QbRepository) private repository: QbRepository<Product>
+        @Inject(QbRepository) private _productRepository: QbRepository<Product>
     ) {}
 
     private s3 = new AWS.S3({
@@ -66,96 +64,80 @@ export class UploadService {
         })
     }
 
-    public async editImages(action, sku, editObj, done) {
-        console.log('-------- Edit Product Images --------')
-        console.log(editObj)
+    public async editImages(
+        action: 'add'|'remove',
+        sku: string,
+        editObj: Partial<Product>
+    ): Promise<Product> {
+        let product = await this._productRepository.lookup('sku', sku) as Product
 
-        try {
-            const product = await this.repository.findOne(Product, { sku })
-
-            Object.keys(editObj).forEach(field => {
-                if (action === 'remove') {
-                    product[field].splice(product[field].indexOf(editObj[field]), 1)
+        Object.keys(editObj).forEach(field => {
+            if (action === 'remove') {
+                product[field].splice(product[field].indexOf(editObj[field]), 1)
+            }
+            else if (action === 'add') {
+                if (field === 'featuredImages' || field === 'thumbnails') { // For now, only allowing one featured image and one thumbnail per SKU
+                    product[field] = []
                 }
-                else if (action === 'add') {
-                    if (field === 'featuredImages' || field === 'thumbnails') { // For now, only allowing one featured image and one thumbnail per SKU
-                        product[field] = []
-                    }
-                    product[field].push(editObj[field])
-                }
-                product.markModified(field)
-            })
+                product[field].push(editObj[field])
+            }
+        })
 
-            this.repository.save(product)
-                .then(async (_product) => {
-                    if (!product.isVariation) {
-                        done(null, _product._doc)
-                    } else {
-                        try {
-                            const parent = await this.repository.findOne(Product, {sku: product.parentSku})
+        product = await this._productRepository.update(new UpdateRequest<Product>({
+            id: product.id,
+            update: product
+        })) as Product
 
-                            Object.keys(editObj).forEach(field => {
-                                if (action === 'remove') {
-                                    parent[field].splice(parent[field].indexOf(editObj[field]), 1)
-                                }
-                                else if (action === 'add') {
-                                    parent[field].push(editObj[field])
-                                }
-                                parent.markModified(field)
-                            })
-
-                            parent.save(($err, $product) => {
-                                done($err, $product._doc)
-                            })
-                        }
-                        catch (error) {
-                            return done(error)
-                        }
-                    }
-                })
-                .catch((error) => {
-                    done(error)
-                })
+        if (!product.isVariation) {
+            return product
         }
-        catch (error) {
-            return done(error)
-        }
+
+        const parent = await this._productRepository
+            .lookup('sku', product.parentSku) as Product
+
+        Object.keys(editObj).forEach(field => {
+            if (action === 'remove') {
+                parent[field].splice(parent[field].indexOf(editObj[field]), 1)
+            }
+            else if (action === 'add') {
+                parent[field].push(editObj[field])
+            }
+        })
+
+        return this._productRepository.update(new UpdateRequest<Product>({
+            id: parent.id,
+            update: parent
+        }))
     }
 
-    public crunch(file, done) {
-        const newFilePath = file.path.indexOf('.') > -1 ? file.path.replace('-medium.', '-thumbnail.') : file.path + '-thumbnail'
-        let thumbnailBuffer, mediumBuffer
+    public async crunch(
+        { path: mediumFilePath }: { path: string }
+    ): Promise<void> {
+        const thumbnailFilePath = mediumFilePath.indexOf('.') > -1
+            ? mediumFilePath.replace('-medium.', '-thumbnail.')
+            : mediumFilePath + '-thumbnail'
 
-        try {
-            fs.copySync(file.path, newFilePath)
-        }
-        catch (err) {
-            done(err)
-        }
+        fs.copySync(mediumFilePath, thumbnailFilePath)
 
-        mediumBuffer = fs.readFileSync(file.path)
-        thumbnailBuffer = fs.readFileSync(newFilePath)
+        const mediumBuffer = fs.readFileSync(mediumFilePath)
+        const thumbnailBuffer = fs.readFileSync(thumbnailFilePath)
 
-        sharp(mediumBuffer)
+        await sharp(mediumBuffer)
             .rotate()
             .resize(500, null)
-            .toFile(file.path)
-            .then(d => {
-                sharp(thumbnailBuffer)
-                    .rotate()
-                    .resize(200, null)
-                    .toFile(newFilePath)
-                    .then(data => {
-                        done(null, data, file.path, newFilePath)
-                    }).catch(done)
-            }).catch(done)
+            .toFile(mediumFilePath)
+
+        await sharp(thumbnailBuffer)
+            .rotate()
+            .resize(200, null)
+            .toFile(thumbnailFilePath)
     }
 
-    public uploadProductImageToCloud(path, destFileName, done) {
+    public uploadProductImageToCloud(filePath, destFileName, done) {
         this.s3.upload({
             Bucket: AppConfig.aws_bucket,
             ACL: 'public-read',
-            Body: fs.createReadStream(path),
+            Body: fs.createReadStream(filePath),
             Key: 'product-images/' + destFileName.toString(),
             ContentType: 'application/octet-stream',
         }).send(done)

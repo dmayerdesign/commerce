@@ -1,5 +1,5 @@
 // @dynamic
-export const queryWithAndOperation = { $and: [] }
+export const queryWithAndOperation = { $and: [] as any[] }
 
 export function toArray<T = any>(arrayLikeObject: object): T[] {
     if (Array.isArray(arrayLikeObject)) {
