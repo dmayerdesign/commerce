@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { DomainEventController } from './domain-event.controller'
+import { DomainEventController } from './domain-event.controller.generated'
 
 describe('Domain Event Controller', () => {
   let module: TestingModule

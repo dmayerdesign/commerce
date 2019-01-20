@@ -7,6 +7,7 @@ import { Taxonomy } from './taxonomy'
 @Entity()
 export class TaxonomyTerm {
     @ObjectIdColumn() public id: ObjectID
+
     @ManyToOne(() => Taxonomy, x => x.id)
     @JoinColumn()
     public taxonomy: Taxonomy

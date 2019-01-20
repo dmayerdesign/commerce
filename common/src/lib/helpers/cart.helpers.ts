@@ -1,19 +1,23 @@
-import { Cart } from '@qb/common/api/interfaces/cart'
-import { CartProduct } from '@qb/common/api/interfaces/cart-item'
-import { Price } from '@qb/common/api/interfaces/price'
-import { Product } from '@qb/common/api/interfaces/product'
+import { Cart } from '@qb/common/api/entities/cart'
+import { Price } from '@qb/common/api/entities/price'
+import { Product } from '@qb/common/api/entities/product'
+import { CartItem } from '@qb/common/api/interfaces/cart-item'
 import { Currency } from '@qb/common/constants/enums/currency'
 import { getPrice } from '@qb/common/helpers/product.helpers'
-import { CartDisplayProduct } from '@qb/common/models/ui/cart-display-item'
+import { CartDisplayProduct } from '@qb/common/models/ui/cart-display-product'
 
-export function getDisplayProducts(products: Product[]): CartDisplayProduct<Product>[] {
-    const displayProducts: CartDisplayProduct<Product>[] = []
+export function getDisplayProducts(products: Product[]): CartDisplayProduct[] {
+    const displayProducts: CartDisplayProduct[] = []
 
     products.forEach((item) => {
-        const duplicateProductIndex = displayProducts.findIndex(displayProduct => displayProduct.data.id === item.id)
+        const duplicateProductIndex = displayProducts.findIndex(
+            displayProduct => displayProduct.data.id === item.id
+        )
 
         if (duplicateProductIndex > -1) {
-            const duplicateProduct = displayProducts.find(displayProduct => displayProduct.data.id === item.id)
+            const duplicateProduct = displayProducts.find(
+                displayProduct => displayProduct.data.id === item.id
+            ) as CartDisplayProduct
 
             displayProducts[duplicateProductIndex] = {
                 ...duplicateProduct,
@@ -22,7 +26,7 @@ export function getDisplayProducts(products: Product[]): CartDisplayProduct<Prod
                     amount: duplicateProduct.subTotal.amount + (getPrice(item) as Price).amount,
                     currency: duplicateProduct.subTotal.currency,
                 } as Price,
-            }
+            } as CartDisplayProduct
         }
         else {
             displayProducts.push({
@@ -63,8 +67,8 @@ export function getTotal(
     } as Price
 }
 
-export function getNumberAvailableToAdd(cart: Cart, item: CartProduct): number {
+export function getNumberAvailableToAdd(cart: Cart, item: CartItem): number {
     return !!cart ?
-        item.stockQuantity - cart.products.filter((_item: CartProduct) => _item.id === item.id).length
+        item.stockQuantity - cart.products.filter((_item: CartItem) => _item.id === item.id).length
         : 0
 }

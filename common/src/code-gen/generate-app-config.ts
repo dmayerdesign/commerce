@@ -1,7 +1,8 @@
+import { Environment } from '@qb/common/constants/enums/environment'
 import { writeFileSync } from 'fs'
 import { resolve } from 'path'
 
-const buildEnv = process.env.ENVIRONMENT
+const buildEnv = process.env.ENVIRONMENT as Environment
 const appConfig = require(`../../../app-config.${buildEnv.toLowerCase()}.json`)
 const destPath = resolve(__dirname, '../lib/config/app-config.generated.ts')
 const formatJsonValue = (value: any) => typeof value === 'string'

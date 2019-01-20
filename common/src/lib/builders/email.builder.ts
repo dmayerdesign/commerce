@@ -6,13 +6,13 @@ import { Organization } from '../api/interfaces/organization'
 // @dynamic
 export class EmailBuilder {
 
-    private _options: EmailOptions = {
+    private _options: Partial<EmailOptions> = {
         fromEmail: AppConfig.organization_email,
         fromName: AppConfig.brand_name,
-        toEmail: null,
-        toName: null,
-        subject: null,
-        preheader: null,
+        toEmail: undefined,
+        toName: undefined,
+        subject: undefined,
+        preheader: undefined,
     }
 
     private html: string
@@ -28,8 +28,8 @@ export class EmailBuilder {
         order?: Order
         organization?: Organization
     } = {
-        order: null,
-        organization: null,
+        order: undefined,
+        organization: undefined,
     }
 
     private customData: any = {}
@@ -78,6 +78,6 @@ export class EmailBuilder {
         return {
             ...this._options,
             html: this.html,
-        }
+        } as EmailOptions
     }
 }

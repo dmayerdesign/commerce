@@ -2,18 +2,17 @@ import { Controller, Get, Inject, Param } from '@nestjs/common'
 import { Product } from '@qb/common/api/entities/product'
 import { Price } from '@qb/common/api/interfaces/price'
 import { products } from '@qb/common/constants/api-endpoints'
-import { QbController } from '../../shared/controller/controller'
-import { QbRepository } from '../../shared/data-access/repository'
+import { ProductController as ProductControllerGenerated } from './product.controller.generated'
+import { ProductRepository } from './product.repository.generated'
 import { ProductService } from './product.service'
 
 @Controller(products)
-export class ProductController extends QbController<Product> {
+export class ProductController extends ProductControllerGenerated {
   constructor(
-    @Inject(QbRepository) protected readonly _repository: QbRepository<Product>,
+    @Inject(ProductRepository) protected readonly _repository: ProductRepository,
     @Inject(ProductService) protected readonly _productService: ProductService,
   ) {
-    super()
-    this._repository.configureForTypeOrmEntity(Product)
+    super(_repository)
   }
 
   // TODO: Figure out streaming with TypeORM.

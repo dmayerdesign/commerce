@@ -19,7 +19,6 @@ export interface QbBaseRepository<EntityType extends any> {
 }
 
 export interface QbRepository<EntityType> extends QbBaseRepository<EntityType> {
-  configureForTypeOrmEntity(entity: any): void
 }
 
 export interface QbThirdPartyRepository<EntityType> extends QbBaseRepository<EntityType> { }

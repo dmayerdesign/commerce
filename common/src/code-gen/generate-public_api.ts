@@ -57,6 +57,7 @@ async function main(): Promise<void> {
         fileContentsAfter.indexOf('abstract class') === 0 ||
         fileContentsAfter.indexOf('class') === 0
       ) {
+        // @ts-ignore
         target = target.split('(')[0].split('<')[0]
       }
 
@@ -64,6 +65,7 @@ async function main(): Promise<void> {
         target = fileContentsAfter.substr(1).split(' ')[0]
       }
 
+      // @ts-ignore
       publicApiFile += `export { ${target} } from './lib/${modulePath}'\n`
     }
   }

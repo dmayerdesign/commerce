@@ -4,9 +4,9 @@ import { EmailOptions, OrderEmailOptions } from '@qb/common/api/interfaces/email
 import { EmailBuilder } from '@qb/common/builders/email.builder'
 import { calculateEstArrival } from '../order/order.helpers'
 import { EmailService as IEmailService } from './email.service.interface'
-const receipt = require('@qb/common/emails/templates/receipt')
-const shippingNotification = require('@qb/common/emails/templates/shippingNotification')
-const emailVerification = require('@qb/common/emails/templates/emailVerification')
+const receipt = require('@qb/common/emails/templates/receipt.pug')
+const shippingNotification = require('@qb/common/emails/templates/shippingNotification.pug')
+const emailVerification = require('@qb/common/emails/templates/emailVerification.pug')
 const mailgun = require('mailgun-js')({ apiKey: process.env.MAILGUN_API_KEY, domain: process.env.MAILGUN_DOMAIN })
 /**
  * Send emails with Mailgun

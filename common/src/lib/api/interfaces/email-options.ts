@@ -1,7 +1,6 @@
-import { CartDisplayItem } from '../../models/ui/cart-display-item'
+import { CartDisplayProduct } from '../../models/ui/cart-display-product'
 import { Order } from './order'
 import { Organization } from './organization'
-import { Product } from './product'
 
 export interface EmailStyleOptions {
     mastheadBgColor: string
@@ -36,5 +35,5 @@ export interface EmailOptions {
 
 export interface OrderEmailOptions extends EmailServiceOptions {
     order: Order
-    orderDisplayProducts: CartDisplayItem<Product>[]
+    orderDisplayProducts: CartDisplayProduct[]
 }

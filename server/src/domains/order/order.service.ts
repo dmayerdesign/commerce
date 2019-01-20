@@ -6,11 +6,12 @@ import { UpdateManyRequest } from '@qb/common/api/requests/update-many.request'
 import { ApiErrorResponse } from '@qb/common/api/responses/api-error.response'
 import { getDisplayProducts } from '@qb/common/helpers/cart.helpers'
 import { getFullName } from '@qb/common/helpers/user.helpers'
-import { QbRepository } from '../../shared/data-access/repository'
 import { EmailService } from '../email/email.service'
 import { StripeOrderService } from '../order/stripe/stripe-order.service'
 import { OrganizationService } from '../organization/organization.service'
+import { ProductRepository } from '../product/product.repository.generated'
 import { ProductService } from '../product/product.service'
+import { OrderRepository } from './order.repository.generated'
 import { OrderService as IOrderService } from './order.service.interface'
 
 /**
@@ -26,16 +27,13 @@ export class OrderService implements IOrderService {
     protected model = Order
 
     constructor(
-        @Inject(QbRepository) protected _repository: QbRepository<Order>,
-        @Inject(QbRepository) private _productRepository: QbRepository<Product>,
+        @Inject(OrderRepository) protected _repository: OrderRepository,
+        @Inject(ProductRepository) private _productRepository: ProductRepository,
         @Inject(StripeOrderService) private _stripeOrderService: StripeOrderService,
         @Inject(ProductService) private _productService: ProductService,
         @Inject(EmailService) private _emailService: EmailService,
         @Inject(OrganizationService) private _organizationService: OrganizationService,
-    ) {
-        this._repository.configureForTypeOrmEntity(Order)
-        this._productRepository.configureForTypeOrmEntity(Product)
-    }
+    ) { }
 
     public async place(newOrder: Partial<Order>): Promise<Order> {
         try {

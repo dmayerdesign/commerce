@@ -1,23 +1,19 @@
 import { Controller, Get, Inject } from '@nestjs/common'
 import { Organization } from '@qb/common/api/entities/organization'
-import { Organization as IOrganization } from '@qb/common/api/interfaces/organization'
 import { organizations } from '@qb/common/constants/api-endpoints'
-import { QbController } from '../../shared/controller/controller'
-import { QbRepository } from '../../shared/data-access/repository'
+import { OrganizationController as OrganizationControllerGenerated } from './organization.controller.generated'
+import { OrganizationRepository } from './organization.repository.generated'
 import { OrganizationService } from './organization.service'
 
 @Controller(organizations)
-export class OrganizationController extends QbController<IOrganization> {
+export class OrganizationController extends OrganizationControllerGenerated {
   constructor(
-    @Inject(QbRepository) protected readonly _repository: QbRepository<IOrganization>,
-    @Inject(QbRepository) protected readonly _organizationService: OrganizationService,
-  ) {
-    super()
-    this._repository.configureForTypeOrmEntity(Organization)
-  }
+    @Inject(OrganizationRepository) protected readonly _repository: OrganizationRepository,
+    @Inject(OrganizationService) protected readonly _organizationService: OrganizationService,
+  ) { super(_repository) }
 
   @Get('primary')
-  public getPrimary(): Promise<IOrganization> {
+  public getPrimary(): Promise<Organization> {
     return this._organizationService.getOrganization()
   }
 }

@@ -8,8 +8,8 @@ export function isProduct(obj: any): boolean {
     return (obj.isParent || obj.isVariation || obj.isStandalone)
 }
 
-export function getBrand(product: Product): TaxonomyTerm {
-    return product ? product.taxonomyTerms.find((t: TaxonomyTerm) => t.slug.indexOf('brand') > -1) as TaxonomyTerm : null
+export function getBrand(product: Product): TaxonomyTerm | undefined {
+    return product ? product.taxonomyTerms.find((t: TaxonomyTerm) => t.slug.indexOf('brand') > -1) as TaxonomyTerm : undefined
 }
 
 export function hasPriceRange(product: Product): boolean {

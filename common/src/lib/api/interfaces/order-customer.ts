@@ -1,8 +1,7 @@
-import { ObjectID } from 'typeorm'
 import { Address } from './address'
 
 export interface OrderCustomer {
-    userId: ObjectID
+    userId: string
     stripeCustomerId: string
     email: string
     lastName: string

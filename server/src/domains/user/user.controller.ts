@@ -1,83 +1,74 @@
-// import { Request, Response } from 'express'
-// import { Inject, Injectable } from '@nestjs/common'
-// import {
-//     controller,
-//     httpDelete,
-//     httpGet,
-//     httpPost,
-//     httpPut,
-//     request,
-//     requestParam,
-//     response,
-// } from 'inversify-express-utils'
+import { Controller, Delete, Get, Inject, Injectable, Param, Post, Put, Request,
+  Response } from '@nestjs/common'
+import { users } from '@qb/common/constants/api-endpoints'
+import { Request as IRequest, Response as IResponse } from 'express'
+import { UserController as UserControllerGenerated } from './user.controller.generated'
+import { UserRepository } from './user.repository.generated'
+import { UserService } from './user.service'
 
-// import { ApiEndpoints } from '@qb/common/constants/api-endpoints'
-// import { Types } from '@qb/common/constants/inversify/types'
-// import { UserService } from '../services/user.service'
-// import { QbController } from '../../../shared/controller/controller'
+@Injectable()
+@Controller(users)
+export class UserController extends UserControllerGenerated {
 
-// @injectable()
-// @controller(User)
-// export class UserController extends QbController {
+    constructor(
+        @Inject(UserRepository) protected readonly _repository: UserRepository,
+        @Inject(UserService) private _userService: UserService,
+    ) { super(_repository) }
 
-//     constructor(
-//         @Inject(UserService) private _userService: UserService,
-//     ) { super() }
+    @Get()
+    // @UseGuards(AuthGuard)
+    public getUser(
+        @Request() req: IRequest,
+        @Response() res: IResponse,
+    ): void {
+        this._userService.refreshSession(req, res)
+    }
 
-//     @httpGet('/', Types.isAuthenticated)
-//     public getUser(
-//         @request() req: Request,
-//         @response() res: Response,
-//     ): void {
-//         this._userService.refreshSession(req, res)
-//     }
+    @Post('login')
+    public login(
+        @Request() req: IRequest,
+        @Response() res: IResponse,
+    ): void {
+        this._userService.login(req.body, res)
+            .catch(({message, status}) => res.status(status).json({message, status}))
+    }
 
-//     @httpPost('/login')
-//     public login(
-//         @request() req: Request,
-//         @response() res: Response,
-//     ): void {
-//         this._userService.login(req.body, res)
-//             .catch(({message, status}) => res.status(status).json({message, status}))
-//     }
+    @Post('verify-email/:token')
+    public verifyEmail(
+        @Param('token') token: string,
+    ): void {
+        this._userService.verifyEmail(token)
+    }
 
-//     @httpPost('/verify-email/:token')
-//     public verifyEmail(
-//         @requestParam('token') token: string,
-//         @response() res: Response,
-//     ): void {
-//         this.handleApiResponse(this._userService.verifyEmail(token), res)
-//     }
+    @Post('logout')
+    public logout(
+        @Response() res: IResponse,
+    ): void {
+        this._userService.logout(res)
+    }
 
-//     @httpPost('/logout')
-//     public logout(
-//         @response() res: Response,
-//     ): void {
-//         this._userService.logout(res)
-//     }
+    @Post('register')
+    public createUser(
+        @Request() req: IRequest,
+        @Response() res: IResponse,
+    ): void {
+        this._userService.register(req.body, res)
+            .catch(({message, status}) => res.status(status).json({message, status}))
+    }
 
-//     @httpPost('/register')
-//     public createUser(
-//         @request() req: Request,
-//         @response() res: Response,
-//     ): void {
-//         this._userService.register(req.body, res)
-//             .catch(({message, status}) => res.status(status).json({message, status}))
-//     }
+    @Put('update')
+    // @UseGuards(AuthGuard)
+    public updateUser(
+        @Request() { user, body }: any,
+    ): void {
+        this._userService.updateUser(user.id, body)
+    }
 
-//     @httpPut('/update', Types.isAuthenticated)
-//     public updateUser(
-//         @request() req: Request,
-//         @response() res: Response,
-//     ): void {
-//         this.handleApiResponse(this._userService.updateUser(req.user.id, req.body), res)
-//     }
-
-//     @httpDelete('/:id', Types.isOwner)
-//     public deleteUser(
-//         @request() req: Request,
-//         @response() res: Response,
-//     ): void {
-//         this.handleApiResponse(this._userService.deleteUser(req.params.id), res)
-//     }
-// }
+    @Delete(':id')
+    // @UseGuards(AdminGuard)
+    public deleteUser(
+        @Request() req: IRequest,
+    ): void {
+        this._userService.deleteUser(req.params.id)
+    }
+}

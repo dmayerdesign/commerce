@@ -3,7 +3,6 @@ import { Order } from '@qb/common/api/entities/order'
 import { Organization } from '@qb/common/api/entities/organization'
 import { Price } from '@qb/common/api/entities/price'
 import { Product } from '@qb/common/api/entities/product'
-import { TaxonomyTerm } from '@qb/common/api/entities/taxonomy-term'
 import { ListRequest } from '@qb/common/api/requests/list.request'
 import { ProductListFilterType } from '@qb/common/api/requests/models/product-list-filter'
 import { UpdateRequest } from '@qb/common/api/requests/update.request'
@@ -12,10 +11,11 @@ import { Currency } from '@qb/common/constants/enums/currency'
 import { RangeLimit } from '@qb/common/constants/enums/range-limit'
 import { getPrice } from '@qb/common/helpers/product.helpers'
 import { ObjectID } from 'typeorm'
-import { QbRepository } from '../../shared/data-access/repository'
 import { OrganizationService } from '../organization/organization.service'
 import { attributeValueFilter, propertyFilter, simpleAttributeValueFilter, taxonomyTermFilter } from '../product/product.helpers'
+import { TaxonomyTermRepository } from '../taxonomy-term/taxonomy-term.repository.generated'
 import { ProductListRequest } from './product.list-request'
+import { ProductRepository } from './product.repository.generated'
 
 /**
  * Methods for querying the `products` collection
@@ -28,13 +28,10 @@ import { ProductListRequest } from './product.list-request'
 export class ProductService {
 
     constructor(
-        @Inject(QbRepository) private _productRepository: QbRepository<Product>,
-        @Inject(QbRepository) private _taxonomyTermsRepository: QbRepository<TaxonomyTerm>,
+        @Inject(ProductRepository) private _productRepository: ProductRepository,
+        @Inject(TaxonomyTermRepository) private _taxonomyTermRepository: TaxonomyTermRepository,
         @Inject(OrganizationService) private _organizationService: OrganizationService,
-    ) {
-        this._productRepository.configureForTypeOrmEntity(Product)
-        this._taxonomyTermsRepository.configureForTypeOrmEntity(TaxonomyTerm)
-    }
+    ) { }
 
     /**
      * Get a single product by slug.
@@ -213,7 +210,7 @@ export class ProductService {
                     name: { $regex: searchRegExp },
                     slug: { $regex: searchRegExp },
                 }
-                taxonomyTermIdsToSearch = (await this._taxonomyTermsRepository.list(new ListRequest({ query: searchableTaxonomiesQuery })))
+                taxonomyTermIdsToSearch = (await this._taxonomyTermRepository.list(new ListRequest({ query: searchableTaxonomiesQuery })))
                     .map((taxonomyTerm) => taxonomyTerm.id)
             }
             catch (error) {
@@ -269,7 +266,7 @@ export class ProductService {
                     // in order to display them anyway, so providing the `id` is easy.)
 
                 if (filter.type === ProductListFilterType.TaxonomyTerm) {
-                    const taxonomyTerms = await this._taxonomyTermsRepository.list(
+                    const taxonomyTerms = await this._taxonomyTermRepository.list(
                         new ListRequest({
                             query: { slug: { $in: filter.values } }
                         })

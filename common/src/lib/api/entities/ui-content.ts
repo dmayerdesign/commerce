@@ -1,4 +1,4 @@
-import { Column, JoinColumn, ManyToMany, ObjectID } from 'typeorm'
+import { Column, JoinColumn, ManyToMany } from 'typeorm'
 import { UiContent as IUiContent } from '../interfaces/ui-content'
 import { CustomRegions } from './custom-regions'
 import { NavigationItem } from './navigation-item'

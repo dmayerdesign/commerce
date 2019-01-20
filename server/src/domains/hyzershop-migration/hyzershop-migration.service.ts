@@ -15,24 +15,27 @@ import * as productsJSON from '@qb/common/work-files/migration/hyzershop-product
 import { pluralize, singularize, titleize } from 'inflection'
 import { camelCase, cloneDeep, kebabCase } from 'lodash'
 import { ObjectID } from 'typeorm'
-import { QbRepository } from '../../shared/data-access/repository'
+import { AttributeValueRepository } from '../attribute-value/attribute-value.repository.generated'
+import { AttributeRepository } from '../attribute/attribute.repository.generated'
+import { ProductRepository } from '../product/product.repository.generated'
+import { TaxonomyTermRepository } from '../taxonomy-term/taxonomy-term.repository.generated'
+import { TaxonomyRepository } from '../taxonomy/taxonomy.repository.generated'
 
 @Injectable()
 export class HyzershopMigrationService {
 
     constructor(
-        @Inject(QbRepository) private readonly _productRepository: QbRepository<Product>,
-        @Inject(QbRepository) private readonly _attributeRepository: QbRepository<Attribute>,
-        @Inject(QbRepository) private readonly _attributeValueRepository: QbRepository<AttributeValue>,
-        @Inject(QbRepository) private readonly _taxonomyRepository: QbRepository<Taxonomy>,
-        @Inject(QbRepository) private readonly _taxonomyTermRepository: QbRepository<TaxonomyTerm>,
-    ) {
-        this._productRepository.configureForTypeOrmEntity(Product)
-        this._attributeRepository.configureForTypeOrmEntity(Attribute)
-        this._attributeValueRepository.configureForTypeOrmEntity(AttributeValue)
-        this._taxonomyRepository.configureForTypeOrmEntity(Taxonomy)
-        this._taxonomyTermRepository.configureForTypeOrmEntity(TaxonomyTerm)
-    }
+        @Inject(ProductRepository)
+        private readonly _productRepository: ProductRepository,
+        @Inject(AttributeRepository)
+        private readonly _attributeRepository: AttributeRepository,
+        @Inject(AttributeValueRepository)
+        private readonly _attributeValueRepository: AttributeValueRepository,
+        @Inject(TaxonomyRepository)
+        private readonly _taxonomyRepository: TaxonomyRepository,
+        @Inject(TaxonomyTermRepository)
+        private readonly _taxonomyTermRepository: TaxonomyTermRepository,
+    ) { }
 
     public async createProductsFromExportedJSON(): Promise<Product[]> {
         const newProducts = [] as Product[]
@@ -660,17 +663,19 @@ console.log(`SKU: ${JSON.stringify(product)}`)
                 const pluralName = pluralize(name)
 
                 if (discType) {
-                    await this._taxonomyTermRepository.update(new UpdateRequest({
-                        id: discType.id,
-                        update: {
-                            singularName,
-                            pluralName,
-                            pageSettings: {
-                                banner: `/page-images/${partialSlug}-banner.jpg`,
-                                bannerOverlay: `/page-images/${slug}.png`,
-                            },
-                        } as TaxonomyTerm
-                    }))
+                    await this._taxonomyTermRepository.update(
+                        new UpdateRequest<TaxonomyTerm>({
+                            id: discType.id,
+                            update: {
+                                singularName,
+                                pluralName,
+                                pageSettings: {
+                                    banner: `/page-images/${partialSlug}-banner.jpg`,
+                                    bannerOverlay: `/page-images/${slug}.png`,
+                                },
+                            }
+                        })
+                    )
                 }
             }
 
@@ -698,17 +703,19 @@ console.log(`SKU: ${JSON.stringify(product)}`)
                 const pluralName = `${brandName} Discs`
 
                 if (brand) {
-                    await this._taxonomyTermRepository.update(new UpdateRequest({
-                        id: brand.id,
-                        update: {
-                            singularName,
-                            pluralName,
-                            pageSettings: {
-                                banner: `/page-images/${partialSlug}-banner.jpg`,
-                                bannerOverlay: `/page-images/${slug}.png`,
-                            },
-                        } as TaxonomyTerm
-                    }))
+                    await this._taxonomyTermRepository.update(
+                        new UpdateRequest<TaxonomyTerm>({
+                            id: brand.id,
+                            update: {
+                                singularName,
+                                pluralName,
+                                pageSettings: {
+                                    banner: `/page-images/${partialSlug}-banner.jpg`,
+                                    bannerOverlay: `/page-images/${slug}.png`,
+                                },
+                            }
+                        })
+                    )
                 }
             }
 

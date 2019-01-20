@@ -1,19 +1,13 @@
-import { Injectable } from '@nestjs/common'
 import { Entity } from '@qb/common/api/interfaces/entity'
 import { InclusivePartial, QbRepository as IQbRepository } from '@qb/common/api/interfaces/repository'
 import { ListRequest } from '@qb/common/api/requests/list.request'
 import { UpdateManyRequest } from '@qb/common/api/requests/update-many.request'
 import { UpdateRequest } from '@qb/common/api/requests/update.request'
 import { isArrayLike, toArray } from '@qb/common/helpers/mongoose.helpers'
-import { getMongoRepository, DeepPartial, DeleteWriteOpResultObject, FindManyOptions, MongoRepository, ObjectID } from 'typeorm'
+import { DeepPartial, DeleteWriteOpResultObject, FindManyOptions, MongoRepository, ObjectID } from 'typeorm'
 
-@Injectable()
-export class QbRepository<EntityType extends Entity> implements IQbRepository<EntityType> {
-  private _repository: MongoRepository<EntityType>
-
-  public configureForTypeOrmEntity(entityType: any): void {
-    this._repository = getMongoRepository(entityType)
-  }
+export abstract class QbRepository<EntityType extends Entity> implements IQbRepository<EntityType> {
+  protected abstract readonly _repository: MongoRepository<EntityType>
 
   public get(id: string | ObjectID): Promise<EntityType | undefined> {
     return this._repository.findOne(id)
@@ -63,9 +57,9 @@ export class QbRepository<EntityType extends Entity> implements IQbRepository<En
 
       Object.keys(update).forEach((key) => {
         if (isArrayLike(update[key])) {
-            includeAddToSet = true
-            $addToSet[key] = toArray(update[key])
-            delete update[key]
+          includeAddToSet = true
+          $addToSet[key] = toArray(update[key])
+          delete update[key]
         }
       })
 
@@ -96,9 +90,9 @@ export class QbRepository<EntityType extends Entity> implements IQbRepository<En
 
       Object.keys(update).forEach((key) => {
         if (isArrayLike(update[key])) {
-            includeAddToSet = true
-            $addToSet[key] = toArray(update[key])
-            delete update[key]
+          includeAddToSet = true
+          $addToSet[key] = toArray(update[key])
+          delete update[key]
         }
       })
 

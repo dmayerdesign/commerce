@@ -35,9 +35,15 @@ generate() {
         ts-node common/src/code-gen/generate-app-config.ts
     elif [ "$1" = "angular-data-services" ]; then
         ts-node common/src/code-gen/generate-angular-data-services.ts
+    elif [ "$1" = "nest-domain-modules" ]; then
+        ts-node common/src/code-gen/generate-nest-domain-modules.ts
+    elif [ "$1" = "nest-domain-repos" ]; then
+        ts-node common/src/code-gen/generate-nest-domain-repos.ts
     else
         generate app-config
         generate angular-data-services
+        generate nest-domain-modules
+        generate nest-domain-repos
     fi
 }
 
@@ -56,7 +62,8 @@ prebuild() {
     fi
     if [ "$1" = "server" ]; then
         generate app-config
-        generate angular-data-services
+        generate nest-domain-modules
+        generate nest-domain-repos
         
         if [ "$env" = "production" ]; then
             test server
