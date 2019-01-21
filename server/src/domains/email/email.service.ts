@@ -2,12 +2,30 @@ import { Injectable } from '@nestjs/common'
 import { AppConfig } from '@qb/app-config'
 import { EmailOptions, OrderEmailOptions } from '@qb/common/api/interfaces/email-options'
 import { EmailBuilder } from '@qb/common/builders/email.builder'
+import { resolve as _resolve } from 'path'
+import * as pug from 'pug'
 import { calculateEstArrival } from '../order/order.helpers'
 import { EmailService as IEmailService } from './email.service.interface'
-const receipt = require('@qb/common/emails/templates/receipt.pug')
-const shippingNotification = require('@qb/common/emails/templates/shippingNotification.pug')
-const emailVerification = require('@qb/common/emails/templates/emailVerification.pug')
-const mailgun = require('mailgun-js')({ apiKey: process.env.MAILGUN_API_KEY, domain: process.env.MAILGUN_DOMAIN })
+
+// const _receipt = (_: any) => '' // require('@qb/common/emails/templates/receipt.pug')
+// const _shippingNotification = (_: any) => '' // require('@qb/common/emails/templates/shippingNotification.pug')
+// const _emailVerification = (_: any) => '' // require('@qb/common/emails/templates/emailVerification.pug')
+const mailgun = require('mailgun-js')({
+    apiKey: process.env.MAILGUN_API_KEY,
+    domain: process.env.MAILGUN_DOMAIN,
+})
+
+const receipt = pug.compileFile(
+    _resolve(__dirname, '../../../../common/src/lib/emails/templates/receipt.pug'),
+)
+const shippingNotification = pug.compileFile(
+    _resolve(__dirname, '../../../../common/src/lib/emails/templates/shippingNotification.pug'),
+)
+const emailVerification = pug.compileFile(
+    _resolve(__dirname, '../../../../common/src/lib/emails/templates/emailVerification.pug'),
+)
+
+// pug.render(_receipt)
 /**
  * Send emails with Mailgun
  */

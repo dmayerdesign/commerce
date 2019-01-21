@@ -7,7 +7,8 @@ import { StripeSubmitOrderResponse } from '@qb/common/api/responses/stripe/strip
 import { Copy } from '@qb/common/constants/copy'
 import { HttpStatus } from '@qb/common/constants/http-status'
 import { customers } from 'stripe'
-import { QbRepository } from '../../../shared/data-access/repository'
+import { ObjectID } from 'typeorm'
+import { ProductRepository } from '../../product/product.repository.generated'
 import { StripeCustomerService } from './stripe-customer.service'
 import { StripeOrderActionsService } from './stripe-order-actions.service'
 import { StripeProductService } from './stripe-product.service'
@@ -23,7 +24,7 @@ import { StripeProductService } from './stripe-product.service'
 export class StripeOrderService {
 
     constructor(
-        @Inject(QbRepository) private _productRepository: QbRepository<any>,
+        @Inject(ProductRepository) private _productRepository: ProductRepository,
         @Inject(StripeCustomerService) private stripeCustomerService: StripeCustomerService,
         @Inject(StripeOrderActionsService) private stripeOrderActionsService: StripeOrderActionsService,
         @Inject(StripeProductService) private stripeProductService: StripeProductService,
@@ -37,7 +38,7 @@ export class StripeOrderService {
      */
     public async submitOrder(orderData: Order): Promise<StripeSubmitOrderResponse> {
         const variationAndStandaloneSkus: string[] = []
-        const parentIds: string[] = []
+        const parentIds: ObjectID[] = []
         orderData.products.forEach((orderProduct: Product) => {
             variationAndStandaloneSkus.push(orderProduct.sku)
         })

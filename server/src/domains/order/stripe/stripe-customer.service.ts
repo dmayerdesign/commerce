@@ -1,10 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { Order } from '@qb/common/api/entities/order'
-import { User } from '@qb/common/api/interfaces/user'
+import { User } from '@qb/common/api/entities/user'
 import { UpdateRequest } from '@qb/common/api/requests/update.request'
 import { ApiErrorResponse } from '@qb/common/api/responses/api-error.response'
 import * as Stripe from 'stripe'
-import { QbRepository } from '../../../shared/data-access/repository'
+import { UserRepository } from '../../user/user.repository.generated'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string)
 
@@ -14,7 +14,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string)
 @Injectable()
 export class StripeCustomerService {
 
-    @Inject(QbRepository) private _userRepository: QbRepository<User>
+    @Inject(UserRepository) private _userRepository: UserRepository
 
     /**
      * If the customer checked "save payment info," create a Stripe Customer

@@ -6,8 +6,7 @@ import { Order } from '@qb/common/api/entities/order'
 import { UpdateRequest } from '@qb/common/api/requests/update.request'
 import { OrderStatus } from '@qb/common/constants/enums/order-status'
 import { Easypost } from '@qb/common/types/node-easypost'
-import { QbRepository } from '../../shared/data-access/repository'
-import { OrderService } from '../order/order.service'
+import { OrderRepository } from '../order/order.repository.generated'
 import { prepareAddressForEasypost } from './easypost.helpers'
 
 const easypost = new EasypostModule(process.env.EASYPOST_API_KEY) as Easypost
@@ -16,9 +15,8 @@ const easypost = new EasypostModule(process.env.EASYPOST_API_KEY) as Easypost
 export class EasypostService {
 
   constructor(
-    @Inject(OrderService) private _orderService: OrderService,
-    @Inject(QbRepository) protected _orderRepository: QbRepository<Order>,
-  ) {}
+    @Inject(OrderRepository) protected _orderRepository: OrderRepository,
+  ) { }
 
   /**
 	 * Create a shipment in EasyPost

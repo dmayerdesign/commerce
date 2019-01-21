@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core'
 import * as helmet from 'helmet'
+import 'reflect-metadata'
 import { AppModule } from './app.module'
 
 async function main(): Promise<void> {

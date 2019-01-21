@@ -15,7 +15,8 @@ import { Request, Response } from 'express'
 import * as jwt from 'jsonwebtoken'
 import { getIdAsEntityType } from 'server/src/shared/data-access/data-access.helpers'
 import { ObjectID } from 'typeorm'
-import { QbRepository } from '../../shared/data-access/repository'
+import { WishlistRepository } from '../wishlist/wishlist.repository.generated'
+import { UserRepository } from './user.repository.generated'
 
 @Injectable()
 export class UserService {
@@ -23,8 +24,8 @@ export class UserService {
     protected model = User
 
     constructor(
-        @Inject(QbRepository) protected _userRepository: QbRepository<User>,
-        @Inject(QbRepository) protected _wishlistRepository: QbRepository<Wishlist>
+        @Inject(UserRepository) protected _userRepository: UserRepository,
+        @Inject(WishlistRepository) protected _wishlistRepository: WishlistRepository,
     ) { }
 
     public async register(user: User, res: Response): Promise<void> {

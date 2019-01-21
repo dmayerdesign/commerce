@@ -5,7 +5,7 @@ import { ApiErrorResponse } from '@qb/common/api/responses/api-error.response'
 import { Copy } from '@qb/common/constants/copy'
 import { HttpStatus } from '@qb/common/constants/http-status'
 import { hyzershop } from '../../../../work-files/data/organization_hyzershop'
-import { QbRepository } from '../../shared/data-access/repository'
+import { OrganizationRepository } from './organization.repository.generated'
 
 @Injectable()
 export class OrganizationService {
@@ -13,7 +13,7 @@ export class OrganizationService {
     protected model = Organization
 
     constructor(
-        @Inject(QbRepository) private _repository: QbRepository<Organization>
+        @Inject(OrganizationRepository) private _repository: OrganizationRepository,
     ) { }
 
     public async getOrganization(): Promise<Organization> {

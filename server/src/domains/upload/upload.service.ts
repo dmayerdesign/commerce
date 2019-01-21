@@ -7,7 +7,7 @@ import * as fs from 'fs-extra'
 import * as multer from 'multer'
 import * as path from 'path'
 import * as sharp from 'sharp'
-import { QbRepository } from '../../shared/data-access/repository'
+import { ProductRepository } from '../product/product.repository.generated'
 
 /**
  * AWS S3 uploads
@@ -17,7 +17,7 @@ AWS.config.region = AppConfig.aws_region
 @Injectable()
 export class UploadService {
     constructor(
-        @Inject(QbRepository) private _productRepository: QbRepository<Product>
+        @Inject(ProductRepository) private _productRepository: ProductRepository,
     ) {}
 
     private s3 = new AWS.S3({

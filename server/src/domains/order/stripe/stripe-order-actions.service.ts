@@ -11,10 +11,12 @@ import { Copy } from '@qb/common/constants/copy'
 import { OrderStatus } from '@qb/common/constants/enums/order-status'
 import { StripeOrder } from '@qb/common/stripe-shims/stripe-order'
 import * as Stripe from 'stripe'
-import { QbRepository } from '../../../shared/data-access/repository'
+import { DiscountRepository } from '../../discount/discount.repository.generated'
 import { OrganizationService } from '../../organization/organization.service'
 import { ProductListRequest } from '../../product/product.list-request'
+import { ProductRepository } from '../../product/product.repository.generated'
 import { getSubTotal, getTotal } from '../order.helpers'
+import { OrderRepository } from '../order.repository.generated'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string)
 
@@ -30,9 +32,9 @@ export class StripeOrderActionsService {
 
   constructor(
     @Inject(OrganizationService) private organizationService: OrganizationService,
-    @Inject(QbRepository) private _discountRepository: QbRepository<Discount>,
-    @Inject(QbRepository) private _orderRepository: QbRepository<Order>,
-    @Inject(QbRepository) private _productRepository: QbRepository<Product>,
+    @Inject(DiscountRepository) private _discountRepository: DiscountRepository,
+    @Inject(OrderRepository) private _orderRepository: OrderRepository,
+    @Inject(ProductRepository) private _productRepository: ProductRepository,
   ) { }
 
   /**
