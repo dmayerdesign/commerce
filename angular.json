@@ -23,7 +23,7 @@
       "root": "ui/web",
       "sourceRoot": "ui/web/src",
       "projectType": "application",
-      "prefix": "",
+      "prefix": "web",
       "schematics": {
         "@schematics/angular:component": {
           "inlineTemplate": true,

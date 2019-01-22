@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core'
-import { NavigationItem } from '@qb/common/api/entities/navigation-item'
+import { NavigationItem } from '@qb/common/api/interfaces/navigation-item'
 import { BootstrapBreakpointKey } from '@qb/common/constants/enums/bootstrap-breakpoint-key'
 import { pullFrom, pushTo } from '@qb/common/helpers/array.helpers'
 import { hasChildren } from '@qb/common/helpers/tree.helpers'
@@ -147,7 +147,7 @@ export class QbNavigationListComponent {
     }
 
     public getNavItemClassList(item: NavigationItem): string[] {
-        const classList = []
+        const classList = [] as string[]
         if (hasChildren(item)) {
             classList.push('dropdown')
         }

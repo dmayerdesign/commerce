@@ -2,7 +2,6 @@ import {
     AfterContentInit,
     Component,
     ContentChild,
-    ContentChildren,
     ElementRef,
     Input,
     OnDestroy,
@@ -49,7 +48,7 @@ export class QbFormFieldComponent extends HeartbeatComponent implements OnInit, 
     @Input() public customErrorMessage: TemplateRef<any>
     @ContentChild('input', { read: ElementRef }) public input: ElementRef
 
-    public errorMessage: string
+    public errorMessage: string | null
     public hasBlurred = false
     public isFocused = false
 
@@ -179,7 +178,7 @@ content child of <qb-form-field>, like so:
         return this.isShowingMessage && !!this.customErrorMessage
     }
 
-    public get currentError(): string {
+    public get currentError(): string | null {
         if (!this.options || !this.options.control) return null
 
         const errors = this.options.control.errors

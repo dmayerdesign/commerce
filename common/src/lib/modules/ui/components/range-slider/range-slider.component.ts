@@ -107,7 +107,7 @@ export class QbRangeSliderComponent extends HeartbeatComponent implements Contro
     public isMouseDownOnMax = false
     public rangeLimit = RangeLimit
     private _onChange: (value: any) => void
-    private _value: number[] = null
+    private _value: number[]
     private _lastMouseDownOffset: number
     private _modelChanges = new BehaviorSubject<number[]>(this.value)
     private _viewChanges = new BehaviorSubject<number[]>(this.value)
@@ -129,7 +129,9 @@ export class QbRangeSliderComponent extends HeartbeatComponent implements Contro
                 scan((accumulator, currentPosition) => {
                     const allowedValues = this._getAllowedValues()
                     const value = this._getLimitFromPosition(currentPosition)
-                    const allowedValue = allowedValues.find((val) => value < val + 5 && value > val - 5)
+                    const allowedValue = allowedValues.find(
+                        (val) => value < val + 5 && value > val - 5
+                    ) as number
                     if (allowedValue > this.value[RangeLimit.Max]) {
                         return accumulator
                     }
@@ -157,7 +159,9 @@ export class QbRangeSliderComponent extends HeartbeatComponent implements Contro
                 scan((accumulator, currentPosition) => {
                     const allowedValues = this._getAllowedValues()
                     const value = this._getLimitFromPosition(currentPosition)
-                    const allowedValue = allowedValues.find((val) => value < val + 5 && value > val - 5)
+                    const allowedValue = allowedValues.find(
+                        (val) => value < val + 5 && value > val - 5
+                    ) as number
                     if (allowedValue < this.value[RangeLimit.Min]) {
                         return accumulator
                     }
@@ -262,7 +266,7 @@ export class QbRangeSliderComponent extends HeartbeatComponent implements Contro
         const newValue = cloneDeep(this._value)
         const indexOfRangeLimit = inputElement.hasAttribute('data-min') ? RangeLimit.Min
             : inputElement.hasAttribute('data-max') ? RangeLimit.Max
-            : null
+            : -1
         const inputValue = Array.isArray(inputElement.value)
             ? inputElement.value[indexOfRangeLimit]
             : inputElement.value
@@ -294,8 +298,8 @@ export class QbRangeSliderComponent extends HeartbeatComponent implements Contro
 
     // model -> view
     public writeValue(value: number[]): void {
-        let min: number
-        let max: number
+        let min: number | undefined
+        let max: number | undefined
 
         if (!!value && !Array.isArray(value)) {
             console.warn('Attempted to write a non-array value to the range slider.')
@@ -317,47 +321,52 @@ export class QbRangeSliderComponent extends HeartbeatComponent implements Contro
             max = value[RangeLimit.Max]
         }
 
-        if (typeof min !== 'number') {
-            if (min === '') {
-                min = 0
-            }
-            else {
-                min = parseFloat(min)
-                if (isNaN(min)) {
-                    throw new Error('The range minimum could not be parsed as a number.')
+        if (typeof min !== 'undefined') {
+            if (typeof min !== 'number') {
+                if (min === '') {
+                    min = 0
+                }
+                else {
+                    min = parseFloat(min)
+                    if (isNaN(min)) {
+                        throw new Error('The range minimum could not be parsed as a number.')
+                    }
                 }
             }
-        }
-        if (typeof max !== 'number') {
-            if (max === '') {
-                max = 0
+            if (min % this.step) {
+                min = min - (min % this.step)
+                if (min < 0) min = 0
             }
-            else {
-                max = parseFloat(max)
-                if (isNaN(max)) {
-                    throw new Error('The range maximum could not be parsed as a number.')
+        }
+
+        if (typeof max !== 'undefined') {
+            if (typeof max !== 'number') {
+                if (max === '') {
+                    max = 0
+                }
+                else {
+                    max = parseFloat(max)
+                    if (isNaN(max)) {
+                        throw new Error('The range maximum could not be parsed as a number.')
+                    }
                 }
             }
+            if (max % this.step) {
+                max = max - (max % this.step) + this.step
+                if (max < 0) max = 0
+            }
         }
 
-        if (min % this.step) {
-            min = min - (min % this.step)
-            if (min < 0) min = 0
-        }
-
-        if (max % this.step) {
-            max = max - (max % this.step) + this.step
-            if (max < 0) max = 0
-        }
-
-        if (min <= max) {
-            this._value = [
-                Math.floor(min),
-                Math.ceil(max),
-            ]
-            this._renderer.setValue(this.min.nativeElement, `${min}`)
-            this._renderer.setValue(this.max.nativeElement, `${max}`)
-            this._modelChanges.next(this.value)
+        if (typeof min !== 'undefined' && typeof max !== 'undefined') {
+            if (min <= max) {
+                this._value = [
+                    Math.floor(min),
+                    Math.ceil(max),
+                ]
+                this._renderer.setValue(this.min.nativeElement, `${min}`)
+                this._renderer.setValue(this.max.nativeElement, `${max}`)
+                this._modelChanges.next(this.value)
+            }
         }
     }
 

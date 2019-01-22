@@ -43,7 +43,10 @@ export class ProductListFilterComponent implements OnInit {
       this.filter.filterType === ProductListFilterType.AttributeValue ||
       this.filter.filterType === ProductListFilterType.TaxonomyTerm
 
-    if (this.filter.filterType === ProductListFilterType.TaxonomyTerm) {
+    if (
+      this.filter.filterType === ProductListFilterType.TaxonomyTerm &&
+      this.filter.taxonomyTermOptions
+    ) {
       this.filter.taxonomyTermOptions.forEach((taxonomyTerm: TaxonomyTerm) => {
         // TaxonomyTerm slug -> form control name.
         const controlName = camelCase(taxonomyTerm.slug)

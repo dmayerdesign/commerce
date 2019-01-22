@@ -2,7 +2,7 @@ import { isPlatformBrowser } from '@angular/common'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Component, Inject, PLATFORM_ID } from '@angular/core'
 import { FormControl } from '@angular/forms'
-import { ListRequest } from '@qb/common/api/requests/list.request'
+import { ListRequest } from '@qb/common/api/requests/list.request.interface'
 import { Crud } from '@qb/common/constants/crud'
 import { Observable } from 'rxjs'
 
@@ -38,9 +38,9 @@ export class AppComponent {
       ? 'browser'
       : 'server'
 
-    const request = new ListRequest({
+    const request = {
       limit: 5,
-    })
+    } as ListRequest
 
     const params = new HttpParams()
       .set(Crud.Params.listRequest, JSON.stringify(request))

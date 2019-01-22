@@ -5,8 +5,10 @@ import { AppConfig } from '@qb/app-config'
 import { join, resolve } from 'path'
 import { domainModules } from './domain-modules.generated'
 import { AdminController } from './domains/admin/admin.controller'
+import { HyzershopMigrationService } from './domains/hyzershop-migration/hyzershop-migration.service'
 import { InstagramRepository } from './domains/instagram/instagram.repository'
 import { OrganizationService } from './domains/organization/organization.service'
+import { ProductService } from './domains/product/product.service'
 
 const BROWSER_DIR = join(process.cwd(), 'dist/web')
 applyDomino(global, join(BROWSER_DIR, 'index.html'))
@@ -32,9 +34,9 @@ applyDomino(global, join(BROWSER_DIR, 'index.html'))
   ],
   providers: [
     OrganizationService,
-    // ProductService,
     InstagramRepository,
-    // HyzershopMigrationService
+    ProductService,
+    HyzershopMigrationService
   ],
 })
 export class AppModule {}

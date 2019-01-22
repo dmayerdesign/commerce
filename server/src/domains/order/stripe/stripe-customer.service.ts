@@ -70,7 +70,9 @@ console.log(customer)
                 throw error
             }
         } else {
-            throw new Error('The order did not contain sufficient data to create a customer in Stripe.')
+            throw new Error(
+                'The order did not contain sufficient data to create a customer in Stripe.'
+            )
         }
     }
 
@@ -112,9 +114,11 @@ console.log(customer)
      * Update a Stripe customer
      *
      * @param {string} stripeCustomerId - The Stripe customer's `id`
-     * @param {object} updateObj - An object containing the values to be updated (@see https://stripe.com/docs/api/node#update_customer)
+     * @param {object} updateObj - An object containing the values to be updated
+     * (@see https://stripe.com/docs/api/node#update_customer)
      */
-    public async updateCustomer(stripeCustomerId: string, updateObj: object): Promise<Stripe.customers.ICustomer> {
+    public async updateCustomer(stripeCustomerId: string, updateObj: object):
+        Promise<Stripe.customers.ICustomer> {
         try {
             const customer = await stripe.customers.update(stripeCustomerId, updateObj)
             return <Stripe.customers.ICustomer>customer
@@ -131,7 +135,8 @@ console.log(customer)
      * @param {string} stripeCardId - The `id` of the Stripe source, usually a card (*not* a single-use token)
      * @example `card_19rzdy2eZvKYlo2CzJQXXiuV`
      */
-    public async updateCustomerDefaultSource(stripeCustomerId: string, stripeCardId: string): Promise<Stripe.customers.ICustomer> {
+    public async updateCustomerDefaultSource(stripeCustomerId: string, stripeCardId: string):
+        Promise<Stripe.customers.ICustomer> {
         try {
             const customer = await stripe.customers.update(stripeCustomerId, { default_source: stripeCardId })
             return <Stripe.customers.ICustomer>customer

@@ -49,6 +49,7 @@ generate() {
 
 prebuild() {
     local env=$2
+    local flag=$3
     [[ -z "$env" ]] && env=development
     export ENVIRONMENT=$env
 
@@ -56,7 +57,7 @@ prebuild() {
         generate app-config
         generate angular-data-services
         
-        if [ "$env" = "production" ]; then
+        if [ "$env" = "production" ] && [ ! "$flag" = "skip-tests" ]; then
             test ui
         fi
     fi
@@ -65,7 +66,7 @@ prebuild() {
         generate nest-domain-modules
         generate nest-domain-repos
         
-        if [ "$env" = "production" ]; then
+        if [ "$env" = "production" ] && [ ! "$flag" = "skip-tests" ]; then
             test server
         fi
     fi

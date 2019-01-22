@@ -8,7 +8,8 @@ import { HyzershopMigrationService } from '../hyzershop-migration/hyzershop-migr
 export class AdminController {
 
   constructor(
-    @Inject(HyzershopMigrationService) private _hyzerShopMigrationService: HyzershopMigrationService
+    @Inject(HyzershopMigrationService)
+    private _hyzerShopMigrationService: HyzershopMigrationService
   ) { }
 
   @Post('migrate')

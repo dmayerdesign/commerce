@@ -9,6 +9,7 @@ async function main(): Promise<void> {
   app.setGlobalPrefix('/api')
   app.use(helmet())
 
-  await app.listen(4300)
+  await app.listen(process.env.PORT as string)
+  console.log(`Listening on port ${process.env.PORT}`)
 }
 main()

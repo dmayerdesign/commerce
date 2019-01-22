@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core'
-import { Observable } from 'rxjs'
+import { Observable, Subscription } from 'rxjs'
 import { takeWhile } from 'rxjs/operators'
 
 import { AppConfig } from '@qb/app-config'
@@ -41,9 +41,9 @@ export class QbToastComponent extends HeartbeatComponent implements OnInit, OnDe
     public _config = AppConfig
 
     public subscriptions = {
-        fadeInDelay: undefined,
-        toastTimeout: undefined,
-        showToastDelay: undefined,
+        fadeInDelay: undefined as Subscription | undefined,
+        toastTimeout: undefined as Subscription | undefined,
+        showToastDelay: undefined as Subscription | undefined,
     }
 
     public ngOnInit(): void {

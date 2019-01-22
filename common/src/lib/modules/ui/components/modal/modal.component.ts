@@ -1,10 +1,13 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit, Output, Renderer2, ViewChild } from '@angular/core'
-import { FormBuilder, FormGroup } from '@angular/forms'
+import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { FormGroup } from '@angular/forms'
 import { AppConfig } from '@qb/app-config'
 import { Copy } from '@qb/common/constants/copy'
 import { ModalType } from '@qb/common/constants/enums/modal-type'
+import { HeartbeatComponent } from '@qb/common/heartbeat/heartbeat.component'
+import { Heartbeat } from '@qb/common/heartbeat/heartbeat.decorator'
 import { ModalData } from '@qb/common/models/ui/modal-data'
-import { Observable, Subscription } from 'rxjs'
+import { Observable } from 'rxjs'
+import { takeWhile } from 'rxjs/operators'
 import { WindowRefService } from '../../services/window-ref.service'
 import { platform } from '../../utils/platform'
 import { timeout } from '../../utils/timeout'
@@ -73,13 +76,14 @@ import { timeout } from '../../utils/timeout'
     `,
     styleUrls: [ './modal.component.scss' ]
 })
-export class QbModalComponent implements OnInit, OnDestroy {
+@Heartbeat()
+export class QbModalComponent extends HeartbeatComponent implements OnInit, OnDestroy {
     @Input() public datas: Observable<ModalData>
     @Input() public closeCallback?: () => void
 
     @ViewChild('modal', { read: ElementRef }) public modal: ElementRef
 
-    public data: ModalData = null
+    public data?: ModalData = undefined
     public defaultCancelText = Copy.Actions.cancel
     public isShowing = false
     public isFadedIn = false
@@ -90,26 +94,21 @@ export class QbModalComponent implements OnInit, OnDestroy {
     private isTransitioning = false
     private modalInner: HTMLElement
 
-    private dataSub: Subscription
-    private initFadeInTimerSub: Subscription
-    private endFadeInTimerSub: Subscription
-    private endFadeOutTimerSub: Subscription
-
     constructor(
-        private formBuilder: FormBuilder,
-        private renderer: Renderer2,
         private windowRef: WindowRefService,
-    ) {}
+    ) { super() }
 
     public ngOnInit(): void {
-        this.dataSub = this.datas.subscribe((data) => {
-            this.show(data)
-        })
+        this.datas
+            .pipe(takeWhile(() => this.isAlive))
+            .subscribe((data) => {
+                this.next(data)
+            })
     }
 
     public ngOnDestroy(): void { }
 
-    private show(data: ModalData): void {
+    private next(data?: ModalData): void {
         if (this.isTransitioning) return
         this.isTransitioning = true
         this.data = data
@@ -117,27 +116,33 @@ export class QbModalComponent implements OnInit, OnDestroy {
         if (this.data) {
             this.isShowing = true
             this.scrollYWhenOpened = this.windowRef.scrollPositionY
-            this.initFadeInTimerSub = timeout(10).subscribe(() => {
-                if (platform.isBrowser()) {
-                    this.updateYPos(window.scrollY)
-                }
-                this.isFadedIn = true;
-                // DOM access.
-                (this.modal.nativeElement as HTMLElement).focus()
-            })
-            this.endFadeInTimerSub = timeout(400).subscribe(() => {
-                this.isTransitioning = false
-            })
+            timeout(10)
+                .pipe(takeWhile(() => this.isAlive))
+                .subscribe(() => {
+                    if (platform.isBrowser()) {
+                        this.updateYPos(window.scrollY)
+                    }
+                    this.isFadedIn = true;
+                    // DOM access.
+                    (this.modal.nativeElement as HTMLElement).focus()
+                })
+            timeout(400)
+                .pipe(takeWhile(() => this.isAlive))
+                .subscribe(() => {
+                    this.isTransitioning = false
+                })
         }
         else {
             this.isFadedIn = false
-            this.endFadeOutTimerSub = timeout(400).subscribe(() => {
-                this.isShowing = false
-                this.isTransitioning = false
-                if (this.closeCallback) {
-                    this.closeCallback()
-                }
-            })
+            timeout(400)
+                .pipe(takeWhile(() => this.isAlive))
+                .subscribe(() => {
+                    this.isShowing = false
+                    this.isTransitioning = false
+                    if (this.closeCallback) {
+                        this.closeCallback()
+                    }
+                })
         }
     }
 
@@ -148,14 +153,17 @@ export class QbModalComponent implements OnInit, OnDestroy {
     }
 
     public cancel(event: Event): void {
-        this.show(null)
-        if (this.data.footer && this.data.footer.onCancel) {
+        this.next()
+        if (this.data && this.data.footer && this.data.footer.onCancel) {
             this.data.footer.onCancel(event)
         }
     }
 
     public getModalContainerClass(): string {
-        return 'modal-' + this.data.type + '-container'
+        if (this.data) {
+            return 'modal-' + this.data.type + '-container'
+        }
+        return ''
     }
 
     public getModalShowingClass(): string {
@@ -168,10 +176,14 @@ export class QbModalComponent implements OnInit, OnDestroy {
     // Identifiers.
 
     public isBanner(): boolean {
-        return this.data.type === this.modalType.Banner && !!this.data.banner
+        return !!this.data &&
+            this.data.type === this.modalType.Banner &&
+            !!this.data.banner
     }
 
     public hasCustomTemplate(): boolean {
-        return !!this.data.template && !!this.data.context
+        return !!this.data &&
+            !!this.data.template &&
+            !!this.data.context
     }
 }

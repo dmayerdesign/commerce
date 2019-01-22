@@ -4,7 +4,7 @@ import { fromEvent, of, BehaviorSubject, Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 
 export class WindowRefService {
-    private _window = typeof window !== 'undefined' ? window : null
+    private _window ?= typeof window !== 'undefined' ? window : undefined
     public scrollPositionY: number
     public scrollPositionYs: Observable<number>
     private scrollPositionYPump: BehaviorSubject<number>
@@ -41,32 +41,45 @@ export class WindowRefService {
         this.heights.subscribe((x) => this.height = x)
         this.htmlFontSizePxs.subscribe((x) => this.htmlFontSizePx = x)
 
-        if (this._window) {
+        if (typeof this._window !== 'undefined') {
             fromEvent(this._window, 'scroll')
-                .pipe(map(() => this._window.scrollY))
+                .pipe(map(() => (this._window as Window).scrollY))
                 .subscribe((x) => this.scrollPositionYPump.next(x))
 
             fromEvent(this._window, 'resize')
-                .pipe(map(() => this._window.innerWidth))
+                .pipe(map(() => (this._window as Window).innerWidth))
                 .subscribe((x) => {
                     this.widthPump.next(x)
                     this.htmlFontSizePxPump.next(this.getHtmlFontSizeInPx())
                 })
 
             fromEvent(this._window, 'resize')
-                .pipe(map(() => this._window.innerHeight))
+                .pipe(map(() => (this._window as Window).innerHeight))
                 .subscribe((x) => this.heightPump.next(x))
         }
     }
 
     private getHtmlFontSizeInPx(): number {
-        if (this._window && this._window.document.getElementsByTagName('html')[0]) {
-            return parseFloat(this._window.getComputedStyle(this._window.document.getElementsByTagName('html')[0], null).getPropertyValue('font-size'))
+        if (
+            this._window &&
+            this._window.document.getElementsByTagName('html')[0]
+        ) {
+            return parseFloat(
+                this._window
+                    .getComputedStyle(
+                        this._window.document.getElementsByTagName('html')[0],
+                        null
+                    )
+                    .getPropertyValue('font-size')
+            )
         }
         else return 10
     }
 
-    private mediaBreakpoint(breakpoint: BootstrapBreakpointKey, dir: 'above'|'below'): boolean {
+    private mediaBreakpoint(
+        breakpoint: BootstrapBreakpointKey,
+        dir: 'above'|'below'
+    ): boolean {
         return dir === 'above'
             ? this.width >= BootstrapBreakpoint[breakpoint + 'Max']
             : this.width < BootstrapBreakpoint[breakpoint + 'Min']
@@ -80,7 +93,10 @@ export class WindowRefService {
         return this.mediaBreakpoint(breakpoint, 'above')
     }
 
-    public mediaBreakpoints(breakpoint: BootstrapBreakpointKey, dir: 'above'|'below'): Observable<boolean> {
+    public mediaBreakpoints(
+        breakpoint: BootstrapBreakpointKey,
+        dir: 'above'|'below'
+    ): Observable<boolean> {
         return this.widths.pipe(
             map((width) => dir === 'above'
                 ? width >= BootstrapBreakpoint[breakpoint + 'Max']
@@ -89,11 +105,15 @@ export class WindowRefService {
         )
     }
 
-    public mediaBreakpointBelows(breakpoint: BootstrapBreakpointKey): Observable<boolean> {
+    public mediaBreakpointBelows(
+        breakpoint: BootstrapBreakpointKey
+    ): Observable<boolean> {
         return this.mediaBreakpoints(breakpoint, 'below')
     }
 
-    public mediaBreakpointAboves(breakpoint: BootstrapBreakpointKey): Observable<boolean> {
+    public mediaBreakpointAboves(
+        breakpoint: BootstrapBreakpointKey
+    ): Observable<boolean> {
         return this.mediaBreakpoints(breakpoint, 'above')
     }
 }

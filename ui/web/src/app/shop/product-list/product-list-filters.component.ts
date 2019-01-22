@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core'
 import { Product } from '@qb/common/api/interfaces/product'
 import { ProductListFilterUi } from '@qb/common/api/interfaces/product-list-filter-ui'
-import { ListRequest } from '@qb/common/api/requests/list.request'
+import { ListRequest } from '@qb/common/api/requests/list.request.interface'
 
 @Component({
   selector: 'product-list-filters',

@@ -1,10 +1,11 @@
 import { ObjectID } from 'typeorm'
 import { Crud } from '../../constants/crud'
+import { ListRequest as IListRequest } from './list.request.interface'
 
-export class ListRequest<EntityType> {
+export class ListRequest<EntityType> implements IListRequest<EntityType> {
   public skip ?= 0
   public limit ?= Crud.Pagination.productsPerPage
-  public sortBy ?= Crud.Sorting.defaultSortField
+  public sortBy ?= Crud.Sorting.defaultSortField as keyof EntityType
   public sortDirection ?= Crud.Sorting.defaultSortDirection
   public query?: object = {}
   public ids?: (string | ObjectID)[]

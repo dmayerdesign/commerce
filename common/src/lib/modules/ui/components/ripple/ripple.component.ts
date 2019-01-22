@@ -13,7 +13,7 @@ import { platform } from '../../utils/platform'
     styleUrls: [ './ripple.component.scss' ],
 })
 export class QbRippleComponent {
-    public ripples = []
+    public ripples = [] as { style: object }[]
 
     constructor() {
         if (platform.isBrowser()) {
