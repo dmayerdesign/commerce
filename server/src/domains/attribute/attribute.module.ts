@@ -1,8 +1,7 @@
 import { forwardRef, Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { User } from '@qb/common/api/entities/user'
+import { Attribute } from '@qb/common/api/entities/attribute'
 import { AttributeValueModule } from '../attribute-value/attribute-value.module'
-import { AttributeModule } from '../attribute/attribute.module'
 import { CartModule } from '../cart/cart.module'
 import { DiscountModule } from '../discount/discount.module'
 import { DomainEventModule } from '../domain-event/domain-event.module'
@@ -11,14 +10,13 @@ import { OrganizationModule } from '../organization/organization.module'
 import { ProductModule } from '../product/product.module'
 import { TaxonomyTermModule } from '../taxonomy-term/taxonomy-term.module'
 import { TaxonomyModule } from '../taxonomy/taxonomy.module'
+import { UserModule } from '../user/user.module'
 import { WishlistModule } from '../wishlist/wishlist.module'
-import { UserController } from './user.controller'
-import { UserRepository } from './user.repository'
-import { UserService } from './user.service'
+import { AttributeController } from './attribute.controller'
+import { AttributeRepository } from './attribute.repository'
 
 @Module({
   imports: [
-    forwardRef(() => AttributeModule),
     forwardRef(() => AttributeValueModule),
     forwardRef(() => CartModule),
     forwardRef(() => DiscountModule),
@@ -28,11 +26,12 @@ import { UserService } from './user.service'
     forwardRef(() => ProductModule),
     forwardRef(() => TaxonomyModule),
     forwardRef(() => TaxonomyTermModule),
+    forwardRef(() => UserModule),
     forwardRef(() => WishlistModule),
-    TypeOrmModule.forFeature([ User ]),
+    TypeOrmModule.forFeature([ Attribute ]),
   ],
-  providers: [ UserRepository, UserService ],
-  controllers: [ UserController ],
-  exports: [ UserRepository, UserService ],
+  providers: [ AttributeRepository ],
+  controllers: [ AttributeController ],
+  exports: [ AttributeRepository ],
 })
-export class UserModule { }
+export class AttributeModule { }

@@ -1,16 +1,16 @@
 import { Body, Controller, Inject, Post } from '@nestjs/common'
 import { Order } from '@qb/common/api/entities/order'
 import { orders } from '@qb/common/constants/api-endpoints'
-import { OrderController as OrderControllerGenerated } from './order.controller.generated'
-import { OrderRepository } from './order.repository.generated'
+import { QbController } from '../../shared/controller/controller'
+import { OrderRepository } from './order.repository'
 import { OrderService } from './order.service'
 
 @Controller(orders)
-export class OrderController extends OrderControllerGenerated {
+export class OrderController extends QbController<Order> {
   constructor(
     @Inject(OrderRepository) protected readonly _repository: OrderRepository,
     @Inject(OrderService) protected readonly _orderService: OrderService,
-  ) { super(_repository) }
+  ) { super() }
 
   @Post()
   public createOne(

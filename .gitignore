@@ -4,7 +4,7 @@
 /dist
 /tmp
 /out-tsc
-*.generated.ts
+*.generated.*
 
 # environment variables
 .env

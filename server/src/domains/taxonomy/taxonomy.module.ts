@@ -1,6 +1,6 @@
 import { forwardRef, Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { User } from '@qb/common/api/entities/user'
+import { Taxonomy } from '@qb/common/api/entities/taxonomy'
 import { AttributeValueModule } from '../attribute-value/attribute-value.module'
 import { AttributeModule } from '../attribute/attribute.module'
 import { CartModule } from '../cart/cart.module'
@@ -10,11 +10,10 @@ import { OrderModule } from '../order/order.module'
 import { OrganizationModule } from '../organization/organization.module'
 import { ProductModule } from '../product/product.module'
 import { TaxonomyTermModule } from '../taxonomy-term/taxonomy-term.module'
-import { TaxonomyModule } from '../taxonomy/taxonomy.module'
+import { UserModule } from '../user/user.module'
 import { WishlistModule } from '../wishlist/wishlist.module'
-import { UserController } from './user.controller'
-import { UserRepository } from './user.repository'
-import { UserService } from './user.service'
+import { TaxonomyController } from './taxonomy.controller'
+import { TaxonomyRepository } from './taxonomy.repository'
 
 @Module({
   imports: [
@@ -26,13 +25,13 @@ import { UserService } from './user.service'
     forwardRef(() => OrderModule),
     forwardRef(() => OrganizationModule),
     forwardRef(() => ProductModule),
-    forwardRef(() => TaxonomyModule),
     forwardRef(() => TaxonomyTermModule),
+    forwardRef(() => UserModule),
     forwardRef(() => WishlistModule),
-    TypeOrmModule.forFeature([ User ]),
+    TypeOrmModule.forFeature([ Taxonomy ]),
   ],
-  providers: [ UserRepository, UserService ],
-  controllers: [ UserController ],
-  exports: [ UserRepository, UserService ],
+  providers: [ TaxonomyRepository ],
+  controllers: [ TaxonomyController ],
+  exports: [ TaxonomyRepository ],
 })
-export class UserModule { }
+export class TaxonomyModule { }

@@ -3,7 +3,7 @@ import { applyDomino, AngularUniversalModule } from '@nestjs/ng-universal'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { AppConfig } from '@qb/app-config'
 import { join, resolve } from 'path'
-import { domainModules } from './domain-modules.generated'
+import { domainModules } from './domain-modules'
 import { AdminController } from './domains/admin/admin.controller'
 import { HyzershopMigrationService } from './domains/hyzershop-migration/hyzershop-migration.service'
 import { InstagramRepository } from './domains/instagram/instagram.repository'
@@ -39,4 +39,4 @@ applyDomino(global, join(BROWSER_DIR, 'index.html'))
     HyzershopMigrationService
   ],
 })
-export class AppModule {}
+export class AppModule { }

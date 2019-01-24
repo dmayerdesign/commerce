@@ -4,7 +4,7 @@ import { User } from '@qb/common/api/entities/user'
 import { UpdateRequest } from '@qb/common/api/requests/update.request'
 import { ApiErrorResponse } from '@qb/common/api/responses/api-error.response'
 import * as Stripe from 'stripe'
-import { UserRepository } from '../../user/user.repository.generated'
+import { UserRepository } from '../../user/user.repository'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string)
 

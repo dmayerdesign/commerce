@@ -15,11 +15,11 @@ import * as productsJSON from '@qb/common/work-files/migration/hyzershop-product
 import { pluralize, singularize, titleize } from 'inflection'
 import { camelCase, cloneDeep, kebabCase } from 'lodash'
 import { ObjectID } from 'typeorm'
-import { AttributeValueRepository } from '../attribute-value/attribute-value.repository.generated'
-import { AttributeRepository } from '../attribute/attribute.repository.generated'
-import { ProductRepository } from '../product/product.repository.generated'
-import { TaxonomyTermRepository } from '../taxonomy-term/taxonomy-term.repository.generated'
-import { TaxonomyRepository } from '../taxonomy/taxonomy.repository.generated'
+import { AttributeValueRepository } from '../attribute-value/attribute-value.repository'
+import { AttributeRepository } from '../attribute/attribute.repository'
+import { ProductRepository } from '../product/product.repository'
+import { TaxonomyTermRepository } from '../taxonomy-term/taxonomy-term.repository'
+import { TaxonomyRepository } from '../taxonomy/taxonomy.repository'
 
 @Injectable()
 export class HyzershopMigrationService {

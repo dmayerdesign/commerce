@@ -15,8 +15,8 @@ import { Request, Response } from 'express'
 import * as jwt from 'jsonwebtoken'
 import { getIdAsEntityType } from 'server/src/shared/data-access/data-access.helpers'
 import { ObjectID } from 'typeorm'
-import { WishlistRepository } from '../wishlist/wishlist.repository.generated'
-import { UserRepository } from './user.repository.generated'
+import { WishlistRepository } from '../wishlist/wishlist.repository'
+import { UserRepository } from './user.repository'
 
 @Injectable()
 export class UserService {

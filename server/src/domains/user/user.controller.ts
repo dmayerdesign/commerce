@@ -1,19 +1,20 @@
-import { Controller, Delete, Get, Inject, Injectable, Param, Post, Put, Request,
-  Response } from '@nestjs/common'
+import { Controller, Delete, Get, Inject, Param, Post, Put,
+  Request, Response} from '@nestjs/common'
+import { User } from '@qb/common/api/entities/user'
 import { users } from '@qb/common/constants/api-endpoints'
 import { Request as IRequest, Response as IResponse } from 'express'
-import { UserController as UserControllerGenerated } from './user.controller.generated'
-import { UserRepository } from './user.repository.generated'
+import { QbController } from '../../shared/controller/controller'
+import { UserRepository } from './user.repository'
 import { UserService } from './user.service'
 
-@Injectable()
 @Controller(users)
-export class UserController extends UserControllerGenerated {
-
+export class UserController extends QbController<User> {
     constructor(
-        @Inject(UserRepository) protected readonly _repository: UserRepository,
+        @Inject(UserRepository) protected _repository: UserRepository,
         @Inject(UserService) private _userService: UserService,
-    ) { super(_repository) }
+    ) {
+        super()
+    }
 
     @Get()
     // @UseGuards(AuthGuard)

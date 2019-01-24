@@ -92,10 +92,10 @@ export abstract class QbReadOnlyController<EntityType extends any> {
 }
 
 export abstract class QbThirdPartyController<EntityType extends any>
-  extends QbBaseController<EntityType> { }
+    extends QbBaseController<EntityType> { }
 
 export abstract class QbController<EntityType extends Entity>
-  extends QbBaseController<EntityType> {
+    extends QbBaseController<EntityType> {
   protected abstract _repository: QbRepository<EntityType>
 }
 

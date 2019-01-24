@@ -5,7 +5,7 @@ import { ApiErrorResponse } from '@qb/common/api/responses/api-error.response'
 import { Copy } from '@qb/common/constants/copy'
 import { HttpStatus } from '@qb/common/constants/http-status'
 import { hyzershop } from '../../../../work-files/data/organization_hyzershop'
-import { OrganizationRepository } from './organization.repository.generated'
+import { OrganizationRepository } from './organization.repository'
 
 @Injectable()
 export class OrganizationService {

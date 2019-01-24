@@ -9,9 +9,9 @@ import { getFullName } from '@qb/common/helpers/user.helpers'
 import { EmailService } from '../email/email.service'
 import { StripeOrderService } from '../order/stripe/stripe-order.service'
 import { OrganizationService } from '../organization/organization.service'
-import { ProductRepository } from '../product/product.repository.generated'
+import { ProductRepository } from '../product/product.repository'
 import { ProductService } from '../product/product.service'
-import { OrderRepository } from './order.repository.generated'
+import { OrderRepository } from './order.repository'
 import { OrderService as IOrderService } from './order.service.interface'
 
 /**

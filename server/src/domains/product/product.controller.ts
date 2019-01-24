@@ -2,18 +2,16 @@ import { Controller, Get, Inject, Param } from '@nestjs/common'
 import { Product } from '@qb/common/api/entities/product'
 import { Price } from '@qb/common/api/interfaces/price'
 import { products } from '@qb/common/constants/api-endpoints'
-import { ProductController as ProductControllerGenerated } from './product.controller.generated'
-import { ProductRepository } from './product.repository.generated'
+import { QbController } from '../../shared/controller/controller'
+import { ProductRepository } from './product.repository'
 import { ProductService } from './product.service'
 
 @Controller(products)
-export class ProductController extends ProductControllerGenerated {
+export class ProductController extends QbController<Product> {
   constructor(
     @Inject(ProductRepository) protected readonly _repository: ProductRepository,
     @Inject(ProductService) protected readonly _productService: ProductService,
-  ) {
-    super(_repository)
-  }
+  ) { super() }
 
   // TODO: Figure out streaming with TypeORM.
   // @Get('stream')

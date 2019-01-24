@@ -7,7 +7,7 @@ import * as fs from 'fs-extra'
 import * as multer from 'multer'
 import * as path from 'path'
 import * as sharp from 'sharp'
-import { ProductRepository } from '../product/product.repository.generated'
+import { ProductRepository } from '../product/product.repository'
 
 /**
  * AWS S3 uploads

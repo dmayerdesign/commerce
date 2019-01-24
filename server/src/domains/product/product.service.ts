@@ -13,9 +13,9 @@ import { getPrice } from '@qb/common/helpers/product.helpers'
 import { ObjectID } from 'typeorm'
 import { OrganizationService } from '../organization/organization.service'
 import { attributeValueFilter, propertyFilter, simpleAttributeValueFilter, taxonomyTermFilter } from '../product/product.helpers'
-import { TaxonomyTermRepository } from '../taxonomy-term/taxonomy-term.repository.generated'
+import { TaxonomyTermRepository } from '../taxonomy-term/taxonomy-term.repository'
 import { ProductListRequest } from './product.list-request'
-import { ProductRepository } from './product.repository.generated'
+import { ProductRepository } from './product.repository'
 
 /**
  * Methods for querying the `products` collection
