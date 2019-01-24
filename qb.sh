@@ -42,8 +42,8 @@ generate() {
     else
         generate app-config
         generate angular-data-services
-        generate nest-domain-modules
-        generate nest-domain-repos
+        # generate nest-domain-modules
+        # generate nest-domain-repos
     fi
 }
 
@@ -63,8 +63,8 @@ prebuild() {
     fi
     if [ "$1" = "server" ]; then
         generate app-config
-        generate nest-domain-modules
-        generate nest-domain-repos
+        # generate nest-domain-modules
+        # generate nest-domain-repos
         
         if [ "$env" = "production" ] && [ ! "$flag" = "skip-tests" ]; then
             test server

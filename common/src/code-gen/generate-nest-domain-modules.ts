@@ -77,7 +77,6 @@ import { ${entityName}Controller } from './${entityNameKebab}.controller.generat
       }
       entityImportsForModule += `
 import { ${entityName}Repository } from './${entityNameKebab}.repository.generated'
-
 ${(entityNames
   .filter((_entityName) => _entityName !== entityName)
   .map((_entityName) =>

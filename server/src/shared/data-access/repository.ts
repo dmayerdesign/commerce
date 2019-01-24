@@ -7,7 +7,10 @@ import { isArrayLike, toArray } from '@qb/common/helpers/mongoose.helpers'
 import { DeepPartial, DeleteWriteOpResultObject, FindManyOptions, MongoRepository, ObjectID } from 'typeorm'
 
 export abstract class QbRepository<EntityType extends Entity> implements IQbRepository<EntityType> {
-  protected abstract readonly _repository: MongoRepository<EntityType>
+
+  constructor(
+    protected readonly _repository: MongoRepository<EntityType>
+  ) { }
 
   public get(id: string | ObjectID): Promise<EntityType | undefined> {
     return this._repository.findOne(id)
