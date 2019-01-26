@@ -1,5 +1,4 @@
-import { Controller, Delete, Get, Inject, Param, Post, Put,
-  Request, Response} from '@nestjs/common'
+import { Controller, Get, Inject, Param, Post, Request, Response } from '@nestjs/common'
 import { User } from '@qb/common/api/entities/user'
 import { users } from '@qb/common/constants/api-endpoints'
 import { Request as IRequest, Response as IResponse } from 'express'
@@ -19,57 +18,42 @@ export class UserController extends QbController<User> {
     @Get()
     // @UseGuards(AuthGuard)
     public getUser(
-        @Request() req: IRequest,
-        @Response() res: IResponse,
-    ): void {
-        this._userService.refreshSession(req, res)
+        @Request() request: IRequest,
+        @Response() response: IResponse,
+    ): User {
+        return this._userService.refreshSession(
+            request,
+            response,
+        )
     }
 
     @Post('login')
     public login(
-        @Request() req: IRequest,
-        @Response() res: IResponse,
-    ): void {
-        this._userService.login(req.body, res)
-            .catch(({message, status}) => res.status(status).json({message, status}))
+        @Request() request: IRequest,
+        @Response() response: IResponse,
+    ): Promise<User> {
+        return this._userService.login(request.body, response)
     }
 
     @Post('verify-email/:token')
     public verifyEmail(
         @Param('token') token: string,
-    ): void {
-        this._userService.verifyEmail(token)
+    ): Promise<void> {
+        return this._userService.verifyEmail(token)
     }
 
     @Post('logout')
     public logout(
-        @Response() res: IResponse,
-    ): void {
-        this._userService.logout(res)
+        @Response() response: IResponse,
+    ): Promise<void> {
+        return this._userService.logout(response)
     }
 
     @Post('register')
     public createUser(
         @Request() req: IRequest,
         @Response() res: IResponse,
-    ): void {
-        this._userService.register(req.body, res)
-            .catch(({message, status}) => res.status(status).json({message, status}))
-    }
-
-    @Put('update')
-    // @UseGuards(AuthGuard)
-    public updateUser(
-        @Request() { user, body }: any,
-    ): void {
-        this._userService.updateUser(user.id, body)
-    }
-
-    @Delete(':id')
-    // @UseGuards(AdminGuard)
-    public deleteUser(
-        @Request() req: IRequest,
-    ): void {
-        this._userService.deleteUser(req.params.id)
+    ): Promise<User> {
+        return this._userService.register(req.body, res)
     }
 }

@@ -1,3 +1,15 @@
 {
-  "editor.tabSize": 2
+  // Place your settings in this file to overwrite default and user settings.
+  "editor.wordWrap": "on",
+  "window.zoomLevel": 1,
+  // "tslint.autoFixOnSave": true,
+  "search.exclude": {
+      "**/node_modules": true
+  },
+  "tslint.exclude": [
+      "**/node_modules"
+  ],
+  "typescript.updateImportsOnFileMove.enabled": "never",
+  "editor.tabSize": 2,
+  "editor.rulers": [90]
 }
