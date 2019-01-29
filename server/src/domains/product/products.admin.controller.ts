@@ -11,8 +11,8 @@
 //     response,
 // } from 'inversify-express-utils'
 
-// import { Product } from '@qb/common/api/entities/product'
-// import { GetProductsFromIdsRequest, GetProductsRequest } from '@qb/common/api/requests/get-products.request'
+// import { Product } from '@qb/common/domains/product/product'
+// import { GetProductsFromIdsRequest, GetProductsRequest } from '@qb/common/domains/data-access/requests/get-products.request'
 // import { ApiEndpoints, Types } from '@qb/common/constants'
 // import { HyzershopMigrationService } from '../services/hyzershop-migration.service'
 // import { ProductService } from '../services/product.service'

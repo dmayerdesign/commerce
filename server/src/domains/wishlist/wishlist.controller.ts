@@ -1,5 +1,5 @@
 import { Controller, Inject } from '@nestjs/common'
-import { Wishlist } from '@qb/common/api/entities/wishlist'
+import { Wishlist } from '@qb/common/domains/wishlist/wishlist'
 import { wishlists } from '@qb/common/constants/api-endpoints'
 import { QbController } from '../../shared/controller/controller'
 import { WishlistRepository } from './wishlist.repository'

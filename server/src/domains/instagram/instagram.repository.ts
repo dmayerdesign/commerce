@@ -1,8 +1,8 @@
 
 import { Injectable } from '@nestjs/common'
 import { AppConfig } from '@qb/app-config'
-import { QbReadOnlyRepository } from '@qb/common/api/interfaces/repository'
-import { ApiErrorResponse } from '@qb/common/api/responses/api-error.response'
+import { ApiErrorResponse } from '@qb/common/domains/data-access/responses/api-error.response'
+import { QbReadOnlyRepository } from '@qb/common/domains/data-access/repository.interface'
 import { InstagramPost } from '@qb/common/models/ui/instagram-post'
 import * as rp from 'request-promise-native'
 

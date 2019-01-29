@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { Wishlist } from '@qb/common/api/entities/wishlist'
+import { Wishlist } from '@qb/common/domains/wishlist/wishlist'
 import { Connection } from 'typeorm'
 import { QbRepository } from '../../shared/data-access/repository'
 

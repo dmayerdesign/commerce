@@ -1,5 +1,5 @@
 import { Controller, Inject } from '@nestjs/common'
-import { Attribute } from '@qb/common/api/entities/attribute'
+import { Attribute } from '@qb/common/domains/attribute/attribute'
 import { attributes } from '@qb/common/constants/api-endpoints'
 import { QbController } from '../../shared/controller/controller'
 import { AttributeRepository } from './attribute.repository'

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { Order } from '@qb/common/api/entities/order'
+import { Order } from '@qb/common/domains/order/order'
 import { Connection } from 'typeorm'
 import { QbRepository } from '../../shared/data-access/repository'
 

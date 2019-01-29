@@ -1,4 +1,4 @@
-import { Entity } from '@qb/common/api/interfaces/entity'
+import { Entity } from '@qb/common/domains/data-access/entity.interface'
 import { ObjectID } from 'typeorm'
 
 export function getIdAsEntityType<EntityType extends Entity>(

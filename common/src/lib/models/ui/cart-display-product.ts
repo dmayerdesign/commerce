@@ -1,5 +1,5 @@
-import { Product } from '../../api/entities/product'
-import { Price } from '../../api/interfaces/price'
+import { Price } from '@qb/common/domains/price/price.interface'
+import { Product } from '@qb/common/domains/product/product.interface'
 
 export interface CartDisplayProduct {
     quantity: number

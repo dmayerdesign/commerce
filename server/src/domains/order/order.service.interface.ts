@@ -1,4 +1,4 @@
-import { Order } from '@qb/common/api/interfaces/order'
+import { Order } from '@qb/common/domains/order/order.interface'
 
 export interface OrderService {
     place(newOrder: Partial<Order>): Promise<Order>

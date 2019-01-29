@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { Discount } from '@qb/common/api/entities/discount'
+import { Discount } from '@qb/common/domains/discount/discount'
 import { Connection } from 'typeorm'
 import { QbRepository } from '../../shared/data-access/repository'
 

@@ -1,6 +1,6 @@
 import { CanActivate, ExecutionContext, HttpException, Injectable } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
-import { User } from '@qb/common/api/entities/user'
+import { User } from '@qb/common/domains/user/user'
 import { Cookies } from '@qb/common/constants/cookies'
 import { Copy } from '@qb/common/constants/copy'
 import { UserRole } from '@qb/common/constants/enums/user-role'

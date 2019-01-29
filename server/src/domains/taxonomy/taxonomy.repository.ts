@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { Taxonomy } from '@qb/common/api/entities/taxonomy'
+import { Taxonomy } from '@qb/common/domains/taxonomy/taxonomy'
 import { Connection } from 'typeorm'
 import { QbRepository } from '../../shared/data-access/repository'
 

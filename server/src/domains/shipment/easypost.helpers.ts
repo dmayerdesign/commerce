@@ -1,4 +1,4 @@
-import { Address } from '@qb/common/api/interfaces/address'
+import { Address } from '@qb/common/domains/address/address.interface'
 import { Easypost } from '@qb/common/types/node-easypost'
 
 export function prepareAddressForEasypost(address: Address): Easypost.Address {

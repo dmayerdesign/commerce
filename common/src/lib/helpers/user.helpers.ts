@@ -1,4 +1,4 @@
-import { User } from '../api/entities/user'
+import { User } from '@qb/common/domains/user/user'
 
 export function getFullName(user: { firstName: string, lastName: string }): string {
     if (user.firstName && !user.lastName) {

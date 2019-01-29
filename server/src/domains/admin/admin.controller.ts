@@ -1,5 +1,5 @@
 import { Controller, Inject, Post } from '@nestjs/common'
-import { Product } from '@qb/common/api/interfaces/product'
+import { Product } from '@qb/common/domains/product/product.interface'
 import { admin } from '@qb/common/constants/api-endpoints'
 import { UserRole } from '@qb/common/constants/enums/user-role'
 import { HyzershopMigrationService } from '../hyzershop-migration/hyzershop-migration.service'

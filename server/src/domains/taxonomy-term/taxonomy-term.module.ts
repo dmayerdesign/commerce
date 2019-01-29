@@ -1,6 +1,6 @@
 import { forwardRef, Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { TaxonomyTerm } from '@qb/common/api/entities/taxonomy-term'
+import { TaxonomyTerm } from '@qb/common/domains/taxonomy-term/taxonomy-term'
 import { AttributeValueModule } from '../attribute-value/attribute-value.module'
 import { AttributeModule } from '../attribute/attribute.module'
 import { CartModule } from '../cart/cart.module'

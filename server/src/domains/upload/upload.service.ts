@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { AppConfig } from '@qb/app-config'
-import { Product } from '@qb/common/api/entities/product'
-import { UpdateRequest } from '@qb/common/api/requests/update.request'
+import { Product } from '@qb/common/domains/product/product'
+import { UpdateRequest } from '@qb/common/domains/data-access/requests/update.request'
 import * as AWS from 'aws-sdk'
 import * as fs from 'fs-extra'
 import * as multer from 'multer'
@@ -49,7 +49,7 @@ export class UploadService {
 
     public uploadProductImage(sku) {
         if (sku) sku += '-'
-        else sku = ''
+        else sku = '
 
         return multer({
             storage: multer.diskStorage({

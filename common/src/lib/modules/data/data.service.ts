@@ -1,8 +1,8 @@
 import { HttpClient, HttpParams } from '@angular/common/http'
-import { ListRequest } from '@qb/common/api/requests/list.request'
-import { UpdateManyRequest } from '@qb/common/api/requests/update-many.request'
-import { UpdateRequest } from '@qb/common/api/requests/update.request'
 import { Crud } from '@qb/common/constants/crud'
+import { ListRequest } from '@qb/common/domains/data-access/requests/list.request'
+import { UpdateManyRequest } from '@qb/common/domains/data-access/requests/update-many.request'
+import { UpdateRequest } from '@qb/common/domains/data-access/requests/update.request'
 
 export abstract class DataService<EntityType extends any> {
   public abstract readonly baseEndpoint: string

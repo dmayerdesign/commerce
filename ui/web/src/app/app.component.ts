@@ -2,7 +2,7 @@ import { isPlatformBrowser } from '@angular/common'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Component, Inject, PLATFORM_ID } from '@angular/core'
 import { FormControl } from '@angular/forms'
-import { ListRequest } from '@qb/common/api/requests/list.request.interface'
+import { ListRequest } from '@qb/common/domains/data-access/requests/list.request.interface'
 import { Crud } from '@qb/common/constants/crud'
 import { Observable } from 'rxjs'
 

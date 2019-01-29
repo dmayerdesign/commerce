@@ -1,5 +1,5 @@
-import { ProductListFilter } from '@qb/common/api/requests/models/product-list-filter'
 import { RangeLimit } from '@qb/common/constants/enums/range-limit'
+import { ProductListFilter } from '@qb/common/domains/product/product-list-filter'
 import { queryWithAndOperation } from '@qb/common/helpers/mongoose.helpers'
 import { cloneDeep } from 'lodash'
 import { ObjectID } from 'typeorm'

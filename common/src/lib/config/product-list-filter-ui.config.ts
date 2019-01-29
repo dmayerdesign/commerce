@@ -1,4 +1,4 @@
-import { ProductListFilterType } from '../api/requests/models/product-list-filter'
+import { ProductListFilterType } from '../domains/product/product-list-filter'
 
 export interface ProductListFilterUiConfig {
   [key: string]: {

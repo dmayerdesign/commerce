@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { DomainEvent } from '@qb/common/api/entities/domain-event'
+import { DomainEvent } from '@qb/common/domains/domain-event/domain-event'
 import { Connection } from 'typeorm'
 import { QbRepository } from '../../shared/data-access/repository'
 

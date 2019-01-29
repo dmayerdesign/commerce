@@ -1,8 +1,8 @@
-import { Entity } from '@qb/common/api/interfaces/entity'
-import { InclusivePartial, QbRepository as IQbRepository } from '@qb/common/api/interfaces/repository'
-import { ListRequest } from '@qb/common/api/requests/list.request'
-import { UpdateManyRequest } from '@qb/common/api/requests/update-many.request'
-import { UpdateRequest } from '@qb/common/api/requests/update.request'
+import { ListRequest } from '@qb/common/domains/data-access/requests/list.request'
+import { UpdateManyRequest } from '@qb/common/domains/data-access/requests/update-many.request'
+import { UpdateRequest } from '@qb/common/domains/data-access/requests/update.request'
+import { Entity } from '@qb/common/domains/data-access/entity.interface'
+import { InclusivePartial, QbRepository as IQbRepository } from '@qb/common/domains/data-access/repository.interface'
 import { isArrayLike, toArray } from '@qb/common/helpers/mongoose.helpers'
 import { DeepPartial, DeleteWriteOpResultObject, FindManyOptions, MongoRepository, ObjectID } from 'typeorm'
 

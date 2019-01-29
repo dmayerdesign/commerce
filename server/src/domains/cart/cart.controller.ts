@@ -1,6 +1,6 @@
 import { Controller, Get, Inject, Query } from '@nestjs/common'
-import { Cart } from '@qb/common/api/entities/cart'
-import { Product } from '@qb/common/api/entities/product'
+import { Cart } from '@qb/common/domains/cart/cart'
+import { Product } from '@qb/common/domains/product/product'
 import { carts } from '@qb/common/constants/api-endpoints'
 import { Crud } from '@qb/common/constants/crud'
 import { QbController } from '../../shared/controller/controller'

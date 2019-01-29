@@ -1,10 +1,10 @@
 import { Body, Delete, Get, Param, Post, Put, Query } from '@nestjs/common'
-import { Entity } from '@qb/common/api/interfaces/entity'
-import { QbBaseRepository, QbReadOnlyRepository, QbRepository } from '@qb/common/api/interfaces/repository'
-import { ListRequest } from '@qb/common/api/requests/list.request'
-import { UpdateManyRequest } from '@qb/common/api/requests/update-many.request'
-import { UpdateRequest } from '@qb/common/api/requests/update.request'
+import { ListRequest } from '@qb/common/domains/data-access/requests/list.request'
+import { UpdateManyRequest } from '@qb/common/domains/data-access/requests/update-many.request'
+import { UpdateRequest } from '@qb/common/domains/data-access/requests/update.request'
 import { Crud } from '@qb/common/constants/crud'
+import { Entity } from '@qb/common/domains/data-access/entity.interface'
+import { QbBaseRepository, QbReadOnlyRepository, QbRepository } from '@qb/common/domains/data-access/repository.interface'
 
 export abstract class QbBaseController<EntityType extends any> {
 

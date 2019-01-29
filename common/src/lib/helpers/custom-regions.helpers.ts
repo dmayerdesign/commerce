@@ -1,23 +1,23 @@
-import { CustomRegion } from '../api/interfaces/custom-region'
-import { CustomRegions } from '../api/interfaces/custom-regions'
+import { CustomRegion } from '@qb/common/domains/custom-region/custom-region.interface'
+import { CustomRegions } from '@qb/common/domains/custom-regions/custom-regions.interface'
 
 export function hasDataForCustomRegion(customRegion: CustomRegion, data: any): boolean {
     return !!_getCustomRegionTextValueFromArrayProperty(customRegion, data)
 }
 
-export function getCustomRegionHtml(customRegion: CustomRegion, data: any): string {
+export function getCustomRegionHtml(customRegion: CustomRegion, data: any): string | undefined {
     if (customRegion.isMetaRegion && !!customRegion.childRegions) {
         const childRegionsMap: { [key: string]: string } = {}
         let parsedTemplate = customRegion.template
         customRegion.childRegions.forEach((childRegion) => {
-            childRegionsMap[childRegion.key] = _parseHtmlString(childRegion, data)
+            childRegionsMap[childRegion.key as string] = _parseHtmlString(childRegion, data)
         })
         Object.keys(childRegionsMap).forEach((key) => {
-            const interpolationMatch = customRegion.template
+            const interpolationMatch = (customRegion.template as string)
                 .match(new RegExp('\\{\\{(\\s)*' + key + '(\\s)*\\}\\}', 'g'))
             const childRegionParsedHtml = childRegionsMap[key]
             if (!!interpolationMatch) {
-                interpolationMatch.forEach((match) => parsedTemplate = parsedTemplate.replace(match, childRegionParsedHtml))
+                interpolationMatch.forEach((match) => parsedTemplate = (parsedTemplate as string).replace(match, childRegionParsedHtml))
             }
         })
         return parsedTemplate
@@ -62,11 +62,11 @@ function _getCustomRegionTextValueFromArrayProperty(customRegion: CustomRegion, 
             return value === customRegion.dataArrayPropertyLookupValue
         }
     }
-    const arrayElement = !!data[customRegion.dataArrayProperty]
-        ? data[customRegion.dataArrayProperty].find(lookUpProperty(customRegion.pathToDataArrayPropertyLookupKey))
+    const arrayElement = !!data[customRegion.dataArrayProperty as string]
+        ? data[customRegion.dataArrayProperty as string].find(lookUpProperty(customRegion.pathToDataArrayPropertyLookupKey as string))
         : null
     if (!!arrayElement) {
-        return `${arrayElement[customRegion.pathToDataPropertyValue]}`
+        return `${arrayElement[customRegion.pathToDataPropertyValue as string]}`
     }
     return ''
 }

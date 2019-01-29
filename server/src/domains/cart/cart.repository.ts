@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { Cart } from '@qb/common/api/entities/cart'
+import { Cart } from '@qb/common/domains/cart/cart'
 import { Connection } from 'typeorm'
 import { QbRepository } from '../../shared/data-access/repository'
 

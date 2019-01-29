@@ -1,5 +1,5 @@
 import { Body, Controller, Inject, Post } from '@nestjs/common'
-import { Order } from '@qb/common/api/entities/order'
+import { Order } from '@qb/common/domains/order/order'
 import { orders } from '@qb/common/constants/api-endpoints'
 import { QbController } from '../../shared/controller/controller'
 import { OrderRepository } from './order.repository'

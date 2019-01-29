@@ -1,5 +1,5 @@
 import { Controller, Inject } from '@nestjs/common'
-import { Discount } from '@qb/common/api/entities/discount'
+import { Discount } from '@qb/common/domains/discount/discount'
 import { discounts } from '@qb/common/constants/api-endpoints'
 import { QbController } from '../../shared/controller/controller'
 import { DiscountRepository } from './discount.repository'

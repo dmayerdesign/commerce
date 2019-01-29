@@ -1,6 +1,6 @@
 import { Controller, Get, Inject, Param } from '@nestjs/common'
-import { Product } from '@qb/common/api/entities/product'
-import { Price } from '@qb/common/api/interfaces/price'
+import { Product } from '@qb/common/domains/product/product'
+import { Price } from '@qb/common/domains/price/price.interface'
 import { products } from '@qb/common/constants/api-endpoints'
 import { QbController } from '../../shared/controller/controller'
 import { ProductRepository } from './product.repository'

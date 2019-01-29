@@ -1,6 +1,6 @@
-import { Product } from '@qb/common/api/interfaces/product'
-import { ListRequest } from '@qb/common/api/requests/list.request'
-import { ProductListFilter } from '@qb/common/api/requests/models/product-list-filter'
+import { ListRequest } from '@qb/common/domains/data-access/requests/list.request'
+import { ProductListFilter } from '@qb/common/domains/product/product-list-filter'
+import { Product } from '@qb/common/domains/product/product.interface'
 
 export class ProductListRequest extends ListRequest<Product> {
     public filters?: ProductListFilter[]

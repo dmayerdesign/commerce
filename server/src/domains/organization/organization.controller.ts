@@ -1,7 +1,7 @@
 import { Controller, Get, Inject } from '@nestjs/common'
-import { Organization } from '@qb/common/api/entities/organization'
 import { organizations } from '@qb/common/constants/api-endpoints'
-import { QbController } from '../../shared/controller/controller';
+import { Organization } from '@qb/common/domains/organization/organization'
+import { QbController } from '../../shared/controller/controller'
 import { OrganizationRepository } from './organization.repository'
 import { OrganizationService } from './organization.service'
 

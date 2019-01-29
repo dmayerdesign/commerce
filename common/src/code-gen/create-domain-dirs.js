@@ -9,8 +9,10 @@ const pathsToWalk = [
 const importSubstrings = [
   'api/entities/',
   'api/interfaces/',
+  'builders/',
 ]
 
+// Adapted from https://stackoverflow.com/questions/5827612/node-js-fs-readdir-recursive-directory-search
 const walk = function(dir) {
   return new Promise((resolve) => {
     const list = readdirSync(dir)

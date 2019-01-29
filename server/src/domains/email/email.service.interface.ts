@@ -1,4 +1,4 @@
-import { EmailOptions, EmailServiceOptions, OrderEmailOptions } from '@qb/common/api/interfaces/email-options'
+import { EmailOptions, EmailServiceOptions, OrderEmailOptions } from '@qb/common/domains/email-options/email-options.interface'
 
 export interface EmailService {
   sendEmail(options: EmailOptions): Promise<any>

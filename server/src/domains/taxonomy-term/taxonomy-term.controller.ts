@@ -1,5 +1,5 @@
 import { Controller, Inject } from '@nestjs/common'
-import { TaxonomyTerm } from '@qb/common/api/entities/taxonomy-term'
+import { TaxonomyTerm } from '@qb/common/domains/taxonomy-term/taxonomy-term'
 import { taxonomyTerms } from '@qb/common/constants/api-endpoints'
 import { QbController } from '../../shared/controller/controller'
 import { TaxonomyTermRepository } from './taxonomy-term.repository'

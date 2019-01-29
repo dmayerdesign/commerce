@@ -1,6 +1,6 @@
 import { forwardRef, Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { Attribute } from '@qb/common/api/entities/attribute'
+import { Attribute } from '@qb/common/domains/attribute/attribute'
 import { AttributeValueModule } from '../attribute-value/attribute-value.module'
 import { CartModule } from '../cart/cart.module'
 import { DiscountModule } from '../discount/discount.module'
