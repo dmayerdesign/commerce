@@ -1,5 +1,5 @@
+import { Crud } from '@qb/common/constants/crud'
 import { ObjectID } from 'typeorm'
-import { Crud } from '../../constants/crud'
 import { ListRequest as IListRequest } from './list.request.interface'
 
 export class ListRequest<EntityType> implements IListRequest<EntityType> {

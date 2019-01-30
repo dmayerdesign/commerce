@@ -1,8 +1,8 @@
-import { Price } from '@qb/common/api/interfaces/price'
-import { Product } from '@qb/common/api/interfaces/product'
-import { TaxonomyTerm } from '@qb/common/api/interfaces/taxonomy-term'
 import { Currency } from '@qb/common/constants/enums/currency'
 import { RangeLimit } from '@qb/common/constants/enums/range-limit'
+import { Price } from '@qb/common/domains/price/price.interface'
+import { Product } from '@qb/common/domains/product/product.interface'
+import { TaxonomyTerm } from '@qb/common/domains/taxonomy-term/taxonomy-term.interface'
 
 export function isProduct(obj: any): boolean {
     return (obj.isParent || obj.isVariation || obj.isStandalone)

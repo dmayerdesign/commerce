@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common'
-import { Order } from '@qb/common/domains/order/order'
-import { User } from '@qb/common/domains/user/user'
 import { UpdateRequest } from '@qb/common/domains/data-access/requests/update.request'
 import { ApiErrorResponse } from '@qb/common/domains/data-access/responses/api-error.response'
+import { Order } from '@qb/common/domains/order/order'
+import { User } from '@qb/common/domains/user/user'
 import * as Stripe from 'stripe'
 import { UserRepository } from '../../user/user.repository'
 

@@ -5,7 +5,7 @@
         "baseUrl": ".",
         "paths": {
             "@qb/common/*": [ "./common/src/lib/*" ],
-            "@qb/app-config": [ "./common/src/lib/config/app-config.generated" ]
+            "@qb/app-config": [ "./common/src/generated/config/app-config.generated" ]
         },
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,

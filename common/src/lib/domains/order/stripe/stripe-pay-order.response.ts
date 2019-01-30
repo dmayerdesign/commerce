@@ -1,5 +1,5 @@
+import { Order } from '@qb/common/domains/order/order'
 import * as Stripe from 'stripe'
-import { Order } from '../../entities/order'
 
 export class StripePayOrderResponse {
     public paidOrder: Order

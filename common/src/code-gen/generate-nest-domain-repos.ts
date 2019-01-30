@@ -21,7 +21,7 @@ import { QbRepository } from '../../shared/data-access/repository'
       const entityNameKebab = kebabCase(singularize(endpointName))
 
       const entityImport =
-`import { ${entityName} } from '@qb/common/api/entities/${entityNameKebab}'\n`
+`import { ${entityName} } from '@qb/common/domains/${entityNameKebab}/${entityNameKebab}'\n`
       const body = `
 @Injectable()
 export class ${entityName}Repository extends QbRepository<${entityName}> {

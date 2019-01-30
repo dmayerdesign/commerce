@@ -41,7 +41,7 @@ import { Controller, Inject } from '@nestjs/common'\n`
       )
 
       let entityImportsForController1 =
-`import { ${entityName} } from '@qb/common/api/entities/${entityNameKebab}'\n`
+`import { ${entityName} } from '@qb/common/domains/${entityNameKebab}/${entityNameKebab}'\n`
       if (!hasCustomController) {
         entityImportsForController1 +=
 `import { ${endpointName} } from '@qb/common/constants/api-endpoints'\n`
@@ -67,7 +67,7 @@ import { Inject } from '@nestjs/common'\n`
 `
 
       let entityImportsForModule =
-`import { ${entityName} } from '@qb/common/api/entities/${entityNameKebab}'`
+`import { ${entityName} } from '@qb/common/domains/${entityNameKebab}/${entityNameKebab}'`
       if (hasCustomController) {
         entityImportsForModule += `
 import { ${entityName}Controller } from './${entityNameKebab}.controller'`

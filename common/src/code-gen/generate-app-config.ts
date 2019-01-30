@@ -1,10 +1,11 @@
 import { Environment } from '@qb/common/constants/enums/environment'
 import { readdirSync, writeFileSync } from 'fs'
+import { mkdirpSync } from 'fs-extra'
 import { resolve } from 'path'
 
 const buildEnv = process.env.ENVIRONMENT as Environment
 const appConfig = require(`../../../app-config.${buildEnv.toLowerCase()}.json`)
-const destPath = resolve(__dirname, '../lib/config/app-config.generated.ts')
+const destPath = resolve(__dirname, '../generated/config/app-config.generated.ts')
 const formatJsonValue = (value: any) => typeof value === 'string'
   ? `'${value}'`
   : value
@@ -36,4 +37,5 @@ if (appConfigClass.indexOf(configPatternForEntitiesProd) > -1) {
   ').js')
 }
 
+mkdirpSync(resolve(__dirname, '../generated/config'))
 writeFileSync(destPath, appConfigClass)

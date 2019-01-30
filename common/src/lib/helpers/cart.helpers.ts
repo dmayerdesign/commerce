@@ -1,8 +1,8 @@
-import { Cart } from '@qb/common/api/entities/cart'
-import { Price } from '@qb/common/api/entities/price'
-import { Product } from '@qb/common/api/entities/product'
-import { CartItem } from '@qb/common/api/interfaces/cart-item'
 import { Currency } from '@qb/common/constants/enums/currency'
+import { Cart } from '@qb/common/domains/cart/cart'
+import { CartItem } from '@qb/common/domains/cart/cart-item'
+import { Price } from '@qb/common/domains/price/price'
+import { Product } from '@qb/common/domains/product/product'
 import { getPrice } from '@qb/common/helpers/product.helpers'
 import { CartDisplayProduct } from '@qb/common/models/ui/cart-display-product'
 

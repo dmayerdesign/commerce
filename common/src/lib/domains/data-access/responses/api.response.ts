@@ -1,4 +1,4 @@
-import { HttpStatus } from '../../constants/http-status'
+import { HttpStatus } from '@qb/common/constants/http-status'
 
 export class ApiResponse<T> {
     constructor(

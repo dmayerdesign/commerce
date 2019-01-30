@@ -1,4 +1,5 @@
 import { writeFileSync } from 'fs'
+import { mkdirpSync } from 'fs-extra'
 import { singularize } from 'inflection'
 import { kebabCase, upperFirst } from 'lodash'
 import { resolve } from 'path'
@@ -23,7 +24,7 @@ import { DataService } from './data.service'
       const entityNameKebab = kebabCase(singularize(endpointName))
 
       entityImports +=
-`import { ${entityName} } from '../../api/entities/${entityNameKebab}'\n`
+`import { ${entityName} } from '../../domains/${entityNameKebab}/${entityNameKebab}.interface'\n`
       constantsImports +=
 `import { ${endpointName} } from '../../constants/api-endpoints'\n`
 
@@ -36,7 +37,8 @@ export class ${entityName}DataService extends DataService<${entityName}> {
 `
     })
 
-  writeFileSync(resolve(__dirname, '../lib/modules/data/data-services.generated.ts'),
+  mkdirpSync(resolve(__dirname, '../generated/ui'))
+  writeFileSync(resolve(__dirname, '../generated/ui/data-services.generated.ts'),
     baseImports + entityImports + constantsImports + body
   )
 }

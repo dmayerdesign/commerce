@@ -1,4 +1,4 @@
-import { SortDirection } from '../../constants/enums/sort-direction'
+import { SortDirection } from '@qb/common/constants/enums/sort-direction'
 
 export interface ListRequest<EntityType = any> {
   skip?: number
