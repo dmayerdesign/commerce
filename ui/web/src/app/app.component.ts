@@ -44,6 +44,6 @@ export class AppComponent {
 
     const params = new HttpParams()
       .set(Crud.Params.listRequest, JSON.stringify(request))
-    this.data = this._httpClient.get('/api/products/stream', { params })
+    this.data = this._httpClient.get('/api/products', { params })
   }
 }

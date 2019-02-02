@@ -15,6 +15,12 @@ import { routes } from './app.routes'
     QbFormsModule,
     QbUiModule.forRoot(),
   ],
+  exports: [
+    RouterModule,
+    HttpClientModule,
+    QbFormsModule,
+    QbUiModule,
+  ],
   declarations: [
     AppComponent,
   ],

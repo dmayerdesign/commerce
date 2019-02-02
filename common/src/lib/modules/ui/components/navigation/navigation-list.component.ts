@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core'
 import { BootstrapBreakpointKey } from '@qb/common/constants/enums/bootstrap-breakpoint-key'
-import { NavigationItem } from '@qb/common/domains/navigation-item/navigation-item'
+import { NavigationItem } from '@qb/common/domains/navigation-item/navigation-item.interface'
 import { pullFrom, pushTo } from '@qb/common/helpers/array.helpers'
 import { hasChildren } from '@qb/common/helpers/tree.helpers'
 import { WindowRefService } from '../../services/window-ref.service'
