@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # If a .vars file exists, use it.
-[[ -f ./.vars ]] && source ./.vars
+if [ -f ./.vars ]; then
+    source ./.vars
+fi
 
 test() {
     if [ "$1" = "ui" ]; then
@@ -49,15 +51,17 @@ generate() {
 
 prebuild() {
     local env=$2
-    local flag=$3
-    [[ -z "$env" ]] && env=development
+
+    if [ -z "$env" ]; then
+        env=development
+    fi
     export ENVIRONMENT=$env
 
     if [ "$1" = "ui" ]; then
         generate app-config
         generate angular-data-services
         
-        if [ "$env" = "production" ] && [ ! "$flag" = "skip-tests" ]; then
+        if [ "$env" = "production" ]; then
             test ui
         fi
     fi
@@ -66,7 +70,7 @@ prebuild() {
         # generate nest-domain-modules
         # generate nest-domain-repos
         
-        if [ "$env" = "production" ] && [ ! "$flag" = "skip-tests" ]; then
+        if [ "$env" = "production" ]; then
             test server
         fi
     fi
@@ -74,7 +78,9 @@ prebuild() {
 
 build() {
     local env=$2
-    [[ -z "$env" ]] && env=development
+    if [ -z "$env" ]; then
+        env=development
+    fi
     export ENVIRONMENT=$env
 
     prebuild $1 $2 $3
@@ -83,20 +89,12 @@ build() {
         generate
         ng build common
     elif [ "$1" = "ui" ]; then
-        if [ "$env" = "development" ]; then
-            ng build web --configuration=development && ng run web:ssr:development
-        elif [ "$env" = "production" ]; then
-            ng build web --configuration=production && ng run web:ssr:production
-        fi
+        ng build web --configuration=$env && ng run web:ssr:$env
     elif [ "$1" = "server" ]; then
         # For the server, environment only matters in the prebuild step.
         tsc -p server/tsconfig.server.json
     else
-        if [ "$env" = "development" ]; then
-            build ui development && build server development
-        elif [ "$env" = "production" ]; then
-            build ui production && build server production
-        fi
+        build ui $env && build server $env
     fi
 }
 
@@ -115,22 +113,22 @@ dev() {
 
 qb() {
     if [ "$1" = "dev" ]; then
-        dev $2 $3 $4
+        dev ${@:2}
     fi
 
     if [ "$1" = "build" ]; then
-        build $2 $3 $4
+        build ${@:2}
     fi
 
     if [ "$1" = "test" ]; then
-        test $2 $3 $4
+        test ${@:2}
     fi
 
     if [ "$1" = "generate" ]; then
-        generate $2 $3 $4
+        generate ${@:2}
     fi
 
-    if [[ (-z $1 || "$1" = "help" || "$1" = "--help" || "$1" = "-h") ]]; then
+    if [ -z $1 ] || [ "$1" = "help" ] || [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
         echo "
 _____________________________________________________________________
                                                                     |
@@ -148,4 +146,4 @@ ____________________________________________________________________|
     fi
 }
 
-qb "$1" "$2" "$3" "$4"
+qb "$@"

@@ -6,12 +6,12 @@
   "license": "MIT",
   "scripts": {
     "dev": "source ./.vars; npm run qb dev ui & npm run qb dev server",
-    "start": "source ./.vars; node dist/server/main.js",
+    "start": "node dist/server/main.js",
     "test": "npm run qb test ui && npm run qb test server",
     "lint": "tslint -p tsconfig.json -c tslint.json",
     "format": "prettier --write \"src/**/*.ts\"",
     "ng": "ng",
-    "qb": "sh ./qb.sh"
+    "qb": "/bin/bash ./qb.sh"
   },
   "dependencies": {
     "@angular/animations": "~7.0.0",
