@@ -1,6 +1,6 @@
 import { Controller, Inject } from '@nestjs/common'
-import { DomainEvent } from '@qb/common/domains/domain-event/domain-event'
 import { domainEvents } from '@qb/common/constants/api-endpoints'
+import { DomainEvent } from '@qb/common/domains/domain-event/domain-event'
 import { QbController } from '../../shared/controller/controller'
 import { DomainEventRepository } from './domain-event.repository'
 

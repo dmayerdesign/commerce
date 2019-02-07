@@ -61,18 +61,18 @@ prebuild() {
         generate app-config
         generate angular-data-services
         
-        if [ "$env" = "production" ]; then
-            test ui
-        fi
+        # if [ "$env" = "production" ]; then
+        #     test ui
+        # fi
     fi
     if [ "$1" = "server" ]; then
         generate app-config
         # generate nest-domain-modules
         # generate nest-domain-repos
         
-        if [ "$env" = "production" ]; then
-            test server
-        fi
+        # if [ "$env" = "production" ]; then
+        #     test server
+        # fi
     fi
 }
 
@@ -91,8 +91,17 @@ build() {
     elif [ "$1" = "ui" ]; then
         ng build web --configuration=$env && ng run web:ssr:$env
     elif [ "$1" = "server" ]; then
-        # For the server, environment only matters in the prebuild step.
         tsc -p server/tsconfig.server.json
+        mkdir -p ./dist/server/server/src/domains/email/emails/templates
+        cp -r \
+            ./server/src/domains/email/emails/templates/. \
+            ./dist/server/server/src/domains/email/emails/templates
+        cp -r \
+            ./server/src/domains/email/emails/partials/. \
+            ./dist/server/server/src/domains/email/emails/partials
+        cp -r \
+            ./work-files/. \
+            ./dist/server/work-files
     else
         build ui $env && build server $env
     fi

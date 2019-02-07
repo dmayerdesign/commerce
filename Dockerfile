@@ -19,6 +19,7 @@ COPY .vars ./
 
 RUN chmod +x /usr/src/app/entrypoint.sh
 RUN chmod +x /usr/src/app/.vars
+RUN chmod +x /usr/src/app/dist/server/server/src/main.js
 
 EXPOSE 4300
 
