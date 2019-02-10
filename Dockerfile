@@ -1,7 +1,7 @@
 FROM node:10
 
 # Create app directory
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # Install app dependencies
 COPY package*.json ./
@@ -12,16 +12,11 @@ RUN npm install
 
 # Build the app
 COPY . .
-RUN npm run qb build ui development
-RUN npm run qb build server development
+RUN npm run qb build ui production
+RUN npm run qb build server production
 
-COPY .vars ./
+RUN chmod +x /app/dist/server/server/src/main.js
 
-RUN chmod +x /usr/src/app/entrypoint.sh
-RUN chmod +x /usr/src/app/.vars
-RUN chmod +x /usr/src/app/dist/server/server/src/main.js
+EXPOSE 8080
 
-EXPOSE 4300
-
-ENTRYPOINT [ "/usr/src/app/entrypoint.sh" ]
 CMD [ "npm", "run", "start" ]

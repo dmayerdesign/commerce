@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# If a .vars file exists, use it.
-if [ -f ./.vars ]; then
-    source ./.vars
+# If an entrypoint file exists, use it.
+if [ -f ./entrypoint.sh ]; then
+    source ./entrypoint.sh
 fi
 
 test() {

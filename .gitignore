@@ -9,7 +9,7 @@
 
 # environment variables
 .env
-.vars
+.variables
 
 # dependencies
 /node_modules

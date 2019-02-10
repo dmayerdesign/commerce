@@ -5,7 +5,7 @@
   "author": "",
   "license": "MIT",
   "scripts": {
-    "dev": "source .vars; npm run qb dev ui & npm run qb dev server",
+    "dev": "source entrypoint.sh; npm run qb dev ui & npm run qb dev server",
     "start": "node -r ./tsconfig-paths-bootstrap.js dist/server/server/src/main.js",
     "test": "npm run qb test ui && npm run qb test server",
     "lint": "tslint -p tsconfig.json -c tslint.json",
