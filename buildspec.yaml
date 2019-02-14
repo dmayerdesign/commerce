@@ -6,8 +6,25 @@ phases:
       - npm install
   build:
     commands:
-      - chmod a+x ci-build.sh
-      - bash ci-build.sh
+      # Set permissions.
+      - chmod a+x qb
+
+      # Build the project.
+      - ./qb build --env=$ENVIRONMENT
+
+      # Assemble the bundle.
+      - npm install --production
+      - cat package.json
+      - mkdir bundle
+
+      - cp package.json bundle/
+      - cp tsconfig.json bundle/
+      - cp tsconfig-paths-bootstrap.js bundle/
+      - cp -r dist bundle/
+      - cp -r node_modules bundle/
+
+      # Compress the bundle.
+      - zip -r bundle.zip bundle/*
 artifacts:
   files:
     - bundle.zip

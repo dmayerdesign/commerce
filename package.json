@@ -2,7 +2,7 @@
   "name": "commerce",
   "version": "0.0.0",
   "description": "description",
-  "author": "",
+  "author": "dmayerdesign",
   "license": "MIT",
   "scripts": {
     "dev": "source entrypoint.sh; npm run qb dev ui & npm run qb dev server",
