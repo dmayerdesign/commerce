@@ -31,11 +31,6 @@ function main() {
     test(stack, modifier, skipTests)
   }
 
-  if (action === 'generate') {
-    const [ fileKey ] = modifiers
-    generate(fileKey)
-  }
-
   if (action === 'build') {
     const [ stack ] = modifiers
     build(stack, environment, skipTests)
