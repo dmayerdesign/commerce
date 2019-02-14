@@ -6,7 +6,8 @@ phases:
       - npm install
   build:
     commands:
-      - ./build.sh
+      - chmod a+x ci-build.sh
+      - bash ci-build.sh
 artifacts:
   files:
     - bundle.zip
