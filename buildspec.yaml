@@ -14,7 +14,6 @@ phases:
 
       # Assemble the bundle.
       - npm install --production
-      - cat package.json
       - mkdir bundle
 
       - cp package.json bundle/
@@ -25,6 +24,7 @@ phases:
 
       # Compress the bundle.
       - zip -r bundle.zip bundle/*
+      - cat package.json
 artifacts:
   files:
     - bundle.zip

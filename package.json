@@ -1,7 +1,7 @@
 {
-  "name": "commerce",
+  "name": "cubie",
   "version": "0.0.0",
-  "description": "description",
+  "description": "A full-stack TypeScript project.",
   "author": "dmayerdesign",
   "license": "MIT",
   "scripts": {
