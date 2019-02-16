@@ -6,6 +6,10 @@ const minimist = require('minimist')
 const boxen = require('boxen')
 require('dotenv').config({ path: resolve(process.cwd(), '.variables') })
 
+if (!process.env.ENVIRONMENT && !process.env.PORT) {
+  require('dotenv').config()
+}
+
 main()
 function main() {
   const {
@@ -108,23 +112,24 @@ function build(stack, env, skipTests) {
       exec(`ng build web --configuration=${env} && ng run web:ssr:${env}`)
     }
     if (stack === 'server') {
-      exec(`tsc -p server/tsconfig.server.json`)
-      mkdirp(resolve(__dirname, './dist/server/server/src/domains/email/emails/templates'))
-      copySync(
-        './server/src/domains/email/emails/templates/.',
-        './dist/server/server/src/domains/email/emails/templates',
-        { recursive: true }
-      )
-      copySync(
-        './server/src/domains/email/emails/partials/.',
-        './dist/server/server/src/domains/email/emails/partials',
-        { recursive: true }
-      )
-      copySync(
-        './work-files/.',
-        './dist/server/work-files',
-        { recursive: true }
-      )
+      exec(`webpack server/webpack.config.js`)
+      // exec(`tsc -p server/tsconfig.server.json`)
+      // mkdirp(resolve(__dirname, './dist/server/server/src/domains/email/emails/templates'))
+      // copySync(
+      //   './server/src/domains/email/emails/templates/.',
+      //   './dist/server/server/src/domains/email/emails/templates',
+      //   { recursive: true }
+      // )
+      // copySync(
+      //   './server/src/domains/email/emails/partials/.',
+      //   './dist/server/server/src/domains/email/emails/partials',
+      //   { recursive: true }
+      // )
+      // copySync(
+      //   './work-files/.',
+      //   './dist/server/work-files',
+      //   { recursive: true }
+      // )
     }
   }
   else {

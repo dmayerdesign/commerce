@@ -91,7 +91,7 @@
         "ssr": {
           "builder": "@angular-devkit/build-angular:server",
           "options": {
-            "outputPath": "dist/web-ssr",
+            "outputPath": "dist/server/web-ssr",
             "main": "ui/web/src/main.ssr.ts",
             "tsConfig": "ui/web/tsconfig.ssr.json"
           },

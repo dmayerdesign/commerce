@@ -14,17 +14,14 @@ phases:
 
       # Assemble the bundle.
       - npm install --production
-      - mkdir bundle
 
-      - cp package.json bundle/
-      - cp tsconfig.json bundle/
-      - cp tsconfig-paths-bootstrap.js bundle/
-      - cp -r dist bundle/
-      - cp -r node_modules bundle/
+      - mkdir -p bundle
+      - cp dist/server/server.js bundle/
+      - cd bundle
 
       # Compress the bundle.
-      - zip -r bundle.zip bundle/*
-      - cat package.json
+      - zip ../bundle.zip server.js
+      - cd ..
 artifacts:
   files:
     - bundle.zip
