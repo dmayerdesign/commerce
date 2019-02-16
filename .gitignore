@@ -6,6 +6,7 @@
 /out-tsc
 /generated/
 *.generated.*
+bundle.zip
 
 # environment variables
 .env

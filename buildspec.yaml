@@ -3,25 +3,35 @@ version: 0.2
 phases:
   install:
     commands:
-      - npm install
+      - npm i
   build:
     commands:
       # Set permissions.
       - chmod a+x qb
+      - chmod a+x ./node_modules/@angular/cli/bin/ng
+      - chmod a+x ./node_modules/webpack-cli/bin/cli.js
+      - chmod a+x ./node_modules/ts-node/dist/bin.js
 
       # Build the project.
       - ./qb build --env=$ENVIRONMENT
 
-      # Assemble the bundle.
-      - npm install --production
+      - mkdir -p tmp
 
-      - mkdir -p bundle
-      - cp dist/server/server.js bundle/
-      - cd bundle
+      - cp package.json tmp/
+      - cp tsconfig.json tmp/
+      - cp tsconfig-paths-bootstrap.js tmp/
+      - cp -r dist tmp/
+
+      # - cp dist/server/server.js tmp/
+      - cd tmp
+      - npm i --production
 
       # Compress the bundle.
-      - zip ../bundle.zip server.js
-      - cd ..
+      # - zip ../bundle.zip server.js
+      # - zip -r ../bundle.zip *
 artifacts:
+  base-directory: 'tmp'
   files:
-    - bundle.zip
+    # - bundle.zip
+    - '**/*'
+  
