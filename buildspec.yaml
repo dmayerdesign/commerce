@@ -16,14 +16,16 @@ phases:
       - ./qb build --env=$ENVIRONMENT
 
       - mkdir -p tmp
+      - chmod a+r tmp
 
       - cp package.json tmp/
       - cp tsconfig.json tmp/
       - cp tsconfig-paths-bootstrap.js tmp/
-      - cp -r dist tmp/
+      - cp -a dist/**/* tmp/
 
       # - cp dist/server/server.js tmp/
       - cd tmp
+      - find . -type d -exec chmod +rx {} \
       - npm i --production
 
       # Compress the bundle.
