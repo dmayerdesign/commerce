@@ -11,6 +11,7 @@ phases:
       - chmod a+x ./node_modules/@angular/cli/bin/ng
       - chmod a+x ./node_modules/webpack-cli/bin/cli.js
       - chmod a+x ./node_modules/ts-node/dist/bin.js
+      - chmod a+x ./node_modules/jest/bin/jest.js
 
       # Build the project.
       - ./qb build --env=$ENVIRONMENT

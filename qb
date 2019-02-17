@@ -45,6 +45,10 @@ function main() {
     dev(stack)
   }
 
+  if (action === 'start') {
+    start(environment)
+  }
+
   if (action === 'help' || !action) {
     help()
   }
@@ -58,7 +62,7 @@ function test(stack, modifier, skipTests) {
   if (stack === 'ui') {
     if (modifier) {
       if (modifier === 'unit') {
-        exec('./node_modules/jest/bin/jest --config ./jest.ui-unit.config.js')
+        exec('./node_modules/jest/bin/jest.js --config ./jest.ui-unit.config.js')
       }
       if (modifier === 'e2e') {
         exec('./node_modules/@angular/cli/bin/ng e2e')
@@ -71,32 +75,32 @@ function test(stack, modifier, skipTests) {
 
   if (stack === 'server') {
     // TODO: maybe add --watch and --coverage.
-    exec('./node_modules/jest/bin/jest --config ./server/test/jest-unit.config.js')
+    exec('./node_modules/jest/bin/jest.js --config ./server/test/jest-unit.config.js')
   }
 }
 
-function generate(fileKey) {
+function generate(fileKey, env) {
   if (fileKey) {
     if (fileKey === 'app-config') {
-      exec('./node_modules/ts-node/dist/bin.js common/src/code-gen/generate-app-config.ts')
+      exec(`export ENVIRONMENT=${env}; ./node_modules/ts-node/dist/bin.js common/src/code-gen/generate-app-config.ts`)
     }
     if (fileKey === 'angular-data-services') {
-      exec('./node_modules/ts-node/dist/bin.js common/src/code-gen/generate-angular-data-services.ts')
+      exec(`export ENVIRONMENT=${env}; ./node_modules/ts-node/dist/bin.js common/src/code-gen/generate-angular-data-services.ts`)
     }
   }
   else {
-    generate('app-config')
-    generate('angular-data-services')
+    generate('app-config', env)
+    generate('angular-data-services', env)
   }
 }
 
 function prebuild(stack, env, skipTests) {
   if (stack === 'ui') {
-    generate('app-config')
-    generate('angular-data-services')
+    generate('app-config', env)
+    generate('angular-data-services', env)
   }
   if (stack === 'server') {
-    generate('app-config')
+    generate('app-config', env)
   }
 
   if (env && env === 'production') {
@@ -152,6 +156,10 @@ function dev(stack) {
     dev('ui')
     dev('server')
   }
+}
+
+function start(environment) {
+  exec(`export ENVIRONMENT=${environment}; node -r ./tsconfig-paths-bootstrap.js ./dist/server/server/src/main.js`)
 }
 
 function help() {
