@@ -12,8 +12,7 @@ RUN npm install
 
 # Build the app
 COPY . .
-RUN npm run qb build ui production
-RUN npm run qb build server production
+RUN ./qb build --env=production --skip-tests
 
 RUN chmod +x /app/dist/server/server/src/main.js
 

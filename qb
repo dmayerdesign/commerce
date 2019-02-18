@@ -82,10 +82,10 @@ function test(stack, modifier, skipTests) {
 function generate(fileKey, env) {
   if (fileKey) {
     if (fileKey === 'app-config') {
-      exec(`[[ -f ./.variables ]] && source ./.variables; export ENVIRONMENT=${env}; ./node_modules/ts-node/dist/bin.js common/src/code-gen/generate-app-config.ts`)
+      exec(`if [ -f ./.variables ]; then source ./.variables; fi; export ENVIRONMENT=${env}; ./node_modules/ts-node/dist/bin.js common/src/code-gen/generate-app-config.ts`)
     }
     if (fileKey === 'angular-data-services') {
-      exec(`[[ -f ./.variables ]] && source ./.variables; export ENVIRONMENT=${env}; ./node_modules/ts-node/dist/bin.js common/src/code-gen/generate-angular-data-services.ts`)
+      exec(`if [ -f ./.variables ]; then source ./.variables; fi; export ENVIRONMENT=${env}; ./node_modules/ts-node/dist/bin.js common/src/code-gen/generate-angular-data-services.ts`)
     }
   }
   else {
@@ -116,8 +116,7 @@ function build(stack, env, skipTests) {
       exec(`./node_modules/@angular/cli/bin/ng build web --configuration=${env} && ./node_modules/@angular/cli/bin/ng run web:ssr:${env}`)
     }
     if (stack === 'server') {
-      // exec(`./node_modules/webpack-cli/bin/cli.js`)
-      exec(`tsc -p server/tsconfig.server.json`)
+      exec(`./node_modules/typescript/bin/tsc -p server/tsconfig.server.json`)
       mkdirp(resolve(__dirname, './dist/server/server/src/domains/email/emails/templates'))
       copySync(
         './server/src/domains/email/emails/templates/.',
@@ -161,7 +160,7 @@ function dev(stack) {
 }
 
 function start(environment) {
-  exec(`[[ -f ./.variables ]] && source ./.variables; export ENVIRONMENT=${environment}; node -r ./tsconfig-paths-bootstrap.js ./dist/server/server/src/main.js`)
+  exec(`if [ -f ./.variables ]; then source ./.variables; fi; export ENVIRONMENT=${environment}; node -r ./tsconfig-paths-bootstrap.js ./dist/server/server/src/main.js`)
 }
 
 function help() {
