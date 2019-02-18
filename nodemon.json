@@ -5,5 +5,5 @@
   ],
   "ext": "ts",
   "ignore": ["src/**/*.spec.ts"],
-  "exec": "./qb dev server"
+  "exec": "export ENVIRONMENT=development; ts-node common/src/code-gen/generate-app-config.ts; ts-node -r tsconfig-paths/register --project server/tsconfig.server.json server/src/main.ts"
 }

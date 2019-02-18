@@ -13,17 +13,18 @@ import { ProductService } from './domains/product/product.service'
 const BROWSER_DIR = join(process.cwd(), 'dist/web')
 applyDomino(global, join(BROWSER_DIR, 'index.html'))
 
-console.log('MONGODB_URI_TEST', process.env.MONGODB_URI_TEST)
-
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'mongodb',
       url: process.env.MONGODB_URI_TEST,
+      authSource: 'admin',
+      replicaSet: AppConfig.replica_set_name,
+      useNewUrlParser: true,
+      ssl: true,
       entities: [
         resolve(__dirname, AppConfig.path_to_entities_from_module_root),
       ],
-      useNewUrlParser: true
     }),
     AngularUniversalModule.forRoot({
       viewsPath: BROWSER_DIR,

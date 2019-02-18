@@ -41,3 +41,4 @@ export default function main(): void {
   mkdirpSync(resolve(__dirname, '../generated/config'))
   writeFileSync(destPath, appConfigClass)
 }
+main()

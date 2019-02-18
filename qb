@@ -42,7 +42,7 @@ function main() {
 
   if (action === 'dev') {
     const [ stack ] = modifiers
-    dev(stack)
+    dev(stack, environment)
   }
 
   if (action === 'start') {
@@ -82,10 +82,10 @@ function test(stack, modifier, skipTests) {
 function generate(fileKey, env) {
   if (fileKey) {
     if (fileKey === 'app-config') {
-      exec(`export ENVIRONMENT=${env}; ./node_modules/ts-node/dist/bin.js common/src/code-gen/generate-app-config.ts`)
+      exec(`[[ -f ./.variables ]] && source ./.variables; export ENVIRONMENT=${env}; ./node_modules/ts-node/dist/bin.js common/src/code-gen/generate-app-config.ts`)
     }
     if (fileKey === 'angular-data-services') {
-      exec(`export ENVIRONMENT=${env}; ./node_modules/ts-node/dist/bin.js common/src/code-gen/generate-angular-data-services.ts`)
+      exec(`[[ -f ./.variables ]] && source ./.variables; export ENVIRONMENT=${env}; ./node_modules/ts-node/dist/bin.js common/src/code-gen/generate-angular-data-services.ts`)
     }
   }
   else {
@@ -143,23 +143,25 @@ function build(stack, env, skipTests) {
 }
 
 function dev(stack) {
+  const env = 'development'
+
   if (stack) {
-    prebuild(stack)
+    prebuild(stack, env)
     if (stack === 'ui') {
-      exec('./node_modules/@angular/cli/bin/ng serve')
+      exec(`./node_modules/@angular/cli/bin/ng serve --configuration=${env}`)
     }
     if (stack === 'server') {
-      exec('nodemon --config nodemon.json')
+      exec(`./node_modules/nodemon/bin/nodemon.js --config nodemon.json`)
     }
   }
   else {
-    dev('ui')
-    dev('server')
+    dev('ui', env)
+    dev('server', env)
   }
 }
 
 function start(environment) {
-  exec(`export ENVIRONMENT=${environment}; node -r ./tsconfig-paths-bootstrap.js ./dist/server/server/src/main.js`)
+  exec(`[[ -f ./.variables ]] && source ./.variables; export ENVIRONMENT=${environment}; node -r ./tsconfig-paths-bootstrap.js ./dist/server/server/src/main.js`)
 }
 
 function help() {
