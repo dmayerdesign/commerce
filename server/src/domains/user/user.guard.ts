@@ -1,15 +1,17 @@
 import { CanActivate, ExecutionContext, HttpException, Injectable } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
-import { User } from '@qb/common/domains/user/user'
 import { Cookies } from '@qb/common/constants/cookies'
 import { Copy } from '@qb/common/constants/copy'
 import { UserRole } from '@qb/common/constants/enums/user-role'
 import { HttpStatus } from '@qb/common/constants/http-status'
+import { User } from '@qb/common/domains/user/user'
 import { cleanUser } from '@qb/common/helpers/user.helpers'
 import { RequestWithUser } from '@qb/common/models/server/request-with-user'
+import { environment } from '@qb/environment-vars'
 import * as jwt from 'jsonwebtoken'
 import { UserRepository } from './user.repository'
-const jwtSecret = process.env.JWT_SECRET
+
+const jwtSecret = environment().JWT_SECRET
 
 @Injectable()
 export class UserGuard implements CanActivate {

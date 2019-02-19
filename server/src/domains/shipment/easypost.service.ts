@@ -1,15 +1,16 @@
 const EasypostModule = require('@easypost/api')
 import { Inject, Injectable } from '@nestjs/common'
+import { OrderStatus } from '@qb/common/constants/enums/order-status'
 import { Address } from '@qb/common/domains/address/address'
+import { UpdateRequest } from '@qb/common/domains/data-access/requests/update.request'
 import { EasypostRate } from '@qb/common/domains/easypost-rate/easypost-rate'
 import { Order } from '@qb/common/domains/order/order'
-import { UpdateRequest } from '@qb/common/domains/data-access/requests/update.request'
-import { OrderStatus } from '@qb/common/constants/enums/order-status'
 import { Easypost } from '@qb/common/types/node-easypost'
+import { environment } from '@qb/environment-vars'
 import { OrderRepository } from '../order/order.repository'
 import { prepareAddressForEasypost } from './easypost.helpers'
 
-const easypost = new EasypostModule(process.env.EASYPOST_API_KEY) as Easypost
+const easypost = new EasypostModule(environment().EASYPOST_API_KEY) as Easypost
 
 @Injectable()
 export class EasypostService {

@@ -3,10 +3,11 @@ import { UpdateRequest } from '@qb/common/domains/data-access/requests/update.re
 import { ApiErrorResponse } from '@qb/common/domains/data-access/responses/api-error.response'
 import { Order } from '@qb/common/domains/order/order'
 import { User } from '@qb/common/domains/user/user'
+import { environment } from '@qb/environment-vars'
 import * as Stripe from 'stripe'
 import { UserRepository } from '../../user/user.repository'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string)
+const stripe = new Stripe(environment().STRIPE_SECRET_KEY as string)
 
 /**
  * Methods for interacting with the Stripe API

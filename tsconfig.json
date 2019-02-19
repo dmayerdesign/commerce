@@ -5,9 +5,11 @@
         "baseUrl": ".",
         "paths": {
             "@qb/common/*": [ "./common/src/lib/*" ],
-            "@qb/app-config": [ "./common/src/generated/config/app-config.generated" ]
+            "@qb/app-config": [ "./common/src/generated/config/app-config.generated" ],
+            "@qb/environment-vars": [ "./environment.js" ]
         },
         "emitDecoratorMetadata": true,
+        "allowJs": true,
         "experimentalDecorators": true,
         "lib": [
             "es2015",

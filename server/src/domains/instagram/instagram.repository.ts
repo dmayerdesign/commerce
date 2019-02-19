@@ -1,9 +1,10 @@
 
 import { Injectable } from '@nestjs/common'
 import { AppConfig } from '@qb/app-config'
-import { ApiErrorResponse } from '@qb/common/domains/data-access/responses/api-error.response'
 import { QbReadOnlyRepository } from '@qb/common/domains/data-access/repository.interface'
+import { ApiErrorResponse } from '@qb/common/domains/data-access/responses/api-error.response'
 import { InstagramPost } from '@qb/common/models/ui/instagram-post'
+import { environment } from '@qb/environment-vars'
 import * as rp from 'request-promise-native'
 
 @Injectable()
@@ -12,7 +13,7 @@ export class InstagramRepository implements QbReadOnlyRepository<InstagramPost> 
         const recentPostsEndpoint = `https://api.instagram.com/v1/users/${AppConfig.instagram_user_id}/media/recent`
         const requestOptions: rp.RequestPromiseOptions = {
             qs: {
-                access_token: process.env.INSTAGRAM_ACCESS_TOKEN,
+                access_token: environment().INSTAGRAM_ACCESS_TOKEN,
             },
         }
 

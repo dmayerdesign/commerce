@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common'
 import { applyDomino, AngularUniversalModule } from '@nestjs/ng-universal'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { AppConfig } from '@qb/app-config'
+import { environment } from '@qb/environment-vars'
 import { join, resolve } from 'path'
 import { domainModules } from './domain-modules'
 import { AdminController } from './domains/admin/admin.controller'
@@ -17,7 +18,7 @@ applyDomino(global, join(BROWSER_DIR, 'index.html'))
   imports: [
     TypeOrmModule.forRoot({
       type: 'mongodb',
-      url: process.env.MONGODB_URI_TEST,
+      url: environment().MONGODB_URI_TEST,
       authSource: 'admin',
       replicaSet: AppConfig.replica_set_name,
       useNewUrlParser: true,

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { AppConfig } from '@qb/app-config'
 import { EmailOptions, OrderEmailOptions } from '@qb/common/domains/email/email-options'
 import { EmailBuilder } from '@qb/common/domains/email/email.builder'
+import { environment } from '@qb/environment-vars'
 import * as mailgunExport from 'mailgun-js'
 import { resolve as _resolve } from 'path'
 import { calculateEstArrival } from '../order/order.helpers'
@@ -9,8 +10,8 @@ import { getPugCompileTemplateForEmail } from './email.helpers'
 import { EmailService as IEmailService } from './email.service.interface'
 
 const mailgun = mailgunExport({
-  apiKey: process.env.MAILGUN_API_KEY as string,
-  domain: process.env.MAILGUN_DOMAIN as string,
+  apiKey: environment().MAILGUN_API_KEY as string,
+  domain: environment().MAILGUN_DOMAIN as string,
 })
 
 const receipt = getPugCompileTemplateForEmail('receipt')

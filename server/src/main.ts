@@ -1,4 +1,6 @@
+require('dotenv').config()
 import { NestFactory } from '@nestjs/core'
+import { environment } from '@qb/environment-vars'
 import * as cookieParser from 'cookie-parser'
 import * as helmet from 'helmet'
 import 'reflect-metadata'
@@ -17,7 +19,7 @@ async function main(): Promise<void> {
     new ErrorFilter(new EmailService())
   )
 
-  await app.listen(process.env.PORT as string)
-  console.log(`Listening on port ${process.env.PORT}`)
+  await app.listen(environment().PORT as string)
+  console.log(`Listening on port ${environment().PORT}`)
 }
 main()

@@ -1,15 +1,16 @@
 import { Inject, Injectable } from '@nestjs/common'
+import { Copy } from '@qb/common/constants/copy'
+import { OrderStatus } from '@qb/common/constants/enums/order-status'
 import { ListRequest } from '@qb/common/domains/data-access/requests/list.request'
 import { UpdateRequest } from '@qb/common/domains/data-access/requests/update.request'
 import { ApiErrorResponse } from '@qb/common/domains/data-access/responses/api-error.response'
-import { Copy } from '@qb/common/constants/copy'
-import { OrderStatus } from '@qb/common/constants/enums/order-status'
 import { Discount } from '@qb/common/domains/discount/discount'
 import { Order } from '@qb/common/domains/order/order'
 import { StripeCreateOrderResponse } from '@qb/common/domains/order/stripe/stripe-create-order.response'
 import { StripePayOrderResponse } from '@qb/common/domains/order/stripe/stripe-pay-order.response'
 import { Product } from '@qb/common/domains/product/product'
 import { StripeOrder } from '@qb/common/stripe-shims/stripe-order'
+import { environment } from '@qb/environment-vars'
 import * as Stripe from 'stripe'
 import { DiscountRepository } from '../../discount/discount.repository'
 import { OrganizationService } from '../../organization/organization.service'
@@ -18,7 +19,7 @@ import { ProductRepository } from '../../product/product.repository'
 import { getSubTotal, getTotal } from '../order.helpers'
 import { OrderRepository } from '../order.repository'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string)
+const stripe = new Stripe(environment().STRIPE_SECRET_KEY as string)
 
 /**
  * Stripe service

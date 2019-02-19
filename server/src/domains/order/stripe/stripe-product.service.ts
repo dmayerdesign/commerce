@@ -1,14 +1,15 @@
 import { Inject, Injectable } from '@nestjs/common'
-import { Attribute } from '@qb/common/domains/attribute/attribute'
+import { Copy } from '@qb/common/constants/copy'
 import { AttributeValue } from '@qb/common/domains/attribute-value/attribute-value'
+import { Attribute } from '@qb/common/domains/attribute/attribute'
 import { Price } from '@qb/common/domains/price/price'
 import { Product } from '@qb/common/domains/product/product'
 import { SimpleAttributeValue } from '@qb/common/domains/simple-attribute-value/simple-attribute-value'
-import { Copy } from '@qb/common/constants/copy'
+import { environment } from '@qb/environment-vars'
 import * as Stripe from 'stripe'
 import { ProductService } from '../../product/product.service'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string)
+const stripe = new Stripe(environment().STRIPE_SECRET_KEY)
 
 /**
  * Stripe service

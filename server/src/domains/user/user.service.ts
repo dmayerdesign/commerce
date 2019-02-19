@@ -1,14 +1,15 @@
 import { BadRequestException, HttpException, Inject, Injectable } from '@nestjs/common'
-import { UpdateRequest } from '@qb/common/domains/data-access/requests/update.request'
 import { AuthConfig } from '@qb/common/config/auth-config'
 import { Cookies } from '@qb/common/constants/cookies'
 import { Copy } from '@qb/common/constants/copy'
 import { HttpStatus } from '@qb/common/constants/http-status'
 import { Login } from '@qb/common/domains/auth/login'
+import { UpdateRequest } from '@qb/common/domains/data-access/requests/update.request'
 import { User } from '@qb/common/domains/user/user'
 import { Wishlist } from '@qb/common/domains/wishlist/wishlist'
 import { cleanUserForJwt } from '@qb/common/helpers/user.helpers'
 import * as bcrypt from 'bcrypt-nodejs'
+import { environment } from '@qb/environment-vars'
 import { Request, Response } from 'express'
 import * as jwt from 'jsonwebtoken'
 import { getIdAsEntityType } from 'server/src/shared/data-access/data-access.helpers'
@@ -17,7 +18,7 @@ import { UserRepository } from './user.repository'
 
 @Injectable()
 export class UserService {
-    private _jwtSecret = process.env.JWT_SECRET
+    private _jwtSecret = environment().JWT_SECRET
 
     constructor(
         @Inject(UserRepository) protected _userRepository: UserRepository,
