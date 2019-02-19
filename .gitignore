@@ -11,6 +11,7 @@ bundle.zip
 # environment variables
 .env
 .variables
+options.config
 
 # dependencies
 /node_modules

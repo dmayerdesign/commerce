@@ -2,7 +2,9 @@ node_modules
 npm-debug.log
 .variables
 .env
+
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
+.ebextensions/*
 .git
 .gitignore
