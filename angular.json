@@ -49,7 +49,9 @@
             "scripts": []
           },
           "configurations": {
-            "development": {},
+            "development": {
+              "aot": true
+            },
             "production": {
               "fileReplacements": [
                 {
@@ -83,8 +85,13 @@
             "proxyConfig": "proxy.config.json"
           },
           "configurations": {
+            "development": {
+              "browserTarget": "web:build:development",
+              "aot": true
+            },
             "production": {
-              "browserTarget": "web:build:production"
+              "browserTarget": "web:build:production",
+              "aot": true
             }
           }
         },

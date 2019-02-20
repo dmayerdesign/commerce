@@ -152,10 +152,6 @@ function dev(stack) {
       exec(`./node_modules/nodemon/bin/nodemon.js --config nodemon.json`)
     }
   }
-  else {
-    dev('ui', env)
-    dev('server', env)
-  }
 }
 
 function start(environment) {

@@ -4,7 +4,8 @@ import { Component, Inject, PLATFORM_ID } from '@angular/core'
 import { FormControl } from '@angular/forms'
 import { Crud } from '@qb/common/constants/crud'
 import { ListRequest } from '@qb/common/domains/data-access/requests/list.request.interface'
-import { Observable } from 'rxjs'
+import { Observable, Subject } from 'rxjs'
+import { scan } from 'rxjs/operators'
 
 @Component({
   selector: 'web-root',
@@ -20,6 +21,7 @@ import { Observable } from 'rxjs'
     <qb-form-field [options]="{ label: 'Type something!' }">
       <input #input [formControl]="control">
     </qb-form-field>
+
     <router-outlet></router-outlet>
   `,
   styleUrls: ['./app.component.scss']
@@ -29,6 +31,10 @@ export class AppComponent {
   public platform = ''
   public data: Observable<any>
   public control = new FormControl()
+  public btnSwooshIsActiveSubject = new Subject<void>()
+  public btnSwooshIsActiveStream = this.btnSwooshIsActiveSubject.pipe(
+    scan<void, boolean>((acc) => !acc, false)
+  )
 
   constructor(
     @Inject(PLATFORM_ID) private _platformId: object,

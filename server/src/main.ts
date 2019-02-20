@@ -9,7 +9,6 @@ import { ErrorFilter } from './domains/error/error.filter'
 
 async function main(): Promise<void> {
   const app = await NestFactory.create(AppModule)
-  console.log(`nest app created!`)
 
   app.setGlobalPrefix('/api')
   app.use(helmet())

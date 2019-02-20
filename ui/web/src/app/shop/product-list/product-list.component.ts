@@ -2,7 +2,7 @@ import { Component } from '@angular/core'
 
 @Component({
   selector: 'product-list',
-  template: ``
+  template: `<product-list-filters></product-list-filters>`
 })
 export class ProductListComponent {
 }

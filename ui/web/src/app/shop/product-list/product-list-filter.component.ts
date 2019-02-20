@@ -27,7 +27,7 @@ import { camelCase, kebabCase } from 'lodash'
 })
 export class ProductListFilterComponent implements OnInit {
   @Input() public filter: ProductListFilterUi
-  @Output() public filterUpdate: EventEmitter<ProductListFilter>
+  @Output() public filterChange: EventEmitter<ProductListFilter>
   public formControl: FormControl
   public formGroup: FormGroup
   public formGroupControlNames: string[]
@@ -47,8 +47,8 @@ export class ProductListFilterComponent implements OnInit {
       this.filter.filterType === ProductListFilterType.TaxonomyTerm &&
       this.filter.taxonomyTermOptions
     ) {
+      // TaxonomyTerm slug -> form control name.
       this.filter.taxonomyTermOptions.forEach((taxonomyTerm: TaxonomyTerm) => {
-        // TaxonomyTerm slug -> form control name.
         const controlName = camelCase(taxonomyTerm.slug)
         this.formGroupOptions[controlName] = {
           defaultValue: false,
@@ -56,16 +56,18 @@ export class ProductListFilterComponent implements OnInit {
           formControlType: 'checkbox',
         }
       })
-      this.formGroup = this._formBuilderService.getFormGroup(this.formGroupOptions)
-      this.formGroupControlNames = this._formBuilderService.getFormControlNames(this.formGroupOptions)
+      this.formGroup = this._formBuilderService
+        .getFormGroup(this.formGroupOptions)
+      this.formGroupControlNames = this._formBuilderService
+        .getFormControlNames(this.formGroupOptions)
 
-      this.formGroup.valueChanges.subscribe((formValue) => {
-        this.filterUpdate.emit({
+      // Form control name -> TaxonomyTerm slug.
+      this.formGroup.valueChanges.subscribe((formValue) =>
+        this.filterChange.emit({
           type: ProductListFilterType.TaxonomyTerm,
           values: this.formGroupControlNames
             .map((controlName) => {
               if (formValue[controlName]) {
-                // Form control name -> TaxonomyTerm slug.
                 return kebabCase(controlName)
               } else {
                 return undefined
@@ -73,7 +75,7 @@ export class ProductListFilterComponent implements OnInit {
             })
             .filter((taxonomyTermSlug) => taxonomyTermSlug !== undefined)
         })
-      })
+      )
     }
   }
 }
