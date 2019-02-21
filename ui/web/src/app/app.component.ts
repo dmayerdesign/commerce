@@ -2,10 +2,12 @@ import { isPlatformBrowser } from '@angular/common'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Component, Inject, PLATFORM_ID } from '@angular/core'
 import { FormControl } from '@angular/forms'
+import { BOOT_CONDITIONS } from '@qb/common/constants/angular/injection-tokens'
 import { Crud } from '@qb/common/constants/crud'
 import { ListRequest } from '@qb/common/domains/data-access/requests/list.request.interface'
-import { Observable, Subject } from 'rxjs'
-import { scan } from 'rxjs/operators'
+import { Preboot } from '@qb/common/models/ui/preboot'
+import { combineLatest, Observable } from 'rxjs'
+import { filter } from 'rxjs/operators'
 
 @Component({
   selector: 'web-root',
@@ -31,15 +33,23 @@ export class AppComponent {
   public platform = ''
   public data: Observable<any>
   public control = new FormControl()
-  public btnSwooshIsActiveSubject = new Subject<void>()
-  public btnSwooshIsActiveStream = this.btnSwooshIsActiveSubject.pipe(
-    scan<void, boolean>((acc) => !acc, false)
-  )
 
   constructor(
     @Inject(PLATFORM_ID) private _platformId: object,
     private _httpClient: HttpClient,
+    @Inject(BOOT_CONDITIONS) private _bootConditions: Preboot[]
   ) {
+    // TODO: only show app once this callback has run.
+    combineLatest(
+      this._bootConditions.map(
+        ({ ready$ }) => ready$.pipe(filter(
+          (isReady) => isReady)
+        )
+      ))
+      .subscribe(() => {
+        console.log('display app!')
+      })
+
     this.platform = isPlatformBrowser(this._platformId)
       ? 'browser'
       : 'server'

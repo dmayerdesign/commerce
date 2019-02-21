@@ -14,5 +14,5 @@ import { Product } from '@qb/common/domains/product/product.interface'
 export class ProductListFiltersComponent {
   @Input() public filters: ProductListFilterUi[]
   @Input() public listRequest: ListRequest<Product>
-  @Output() public listRequestUpdate = new EventEmitter<ListRequest<Product>>()
+  @Output() public listRequestChange = new EventEmitter<ListRequest<Product>>()
 }
