@@ -5,6 +5,7 @@
         "baseUrl": ".",
         "paths": {
             "@qb/common/*": [ "./common/src/lib/*" ],
+            "@qb/generated/*": [ "./common/src/generated/*" ],
             "@qb/app-config": [ "./common/src/generated/config/app-config.generated" ],
             "@qb/environment-vars": [ "./environment.js" ]
         },

@@ -3,7 +3,7 @@ import { ListRequest } from '@qb/common/domains/data-access/requests/list.reques
 import { ProductListFilterUi } from '@qb/common/domains/product-list-filter-ui/product-list-filter-ui.interface'
 import { Product } from '@qb/common/domains/product/product.interface'
 import { StoreUiSettings } from '@qb/common/domains/store-ui-settings/store-ui-settings.interface'
-import { ProductDataService } from '@qb/common/modules/data/data-services.generated'
+import { ProductDataService } from '@qb/generated/ui/data-services.generated'
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { OrganizationService } from '../../organization/organization.service'
