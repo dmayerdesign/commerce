@@ -36,8 +36,8 @@ export class AppComponent {
 
   constructor(
     @Inject(PLATFORM_ID) private _platformId: object,
+    @Inject(BOOT_CONDITIONS) private _bootConditions: Preboot[],
     private _httpClient: HttpClient,
-    @Inject(BOOT_CONDITIONS) private _bootConditions: Preboot[]
   ) {
     // TODO: only show app once this callback has run.
     combineLatest(
