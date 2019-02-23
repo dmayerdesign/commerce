@@ -76,6 +76,9 @@ function test(stack, modifier, skipTests) {
 
 function generate(fileKey, env) {
   if (fileKey) {
+    if (fileKey === 'environment-vars') {
+      exec(`./node_modules/ts-node/dist/bin.js -r dotenv/config common/src/code-gen/generate-environment-vars.ts`)
+    }
     if (fileKey === 'app-config') {
       exec(`if [ -f ./.env ]; then source ./.env; fi; export ENVIRONMENT=${env}; ./node_modules/ts-node/dist/bin.js -r dotenv/config common/src/code-gen/generate-app-config.ts`)
     }
@@ -84,6 +87,7 @@ function generate(fileKey, env) {
     }
   }
   else {
+    generate('environment-vars')
     generate('app-config', env)
     generate('angular-data-services', env)
   }
