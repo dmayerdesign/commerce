@@ -40,6 +40,10 @@ function main() {
     dev(stack, environment)
   }
 
+  if (action === 'nodemon') {
+    nodemon()
+  }
+
   if (action === 'start') {
     start(environment)
   }
@@ -76,19 +80,33 @@ function test(stack, modifier, skipTests) {
 
 function generate(fileKey, env) {
   if (fileKey) {
-    if (fileKey === 'environment-vars') {
-      exec(`./node_modules/ts-node/dist/bin.js -r dotenv/config common/src/code-gen/generate-environment-vars.ts`)
-    }
     if (fileKey === 'app-config') {
-      exec(`if [ -f ./.env ]; then source ./.env; fi; export ENVIRONMENT=${env}; ./node_modules/ts-node/dist/bin.js -r dotenv/config common/src/code-gen/generate-app-config.ts`)
+      exec(`
+        if [ -f $QB_PATH_TO_SECRETS/.env ]; then
+          source $QB_PATH_TO_SECRETS/.env
+        fi
+        export ENVIRONMENT=${env}
+        ./node_modules/ts-node/dist/bin.js common/src/code-gen/generate-app-config.ts
+      `)
+    }
+    if (fileKey === 'environment-vars') {
+      exec(`
+        ./node_modules/ts-node/dist/bin.js common/src/code-gen/generate-environment-vars.ts
+      `)
     }
     if (fileKey === 'angular-data-services') {
-      exec(`if [ -f ./.env ]; then source ./.env; fi; export ENVIRONMENT=${env}; ./node_modules/ts-node/dist/bin.js -r dotenv/config common/src/code-gen/generate-angular-data-services.ts`)
+      exec(`
+        if [ -f $QB_PATH_TO_SECRETS/.env ]; then
+          source $QB_PATH_TO_SECRETS/.env
+        fi
+        export ENVIRONMENT=${env}
+        ./node_modules/ts-node/dist/bin.js common/src/code-gen/generate-angular-data-services.ts
+      `)
     }
   }
   else {
-    generate('environment-vars')
     generate('app-config', env)
+    generate('environment-vars')
     generate('angular-data-services', env)
   }
 }
@@ -100,6 +118,7 @@ function prebuild(stack, env, skipTests) {
   }
   if (stack === 'server') {
     generate('app-config', env)
+    generate('environment-vars', env)
   }
 
   if (env && env === 'production') {
@@ -158,8 +177,12 @@ function dev(stack) {
   }
 }
 
+function nodemon() {
+  exec(`if [ -f $QB_PATH_TO_SECRETS/.env ]; then source $QB_PATH_TO_SECRETS/.env; fi; export ENVIRONMENT=development; ts-node common/src/code-gen/generate-app-config.ts; ts-node common/src/code-gen/generate-environment-vars.ts; ts-node -r tsconfig-paths/register --project server/tsconfig.server.json server/src/main.ts`)
+}
+
 function start(environment) {
-  exec(`if [ -f ./.env ]; then source ./.env; fi; export ENVIRONMENT=${environment}; node -r ./tsconfig-paths-bootstrap.js ./dist/server/server/src/main.js`)
+  exec(`export ENVIRONMENT=${environment}; node -r ./tsconfig-paths-bootstrap.js ./dist/server/server/src/main.js`)
 }
 
 function help() {

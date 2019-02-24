@@ -1,4 +1,3 @@
-require('dotenv').config()
 import { NestFactory } from '@nestjs/core'
 import * as cookieParser from 'cookie-parser'
 import * as helmet from 'helmet'

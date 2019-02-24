@@ -7,24 +7,29 @@ import { Crud } from '@qb/common/constants/crud'
 import { ListRequest } from '@qb/common/domains/data-access/requests/list.request.interface'
 import { Preboot } from '@qb/common/models/ui/preboot'
 import { combineLatest, Observable } from 'rxjs'
-import { filter } from 'rxjs/operators'
+import { filter, map } from 'rxjs/operators'
 
 @Component({
   selector: 'web-root',
   template: `
-    <h1>Hello!</h1>
-    <p>I am rendered on the <strong>{{ platform }}</strong></p>
-    <p>Here's some data:</p>
-    <pre>{{ data | async | json }}</pre>
-    <h2>Form stuff</h2>
-    <div>
-      You typed: {{ control.value }}
-    </div>
-    <qb-form-field [options]="{ label: 'Type something!' }">
-      <input #input [formControl]="control">
-    </qb-form-field>
+    <ng-container *ngIf="ready$ | async; else: #loading">
+      <h1>Hello!</h1>
+      <!-- <p>I am rendered on the <strong>{{ platform }}</strong></p> -->
+      <p>Here's some data:</p>
+      <pre>{{ data | async | json }}</pre>
+      <h2>Form stuff</h2>
+      <div>
+        You typed: {{ control.value }}
+      </div>
+      <qb-form-field [options]="{ label: 'Type something!' }">
+        <input #input [formControl]="control">
+      </qb-form-field>
 
-    <router-outlet></router-outlet>
+      <router-outlet></router-outlet>
+    </ng-container>
+    <ng-template #loading>
+      <p>Loading...</p>
+    </ng-template>
   `,
   styleUrls: ['./app.component.scss']
 })
@@ -33,6 +38,7 @@ export class AppComponent {
   public platform = ''
   public data: Observable<any>
   public control = new FormControl()
+  public ready$: Observable<boolean>
 
   constructor(
     @Inject(PLATFORM_ID) private _platformId: object,
@@ -40,15 +46,15 @@ export class AppComponent {
     private _httpClient: HttpClient,
   ) {
     // TODO: only show app once this callback has run.
-    combineLatest(
+    this.ready$ = combineLatest(
       this._bootConditions.map(
-        ({ ready$ }) => ready$.pipe(filter(
-          (isReady) => isReady)
+        ({ ready$ }) => ready$.pipe(
+          filter((isReady) => isReady)
         )
       ))
-      .subscribe(() => {
-        console.log('display app!')
-      })
+      .pipe(
+        map((readyReports) => readyReports.every((isReady) => isReady))
+      )
 
     this.platform = isPlatformBrowser(this._platformId)
       ? 'browser'
