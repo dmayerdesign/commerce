@@ -1,8 +1,8 @@
 
-import { Injectable } from '@nestjs/common'
+import { HttpException, Injectable } from '@nestjs/common'
 import { AppConfig } from '@qb/app-config'
+import { HttpStatus } from '@qb/common/constants/http-status'
 import { QbReadOnlyRepository } from '@qb/common/domains/data-access/repository.interface'
-import { ApiErrorResponse } from '@qb/common/domains/data-access/responses/api-error.response'
 import { InstagramPost } from '@qb/common/models/ui/instagram-post'
 import { environment } from '@qb/environment-vars'
 import * as rp from 'request-promise-native'
@@ -27,7 +27,7 @@ export class InstagramRepository implements QbReadOnlyRepository<InstagramPost> 
             }
         }
         catch (error) {
-            throw new ApiErrorResponse(error)
+            throw new HttpException(error, HttpStatus.SERVER_ERROR_INTERNAL)
         }
     }
 }

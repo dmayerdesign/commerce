@@ -1,9 +1,8 @@
-import { Inject } from '@nestjs/common'
+import { Inject, Injectable } from '@nestjs/common'
 import { Currency } from '@qb/common/constants/enums/currency'
 import { RangeLimit } from '@qb/common/constants/enums/range-limit'
 import { ListRequest } from '@qb/common/domains/data-access/requests/list.request'
 import { UpdateRequest } from '@qb/common/domains/data-access/requests/update.request'
-import { ApiErrorResponse } from '@qb/common/domains/data-access/responses/api-error.response'
 import { Order } from '@qb/common/domains/order/order'
 import { Organization } from '@qb/common/domains/organization/organization'
 import { Price } from '@qb/common/domains/price/price'
@@ -25,6 +24,7 @@ import { ProductRepository } from './product.repository'
  * -- *Simple match* on one or more attributes/taxonomies (in this case probably brand and stability)
  * -- Those that match all go first, those that match all but one go next, etc.
  */
+@Injectable()
 export class ProductService {
 
     constructor(
@@ -56,35 +56,30 @@ export class ProductService {
             limit: 0
         })
         const listRequest = await this._createProductListRequestQuery(getProductsRequest)
-        try {
-            const products = await this._productRepository.list(listRequest)
-            const _priceRange = products.reduce<Price[]>((priceRange, product) => {
-                const price = getPrice(product)
-                if (Array.isArray(price)) {
-                    if (priceRange[RangeLimit.Min].amount === 0 || price[RangeLimit.Min].amount < priceRange[RangeLimit.Min].amount) {
-                        priceRange[RangeLimit.Min] = price[RangeLimit.Min]
-                    }
-                    if (price[RangeLimit.Max].amount > priceRange[RangeLimit.Max].amount) {
-                        priceRange[RangeLimit.Max] = price[RangeLimit.Max]
-                    }
-                } else {
-                    if (price.amount < priceRange[RangeLimit.Min].amount) {
-                        priceRange[RangeLimit.Min] = price
-                    }
-                    if (price.amount > priceRange[RangeLimit.Max].amount) {
-                        priceRange[RangeLimit.Max] = price
-                    }
+        const products = await this._productRepository.list(listRequest)
+        const _priceRange = products.reduce<Price[]>((priceRange, product) => {
+            const price = getPrice(product)
+            if (Array.isArray(price)) {
+                if (priceRange[RangeLimit.Min].amount === 0 || price[RangeLimit.Min].amount < priceRange[RangeLimit.Min].amount) {
+                    priceRange[RangeLimit.Min] = price[RangeLimit.Min]
                 }
-                return priceRange
-            }, [
-                { amount: 0, currency: Currency.USD } as Price,
-                { amount: 0, currency: Currency.USD } as Price,
-            ])
-            return _priceRange
-        }
-        catch (error) {
-            throw new ApiErrorResponse(error)
-        }
+                if (price[RangeLimit.Max].amount > priceRange[RangeLimit.Max].amount) {
+                    priceRange[RangeLimit.Max] = price[RangeLimit.Max]
+                }
+            } else {
+                if (price.amount < priceRange[RangeLimit.Min].amount) {
+                    priceRange[RangeLimit.Min] = price
+                }
+                if (price.amount > priceRange[RangeLimit.Max].amount) {
+                    priceRange[RangeLimit.Max] = price
+                }
+            }
+            return priceRange
+        }, [
+            { amount: 0, currency: Currency.USD } as Price,
+            { amount: 0, currency: Currency.USD } as Price,
+        ])
+        return _priceRange
     }
 
     public updateInventory(products: Product[], order: Order): Promise<Product[]> {

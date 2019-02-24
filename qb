@@ -19,8 +19,8 @@ function main() {
       'skip-tests'
     ],
     alias: {
-      env: 'environment',
-      skipTests: 'skip-tests',
+      'env': 'environment',
+      'skipTests': 'skip-tests',
     },
   })
   const environment = _environment || 'development'

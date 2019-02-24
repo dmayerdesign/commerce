@@ -12,7 +12,7 @@ import { filter, map } from 'rxjs/operators'
 @Component({
   selector: 'web-root',
   template: `
-    <ng-container *ngIf="ready$ | async; else: #loading">
+    <ng-container *ngIf="ready$ | async; else loading">
       <h1>Hello!</h1>
       <!-- <p>I am rendered on the <strong>{{ platform }}</strong></p> -->
       <p>Here's some data:</p>
@@ -45,7 +45,6 @@ export class AppComponent {
     @Inject(BOOT_CONDITIONS) private _bootConditions: Preboot[],
     private _httpClient: HttpClient,
   ) {
-    // TODO: only show app once this callback has run.
     this.ready$ = combineLatest(
       this._bootConditions.map(
         ({ ready$ }) => ready$.pipe(

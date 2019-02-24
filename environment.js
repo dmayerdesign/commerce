@@ -1,7 +1,10 @@
 const { resolve } = require('path')
-require('dotenv').config({
-  path: resolve(process.env.QB_PATH_TO_SECRETS, '.env')
-})
+
+if (process.env.QB_PATH_TO_SECRETS) {
+  require('dotenv').config({
+    path: resolve(process.env.QB_PATH_TO_SECRETS, '.env')
+  })
+}
 
 module.exports.environment = function() {
   // Note: though we're using `decodeURIComponent`, this value should NEVER be transmitted

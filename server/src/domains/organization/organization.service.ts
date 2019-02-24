@@ -1,9 +1,8 @@
-import { Inject, Injectable } from '@nestjs/common'
-import { Organization } from '@qb/common/domains/organization/organization'
-import { ListRequest } from '@qb/common/domains/data-access/requests/list.request'
-import { ApiErrorResponse } from '@qb/common/domains/data-access/responses/api-error.response'
+import { HttpException, Inject, Injectable } from '@nestjs/common'
 import { Copy } from '@qb/common/constants/copy'
 import { HttpStatus } from '@qb/common/constants/http-status'
+import { ListRequest } from '@qb/common/domains/data-access/requests/list.request'
+import { Organization } from '@qb/common/domains/organization/organization'
 import { hyzershop } from '../../../../work-files/data/organization_hyzershop'
 import { OrganizationRepository } from './organization.repository'
 
@@ -22,7 +21,10 @@ export class OrganizationService {
       }))
 
       if (!organizations || !organizations.length) {
-          throw new ApiErrorResponse(new Error(Copy.ErrorMessages.findOrganizationError), HttpStatus.CLIENT_ERROR_NOT_FOUND)
+        throw new HttpException(
+          new Error(Copy.ErrorMessages.findOrganizationError),
+          HttpStatus.CLIENT_ERROR_NOT_FOUND,
+        )
       }
 
       return organizations[0]

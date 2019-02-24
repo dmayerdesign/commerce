@@ -27,7 +27,11 @@ import { OrganizationService } from './organization/organization.service'
     AppComponent,
   ],
   providers: [
-    { provide: BOOT_CONDITIONS, useExisting: OrganizationService, multi: true }
+    {
+      provide: BOOT_CONDITIONS,
+      useExisting: OrganizationService,
+      multi: true,
+    }
   ],
   bootstrap: [AppComponent],
 })

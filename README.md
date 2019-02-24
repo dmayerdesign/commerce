@@ -17,5 +17,5 @@ This project was created using [Angular CLI](https://github.com/angular/angular-
 
 ## Test
 
-`./qb test ui [unit|e2e]`
-`./qb test server [unit] [watch|cov]`
+`./qb test ui [<unit|e2e>]`
+`./qb test server`

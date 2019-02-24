@@ -4,7 +4,7 @@ import { organizations } from '@qb/common/constants/api-endpoints'
 import { Organization } from '@qb/common/domains/organization/organization.interface'
 import { Preboot } from '@qb/common/models/ui/preboot'
 import { Observable } from 'rxjs'
-import { mapTo } from 'rxjs/operators'
+import { map } from 'rxjs/operators'
 
 @Injectable({ providedIn: 'root' })
 export class OrganizationService implements Preboot {
@@ -19,9 +19,7 @@ export class OrganizationService implements Preboot {
     )
 
     this.ready$ = this.organization$.pipe(
-      // TODO: un-comment and use this instead of mapTo.
-      // map((organization) => !!organization)
-      mapTo(true)
+      map((organization) => !!organization)
     )
   }
 }

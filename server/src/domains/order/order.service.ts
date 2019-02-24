@@ -1,7 +1,6 @@
-import { Inject, Injectable } from '@nestjs/common'
+import { Inject, Injectable, HttpException } from '@nestjs/common'
 import { ListRequest } from '@qb/common/domains/data-access/requests/list.request'
 import { UpdateManyRequest } from '@qb/common/domains/data-access/requests/update-many.request'
-import { ApiErrorResponse } from '@qb/common/domains/data-access/responses/api-error.response'
 import { Order } from '@qb/common/domains/order/order'
 import { Product } from '@qb/common/domains/product/product'
 import { getDisplayProducts } from '@qb/common/helpers/cart.helpers'
@@ -13,6 +12,7 @@ import { ProductRepository } from '../product/product.repository'
 import { ProductService } from '../product/product.service'
 import { OrderRepository } from './order.repository'
 import { OrderService as IOrderService } from './order.service.interface'
+import { HttpStatus } from '@qb/common/constants/http-status';
 
 /**
  * TODO:
@@ -78,10 +78,10 @@ export class OrderService implements IOrderService {
             return paidOrder
         }
         catch (error) {
-            if (error instanceof ApiErrorResponse) {
+            if (error instanceof HttpException) {
                 throw error
             }
-            throw new ApiErrorResponse(error)
+            throw new HttpException(error, HttpStatus.SERVER_ERROR_INTERNAL)
         }
     }
 

@@ -1,10 +1,9 @@
 import { readdirSync, writeFileSync } from 'fs'
 import { mkdirpSync } from 'fs-extra'
 import { resolve } from 'path'
-import { environment } from '../../../environment'
 
 export default function main(): void {
-  const buildEnv = environment().ENVIRONMENT
+  const buildEnv = process.env.ENVIRONMENT as string
   const appConfig = require(`../../../app-config.${buildEnv.toLowerCase()}.json`)
   const destPath = resolve(__dirname, '../generated/config/app-config.generated.ts')
   const formatJsonValue = (value: any) => typeof value === 'string'

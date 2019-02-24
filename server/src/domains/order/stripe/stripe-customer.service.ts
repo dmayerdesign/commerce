@@ -1,6 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { UpdateRequest } from '@qb/common/domains/data-access/requests/update.request'
-import { ApiErrorResponse } from '@qb/common/domains/data-access/responses/api-error.response'
 import { Order } from '@qb/common/domains/order/order'
 import { User } from '@qb/common/domains/user/user'
 import { environment } from '@qb/environment-vars'
@@ -84,13 +83,8 @@ console.log(customer)
      * @param {string} stripeCustomerId - The Stripe customer's `id`
      */
     public async addCard(tokenID: string, stripeCustomerId: string): Promise<Stripe.cards.ICard> {
-        try {
-            const card = await stripe.customers.createSource(stripeCustomerId, { source: tokenID })
-            return <Stripe.cards.ICard>card
-        }
-        catch (error) {
-            throw new ApiErrorResponse(error)
-        }
+        const card = await stripe.customers.createSource(stripeCustomerId, { source: tokenID })
+        return <Stripe.cards.ICard>card
     }
 
     /**
@@ -99,16 +93,11 @@ console.log(customer)
      * @param {string} stripeCustomerId - The Stripe customer's `id`
      */
     public async getCustomer(customerId: string): Promise<Stripe.customers.ICustomer> {
-        try {
-            if (!customerId) {
-                throw new Error('No Stripe customer is associated with this user.')
-            }
-            const customer = await stripe.customers.retrieve(customerId)
-            return <Stripe.customers.ICustomer>customer
+        if (!customerId) {
+            throw new Error('No Stripe customer is associated with this user.')
         }
-        catch (error) {
-            throw new ApiErrorResponse(error)
-        }
+        const customer = await stripe.customers.retrieve(customerId)
+        return <Stripe.customers.ICustomer>customer
     }
 
     /**
@@ -120,13 +109,8 @@ console.log(customer)
      */
     public async updateCustomer(stripeCustomerId: string, updateObj: object):
         Promise<Stripe.customers.ICustomer> {
-        try {
-            const customer = await stripe.customers.update(stripeCustomerId, updateObj)
-            return <Stripe.customers.ICustomer>customer
-        }
-        catch (error) {
-            throw new ApiErrorResponse(error)
-        }
+        const customer = await stripe.customers.update(stripeCustomerId, updateObj)
+        return <Stripe.customers.ICustomer>customer
     }
 
     /**
@@ -138,12 +122,7 @@ console.log(customer)
      */
     public async updateCustomerDefaultSource(stripeCustomerId: string, stripeCardId: string):
         Promise<Stripe.customers.ICustomer> {
-        try {
-            const customer = await stripe.customers.update(stripeCustomerId, { default_source: stripeCardId })
-            return <Stripe.customers.ICustomer>customer
-        }
-        catch (error) {
-            throw new ApiErrorResponse(error)
-        }
+        const customer = await stripe.customers.update(stripeCustomerId, { default_source: stripeCardId })
+        return <Stripe.customers.ICustomer>customer
     }
 }
