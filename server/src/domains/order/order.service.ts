@@ -1,4 +1,4 @@
-import { Inject, Injectable, HttpException } from '@nestjs/common'
+import { Inject, Injectable } from '@nestjs/common'
 import { ListRequest } from '@qb/common/domains/data-access/requests/list.request'
 import { UpdateManyRequest } from '@qb/common/domains/data-access/requests/update-many.request'
 import { Order } from '@qb/common/domains/order/order'
@@ -12,7 +12,6 @@ import { ProductRepository } from '../product/product.repository'
 import { ProductService } from '../product/product.service'
 import { OrderRepository } from './order.repository'
 import { OrderService as IOrderService } from './order.service.interface'
-import { HttpStatus } from '@qb/common/constants/http-status';
 
 /**
  * TODO:
@@ -36,53 +35,46 @@ export class OrderService implements IOrderService {
     ) { }
 
     public async place(newOrder: Partial<Order>): Promise<Order> {
-        try {
-            // Hydrate the order (replace the `id`s stored in `order.products` with products).
 
-            const order = await this._hydrate(newOrder) as Order
+        // Hydrate the order (replace the `id`s stored in `order.products` with products).
 
-            // Submit the order.
+        const order = await this._hydrate(newOrder) as Order
 
-            const stripeSubmitOrderResponse = await this._stripeOrderService
-                .submitOrder(order)
+        // Submit the order.
 
-            const paidOrder = await this._hydrate(stripeSubmitOrderResponse.order) as Order
-            const parentProducts = await this._productService.getParentProducts(order.products as Product[])
-            const allProducts = [ ...order.products as Product[], ...parentProducts ]
+        const stripeSubmitOrderResponse = await this._stripeOrderService
+            .submitOrder(order)
 
-            // Update the stock quantity and total sales of each variation and standalone.
+        const paidOrder = await this._hydrate(stripeSubmitOrderResponse.order) as Order
+        const parentProducts = await this._productService.getParentProducts(order.products as Product[])
+        const allProducts = [ ...order.products as Product[], ...parentProducts ]
 
-            this._productService.updateInventory(allProducts, paidOrder)
+        // Update the stock quantity and total sales of each variation and standalone.
 
-            // Set `existsInStripe` asynchronously.
+        this._productService.updateInventory(allProducts, paidOrder)
 
-            this._productRepository.updateMany(new UpdateManyRequest<Product>({
-                ids: allProducts.map((product) => product.id),
-                update: {
-                    existsInStripe: true,
-                },
-            }))
+        // Set `existsInStripe` asynchronously.
 
-            // Send a receipt.
-            if (paidOrder.customer) {
-                const organization = await this._organizationService.getOrganization()
-                await this._emailService.sendReceipt({
-                    organization,
-                    order: paidOrder,
-                    orderDisplayProducts: getDisplayProducts(order.products as Product[]),
-                    toEmail: paidOrder.customer.email,
-                    toName: getFullName(paidOrder.customer)
-                })
-            }
+        this._productRepository.updateMany(new UpdateManyRequest<Product>({
+            ids: allProducts.map((product) => product.id),
+            update: {
+                existsInStripe: true,
+            },
+        }))
 
-            return paidOrder
+        // Send a receipt.
+        if (paidOrder.customer) {
+            const organization = await this._organizationService.getOrganization()
+            await this._emailService.sendReceipt({
+                organization,
+                order: paidOrder,
+                orderDisplayProducts: getDisplayProducts(order.products as Product[]),
+                toEmail: paidOrder.customer.email,
+                toName: getFullName(paidOrder.customer)
+            })
         }
-        catch (error) {
-            if (error instanceof HttpException) {
-                throw error
-            }
-            throw new HttpException(error, HttpStatus.SERVER_ERROR_INTERNAL)
-        }
+
+        return paidOrder
     }
 
     /**

@@ -134,6 +134,7 @@ function build(stack, env, skipTests) {
       exec(`./node_modules/@angular/cli/bin/ng build web --configuration=${env} && ./node_modules/@angular/cli/bin/ng run web:ssr:${env}`)
     }
     if (stack === 'server') {
+      exec(`./node_modules/@angular/cli/bin/ng run web:ssr:${env}`)
       exec(`./node_modules/typescript/bin/tsc -p server/tsconfig.server.json`)
       mkdirp(resolve(__dirname, './dist/server/server/src/domains/email/emails/templates'))
       copySync(

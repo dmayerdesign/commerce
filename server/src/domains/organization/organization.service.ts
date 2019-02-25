@@ -22,7 +22,7 @@ export class OrganizationService {
 
       if (!organizations || !organizations.length) {
         throw new HttpException(
-          new Error(Copy.ErrorMessages.findOrganizationError),
+          Copy.ErrorMessages.findOrganizationError,
           HttpStatus.CLIENT_ERROR_NOT_FOUND,
         )
       }

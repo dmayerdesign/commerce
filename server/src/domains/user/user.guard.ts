@@ -1,9 +1,7 @@
-import { CanActivate, ExecutionContext, HttpException, Injectable } from '@nestjs/common'
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
 import { Cookies } from '@qb/common/constants/cookies'
-import { Copy } from '@qb/common/constants/copy'
 import { UserRole } from '@qb/common/constants/enums/user-role'
-import { HttpStatus } from '@qb/common/constants/http-status'
 import { User } from '@qb/common/domains/user/user'
 import { cleanUser } from '@qb/common/helpers/user.helpers'
 import { RequestWithUser } from '@qb/common/models/server/request-with-user'
@@ -21,14 +19,17 @@ export class UserGuard implements CanActivate {
   ) { }
 
   public async canActivate(context: ExecutionContext): Promise<boolean> {
-    const roles = this._reflector.get<UserRole[]>('roles', context.getClass())
-    const { getRequest } = context.switchToHttp()
-    const request = getRequest<RequestWithUser>()
+    try {
+      const roles = this._reflector.get<UserRole[]>('roles', context.getClass())
+      const request = context.switchToHttp().getRequest<RequestWithUser>()
 
-    if (!roles) {
-      return this._isAuthenticated(request)
-    } else {
-      return this._hasRole(request, roles)
+      if (!roles) {
+        return this._isAuthenticated(request)
+      } else {
+        return this._hasRole(request, roles)
+      }
+    } catch (_error) {
+      return false
     }
   }
 
@@ -37,20 +38,14 @@ export class UserGuard implements CanActivate {
     let payload: User | undefined
 
     if (!token) {
-      throw new HttpException(
-        new Error(Copy.ErrorMessages.userNotAuthenticated),
-        HttpStatus.CLIENT_ERROR_UNAUTHORIZED
-      )
+      return false
     }
     else {
       try {
         payload = jwt.verify(token, jwtSecret as string) as User
       }
       catch (error) {
-        throw new HttpException(
-          new Error(Copy.ErrorMessages.userNotAuthenticated),
-          HttpStatus.CLIENT_ERROR_UNAUTHORIZED,
-        )
+        return false
       }
 
       if (!!payload) {

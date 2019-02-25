@@ -50,7 +50,10 @@ export class StripeOrderService {
         const standalones = variationsAndStandalones.filter((variationOrStandalone) => !variationOrStandalone.isVariation)
 
         if (!variationsAndStandalones || !variationsAndStandalones.length) {
-            throw new HttpException(new Error(Copy.ErrorMessages.productsNotFound), HttpStatus.CLIENT_ERROR_NOT_FOUND)
+            throw new HttpException(
+                Copy.ErrorMessages.productsNotFound,
+                HttpStatus.CLIENT_ERROR_NOT_FOUND,
+            )
         }
 
         variationsAndStandalones.forEach(product => {

@@ -8,8 +8,8 @@ import { UpdateRequest } from '@qb/common/domains/data-access/requests/update.re
 import { User } from '@qb/common/domains/user/user'
 import { Wishlist } from '@qb/common/domains/wishlist/wishlist'
 import { cleanUserForJwt } from '@qb/common/helpers/user.helpers'
-import * as bcrypt from 'bcrypt-nodejs'
 import { environment } from '@qb/environment-vars'
+import * as bcrypt from 'bcrypt-nodejs'
 import { Request, Response } from 'express'
 import * as jwt from 'jsonwebtoken'
 import { getIdAsEntityType } from 'server/src/shared/data-access/data-access.helpers'
@@ -88,7 +88,7 @@ export class UserService {
             }
             else {
                 throw new HttpException(
-                    new Error(Copy.ErrorMessages.userEmailExists),
+                    Copy.ErrorMessages.userEmailExists,
                     HttpStatus.CLIENT_ERROR_BAD_REQUEST,
                 )
             }
@@ -111,7 +111,7 @@ export class UserService {
 
             if (!user) {
                 throw new HttpException(
-                    new Error(Copy.ErrorMessages.userNotFound),
+                    Copy.ErrorMessages.userNotFound,
                     HttpStatus.CLIENT_ERROR_NOT_FOUND
                 )
             }
@@ -160,28 +160,24 @@ export class UserService {
     }
 
     public async verifyEmail(token: string): Promise<void> {
-        try {
-            const user = await this._userRepository.lookup(
-                'emailVerificationToken', token
-            )
+        const user = await this._userRepository.lookup(
+            'emailVerificationToken', token
+        )
 
-            if (!user) {
+        if (!user) {
+            throw new HttpException(
+                'User not found - the email verification token did not match ' +
+                'any token in the database',
+                HttpStatus.CLIENT_ERROR_NOT_FOUND
+            )
+        }
+        else {
+            if (user.emailTokenExpires as number < Date.now()) {
                 throw new HttpException(
-                    new Error(
-                        'User not found - the email verification token did not match ' +
-                        'any token in the database'
-                    ),
-                    HttpStatus.CLIENT_ERROR_NOT_FOUND
+                    'Verification token has expired',
+                    HttpStatus.CLIENT_ERROR_BAD_REQUEST,
                 )
             }
-            else {
-                if (user.emailTokenExpires as number < Date.now()) {
-                    throw new HttpException(new Error('Verification token has expired'), HttpStatus.CLIENT_ERROR_BAD_REQUEST)
-                }
-            }
-        }
-        catch (error) {
-            throw new HttpException(error, HttpStatus.SERVER_ERROR_INTERNAL)
         }
     }
 }
