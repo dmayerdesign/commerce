@@ -1,8 +1,8 @@
+import { Entity } from '@qb/common/domains/data-access/entity.interface'
+import { InclusivePartial, QbRepository as IQbRepository } from '@qb/common/domains/data-access/repository.interface'
 import { ListRequest } from '@qb/common/domains/data-access/requests/list.request'
 import { UpdateManyRequest } from '@qb/common/domains/data-access/requests/update-many.request'
 import { UpdateRequest } from '@qb/common/domains/data-access/requests/update.request'
-import { Entity } from '@qb/common/domains/data-access/entity.interface'
-import { InclusivePartial, QbRepository as IQbRepository } from '@qb/common/domains/data-access/repository.interface'
 import { isArrayLike, toArray } from '@qb/common/helpers/mongoose.helpers'
 import { DeepPartial, DeleteWriteOpResultObject, FindManyOptions, MongoRepository, ObjectID } from 'typeorm'
 
@@ -126,7 +126,7 @@ export abstract class QbRepository<EntityType extends Entity> implements IQbRepo
       return existingDoc
     }
     const newDocs = await this.insert(docOrQuery)
-    return newDocs[0]
+    return newDocs
   }
 
   public lookup(key: keyof EntityType, value: any): Promise<EntityType | undefined> {

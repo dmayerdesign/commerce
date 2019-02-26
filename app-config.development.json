@@ -14,5 +14,5 @@
   "instagram_user_id": 2256915511,
   "path_to_web_ssr_from_module_root": "../../dist/server/web-ssr",
   "path_to_entities_from_module_root": "../../common/src/lib/domains/**/*.ts",
-  "replica_set_name": "cubie-development-cluster-shard-0"
+  "replica_set_name": "cubie-test-1-shard-0"
 }

@@ -20,7 +20,7 @@ applyDomino(global, join(BROWSER_DIR, 'index.html'))
   imports: [
     TypeOrmModule.forRoot({
       type: 'mongodb',
-      url: environment().MONGODB_URI_TEST,
+      url: environment().MONGODB_URI,
       authSource: 'admin',
       replicaSet: AppConfig.replica_set_name,
       useNewUrlParser: true,

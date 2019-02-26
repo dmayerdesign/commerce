@@ -9,8 +9,7 @@ declare module 'environment' {
     CLIENT_URL: string
     MAILGUN_DOMAIN: string
     // Database.
-    // MONGODB_URI: string
-    MONGODB_URI_TEST: string
+    MONGODB_URI: string
 
     // API Keys.
     ADMIN_KEY: string
