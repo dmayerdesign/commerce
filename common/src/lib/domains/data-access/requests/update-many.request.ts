@@ -1,4 +1,5 @@
-import { DeepPartial, ObjectID } from 'typeorm'
+import { ObjectID } from 'mongodb'
+import { DeepPartial } from 'typeorm'
 
 export class UpdateManyRequest<EntityType> {
   public ids: (string | ObjectID)[]

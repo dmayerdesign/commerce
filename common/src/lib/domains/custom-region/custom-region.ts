@@ -1,4 +1,5 @@
-import { Column, Entity, JoinColumn, ObjectIdColumn, ObjectID, OneToMany } from 'typeorm'
+import { ObjectID } from 'mongodb'
+import { Column, Entity, JoinColumn, ObjectIdColumn, OneToMany } from 'typeorm'
 import { CustomRegion as ICustomRegion } from './custom-region.interface'
 
 @Entity()

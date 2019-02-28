@@ -1,4 +1,6 @@
-import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, JoinColumn, ManyToMany, ManyToOne, ObjectIdColumn, ObjectID, OneToMany, UpdateDateColumn } from 'typeorm'
+import { ObjectID } from 'mongodb'
+import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, JoinColumn,
+    ManyToMany, ManyToOne, ObjectIdColumn, OneToMany, UpdateDateColumn } from 'typeorm'
 import { AttributeValue } from '../attribute-value/attribute-value'
 import { Attribute } from '../attribute/attribute'
 import { Dimensions } from '../dimensions/dimensions'

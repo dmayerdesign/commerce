@@ -1,4 +1,6 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ObjectIdColumn, ObjectID, OneToMany, UpdateDateColumn } from 'typeorm'
+import { ObjectID } from 'mongodb'
+import { Column, CreateDateColumn, Entity, JoinColumn, ObjectIdColumn, OneToMany,
+    UpdateDateColumn } from 'typeorm'
 import { UserRole } from '../../constants/enums/user-role'
 import { Address } from '../address/address'
 import { Cart } from '../cart/cart'

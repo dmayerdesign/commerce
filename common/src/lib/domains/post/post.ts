@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToMany, ObjectIdColumn, ObjectID, OneToMany, UpdateDateColumn } from 'typeorm'
+import { ObjectID } from 'mongodb'
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToMany, ObjectIdColumn, OneToMany, UpdateDateColumn } from 'typeorm'
 import { Image } from '../image/image'
 import { Comment as IComment } from '../post/post.interface'
 import { Post as IPost } from '../post/post.interface'

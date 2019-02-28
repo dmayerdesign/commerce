@@ -1,5 +1,5 @@
 import { Entity } from '@qb/common/domains/data-access/entity.interface'
-import { ObjectID } from 'typeorm'
+import { ObjectID } from 'mongodb'
 
 export function getIdAsEntityType<EntityType extends Entity>(
   documentOrId: EntityType | ObjectID | string

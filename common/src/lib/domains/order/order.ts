@@ -1,4 +1,6 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ObjectIdColumn, ObjectID, OneToMany, UpdateDateColumn } from 'typeorm'
+import { ObjectID } from 'mongodb'
+import { Column, CreateDateColumn, Entity, JoinColumn, ObjectIdColumn, OneToMany,
+    UpdateDateColumn } from 'typeorm'
 import { OrderStatus } from '../../constants/enums/order-status'
 import { Discount } from '../discount/discount'
 import { EasypostRate } from '../easypost-rate/easypost-rate'

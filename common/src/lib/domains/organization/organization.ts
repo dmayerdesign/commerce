@@ -1,4 +1,6 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ObjectIdColumn, ObjectID, OneToMany, UpdateDateColumn } from 'typeorm'
+import { ObjectID } from 'mongodb'
+import { Column, CreateDateColumn, Entity, JoinColumn, ObjectIdColumn, OneToMany,
+    UpdateDateColumn } from 'typeorm'
 import { OrganizationType } from '../../constants/enums/organization-type'
 import { GlobalStyles } from '../global-styles/global-styles'
 import { OrganizationBranding } from '../organization-branding/organization-branding'

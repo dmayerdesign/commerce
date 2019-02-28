@@ -1,4 +1,5 @@
-import { Column, ColumnOptions, Entity, ObjectIdColumn, ObjectID } from 'typeorm'
+import { ObjectID } from 'mongodb'
+import { Column, ColumnOptions, Entity, ObjectIdColumn } from 'typeorm'
 import { getImageForSchema } from '../../helpers/image.helpers'
 import { Image as IImage } from './image.interface'
 

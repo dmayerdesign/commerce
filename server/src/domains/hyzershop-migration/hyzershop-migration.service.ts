@@ -14,7 +14,7 @@ import { TaxonomyTerm } from '@qb/common/domains/taxonomy-term/taxonomy-term'
 import * as productsJSON from '@qb/common/work-files/migration/hyzershop-products'
 import { pluralize, singularize, titleize } from 'inflection'
 import { camelCase, cloneDeep, kebabCase } from 'lodash'
-import { ObjectID } from 'typeorm'
+import { ObjectID } from 'mongodb'
 import { getConnection } from 'typeorm'
 import { AttributeValueRepository } from '../attribute-value/attribute-value.repository'
 import { AttributeRepository } from '../attribute/attribute.repository'
@@ -111,9 +111,9 @@ export class HyzershopMigrationService {
               ) {
                 if (typeof product[key] === 'string') {
                   if (product.type === 'Variable' && product[key].indexOf('|') > -1) {
-                    const variableAttributeValueSlugs = product[key]
+                    const variableAttributeValueSlugs = (product[key] as string)
                       .split('|')
-                      .map((val) => {
+                      .map((val: string) => {
                         return kebabCase(theKey + '-' + val.replace(/\s/g, '-').replace(/[\(\)]/g, '').toLowerCase())
                       })
                     const variableAttributeValueValues = product[key].split('|')

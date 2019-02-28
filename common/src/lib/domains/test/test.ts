@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, ObjectIdColumn, ObjectID, UpdateDateColumn } from 'typeorm'
+import { ObjectID } from 'mongodb'
+import { Column, CreateDateColumn, Entity, ObjectIdColumn, UpdateDateColumn } from 'typeorm'
 import { Test as ITest } from './test.interface'
 
 @Entity()

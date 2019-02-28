@@ -1,4 +1,5 @@
-import { Entity, JoinColumn, ManyToMany, ManyToOne, ObjectIdColumn, ObjectID } from 'typeorm'
+import { ObjectID } from 'mongodb'
+import { Entity, JoinColumn, ManyToMany, ManyToOne, ObjectIdColumn } from 'typeorm'
 import { Product } from '../product/product'
 import { User } from '../user/user'
 import { Wishlist as IWishlist } from './wishlist.interface'

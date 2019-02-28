@@ -1,4 +1,6 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToMany, ObjectIdColumn, ObjectID, UpdateDateColumn } from 'typeorm'
+import { ObjectID } from 'mongodb'
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToMany, ObjectIdColumn,
+    UpdateDateColumn } from 'typeorm'
 import { UsabilityExperience } from '../usability-experience/usability-experience'
 import { UsabilityTestBucket } from '../usability-test-bucket/usability-test-bucket'
 import { UsabilityTest as IUsabilityTest } from './usability-test.interface'

@@ -1,5 +1,6 @@
 import { TemplateRef } from '@angular/core'
-import { Column, Entity, JoinColumn, ObjectIdColumn, ObjectID, OneToMany } from 'typeorm'
+import { ObjectID } from 'mongodb'
+import { Column, Entity, JoinColumn, ObjectIdColumn, OneToMany } from 'typeorm'
 import { NavigationItem as INavigationItem } from './navigation-item.interface'
 
 /**

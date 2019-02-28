@@ -1,4 +1,5 @@
-import { Column, Entity, ObjectIdColumn, ObjectID } from 'typeorm'
+import { ObjectID } from 'mongodb'
+import { Column, Entity, ObjectIdColumn } from 'typeorm'
 import { UsabilityExperience } from '../usability-experience/usability-experience'
 import { UsabilityTestBucket as IUsabilityTestBucket } from './usability-test-bucket.interface'
 

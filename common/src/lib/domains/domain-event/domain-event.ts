@@ -1,6 +1,7 @@
 import { DomainEventVerb } from '@qb/common/constants/enums/domain-event-verb'
 import { HttpVerb } from '@qb/common/modules/http/http.models'
-import { Column, CreateDateColumn, Entity, ObjectIdColumn, ObjectID, UpdateDateColumn } from 'typeorm'
+import { ObjectID } from 'mongodb'
+import { Column, CreateDateColumn, Entity, ObjectIdColumn, UpdateDateColumn } from 'typeorm'
 import { Diff } from '../diff/diff'
 import { DomainEvent as IDomainEvent } from './domain-event.interface'
 

@@ -1,4 +1,5 @@
-import { Column, Entity, ObjectIdColumn, ObjectID } from 'typeorm'
+import { ObjectID } from 'mongodb'
+import { Column, Entity, ObjectIdColumn } from 'typeorm'
 import { Attribute as IAttribute } from './attribute.interface'
 
 @Entity()

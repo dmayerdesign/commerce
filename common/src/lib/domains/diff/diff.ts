@@ -1,4 +1,5 @@
-import { Column, Entity, ObjectIdColumn, ObjectID } from 'typeorm'
+import { ObjectID } from 'mongodb'
+import { Column, Entity, ObjectIdColumn } from 'typeorm'
 import { Diff as IDiff } from './diff.interface'
 
 @Entity()

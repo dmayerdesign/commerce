@@ -1,7 +1,8 @@
 import { ListRequest } from '@qb/common/domains/data-access/requests/list.request'
 import { UpdateManyRequest } from '@qb/common/domains/data-access/requests/update-many.request'
 import { UpdateRequest } from '@qb/common/domains/data-access/requests/update.request'
-import { DeepPartial, ObjectID } from 'typeorm'
+import { ObjectID } from 'mongodb'
+import { DeepPartial } from 'typeorm'
 
 export type InclusivePartial<Type> = Partial<Type> & DeepPartial<Type>
 

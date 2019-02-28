@@ -1,4 +1,5 @@
-import { Column, Entity, JoinColumn, ObjectIdColumn, ObjectID, OneToMany } from 'typeorm'
+import { ObjectID } from 'mongodb'
+import { Column, Entity, JoinColumn, ObjectIdColumn, OneToMany } from 'typeorm'
 import { Discount } from '../discount/discount'
 import { Price } from '../price/price'
 import { Product } from '../product/product'

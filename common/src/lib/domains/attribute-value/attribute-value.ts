@@ -1,4 +1,5 @@
-import { Column, Entity, JoinColumn, ManyToOne, ObjectIdColumn, ObjectID } from 'typeorm'
+import { ObjectID } from 'mongodb'
+import { Column, Entity, JoinColumn, ManyToOne, ObjectIdColumn } from 'typeorm'
 import { Attribute } from '../attribute/attribute'
 import { AttributeValue as IAttributeValue } from './attribute-value.interface'
 

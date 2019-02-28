@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, ObjectIdColumn, ObjectID, UpdateDateColumn } from 'typeorm'
+import { ObjectID } from 'mongodb'
+import { Column, CreateDateColumn, Entity, ObjectIdColumn, UpdateDateColumn } from 'typeorm'
 import { UsabilityExperience as IUsabilityExperience } from './usability-experience.interface'
 
 @Entity()
