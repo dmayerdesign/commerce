@@ -1,4 +1,4 @@
-import { ObjectID } from 'mongodb'
+import { ObjectId } from 'mongodb'
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToMany, ObjectIdColumn, OneToMany, UpdateDateColumn } from 'typeorm'
 import { Image } from '../image/image'
 import { Comment as IComment } from '../post/post.interface'
@@ -32,7 +32,7 @@ export class Reactions {
 
 @Entity()
 export class Comment implements IComment {
-    @ObjectIdColumn() public id: ObjectID
+    @ObjectIdColumn() public id: ObjectId
     @Column(() => Author) public author: Author
     @Column() public content: string
 
@@ -46,7 +46,7 @@ export class Comment implements IComment {
 
 @Entity()
 export class Post implements IPost {
-    @ObjectIdColumn() public id: ObjectID
+    @ObjectIdColumn() public id: ObjectId
     @Column(() => Author) public author: Author
     @Column({ default: 'normal' }) public type: string
     @Column(() => Author) public content: Author

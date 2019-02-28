@@ -2,7 +2,7 @@ import { RangeLimit } from '@qb/common/constants/enums/range-limit'
 import { ProductListFilter } from '@qb/common/domains/product/product-list-filter'
 import { queryWithAndOperation } from '@qb/common/helpers/mongoose.helpers'
 import { cloneDeep } from 'lodash'
-import { ObjectID } from 'mongodb'
+import { ObjectId } from 'mongodb'
 
 export function propertyFilter(filter: ProductListFilter, query: typeof queryWithAndOperation): typeof queryWithAndOperation {
   const newQuery = cloneDeep(query)
@@ -114,7 +114,7 @@ export function attributeValueFilter(filter: ProductListFilter, query: typeof qu
 
 // Note: Parents and variations must share the same taxonomy terms.
 // TODO: Should be deriving a variation's taxonomy terms from its parent.
-export function taxonomyTermFilter(ids: ObjectID[], query: typeof queryWithAndOperation): typeof queryWithAndOperation {
+export function taxonomyTermFilter(ids: ObjectId[], query: typeof queryWithAndOperation): typeof queryWithAndOperation {
     const newQuery = cloneDeep(query)
 
     if (ids && ids.length) {

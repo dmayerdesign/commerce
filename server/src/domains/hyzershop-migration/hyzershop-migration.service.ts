@@ -14,7 +14,7 @@ import { TaxonomyTerm } from '@qb/common/domains/taxonomy-term/taxonomy-term'
 import * as productsJSON from '@qb/common/work-files/migration/hyzershop-products'
 import { pluralize, singularize, titleize } from 'inflection'
 import { camelCase, cloneDeep, kebabCase } from 'lodash'
-import { ObjectID } from 'mongodb'
+import { ObjectId } from 'mongodb'
 import { getConnection } from 'typeorm'
 import { AttributeValueRepository } from '../attribute-value/attribute-value.repository'
 import { AttributeRepository } from '../attribute/attribute.repository'
@@ -76,11 +76,11 @@ export class HyzershopMigrationService {
 
         const newProduct: Product = cloneDeep(product)
 
-        const variableAttributeIds: ObjectID[] = []
-        const variableAttributeValueIds: ObjectID[] = []
-        const attributeValueIds: ObjectID[] = []
-        const simpleAttributeValues: { attribute: ObjectID, value: any }[] = []
-        const taxonomyTermIds: ObjectID[] = []
+        const variableAttributeIds: ObjectId[] = []
+        const variableAttributeValueIds: ObjectId[] = []
+        const attributeValueIds: ObjectId[] = []
+        const simpleAttributeValues: { attribute: string, value: any }[] = []
+        const taxonomyTermIds: ObjectId[] = []
 
         const flightStats: {
           fade:  number | undefined
@@ -127,7 +127,7 @@ export class HyzershopMigrationService {
                       for (const variableAttributeValueSlug of variableAttributeValueSlugs) {
                         try {
                           const variableAttributeValue = await this._attributeValueRepository.getOrCreate({
-                            attribute: variableAttribute.id,
+                            attribute: variableAttribute.id.toHexString(),
                             slug: variableAttributeValueSlug,
                             value: variableAttributeValueValues[variableAttributeValueSlugs.indexOf(variableAttributeValueSlug)],
                           })
@@ -151,7 +151,7 @@ export class HyzershopMigrationService {
                         slug: attributeSlug
                       })
                       const attributeValue = await this._attributeValueRepository.getOrCreate({
-                        attribute: attribute.id,
+                        attribute: attribute.id.toHexString(),
                         slug: attributeValueSlug,
                         value,
                       })
@@ -192,7 +192,7 @@ export class HyzershopMigrationService {
 
               const speedGlideTurnFadeAttribute = await this._attributeRepository.getOrCreate({ slug: key })
               simpleAttributeValues.push({
-                attribute: speedGlideTurnFadeAttribute.id,
+                attribute: speedGlideTurnFadeAttribute.id.toHexString(),
                 value: flightStats[key]
               })
 
@@ -247,7 +247,7 @@ export class HyzershopMigrationService {
             if (key === 'inboundsId') {
               const inboundsIdAttribute = await this._attributeRepository.getOrCreate({ slug: kebabCase(key) })
               simpleAttributeValues.push({
-                attribute: inboundsIdAttribute.id,
+                attribute: inboundsIdAttribute.id.toHexString(),
                 value: newProduct[key]
               })
             }

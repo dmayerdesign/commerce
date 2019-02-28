@@ -1,8 +1,8 @@
-import { ObjectID } from 'mongodb'
+import { ObjectId } from 'mongodb'
 import { DeepPartial } from 'typeorm'
 
 export class UpdateRequest<EntityType> {
-  public id: ObjectID
+  public id: ObjectId
   public update: DeepPartial<EntityType>
   public unsafeArrayUpdates?: boolean
 

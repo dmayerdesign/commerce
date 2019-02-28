@@ -4,7 +4,8 @@ import { ListRequest } from '@qb/common/domains/data-access/requests/list.reques
 import { UpdateManyRequest } from '@qb/common/domains/data-access/requests/update-many.request'
 import { UpdateRequest } from '@qb/common/domains/data-access/requests/update.request'
 import { isArrayLike, toArray } from '@qb/common/helpers/mongoose.helpers'
-import { DeepPartial, DeleteWriteOpResultObject, FindManyOptions, MongoRepository, ObjectID } from 'typeorm'
+import { InsertOneWriteOpResult, InsertWriteOpResult, ObjectId, UpdateWriteOpResult } from 'mongodb'
+import { DeepPartial, DeleteWriteOpResultObject, FindManyOptions, MongoRepository, ObjectID as TypeOrmObjectId } from 'typeorm'
 
 export abstract class QbRepository<EntityType extends Entity> implements IQbRepository<EntityType> {
 
@@ -12,8 +13,8 @@ export abstract class QbRepository<EntityType extends Entity> implements IQbRepo
     protected readonly _repository: MongoRepository<EntityType>
   ) { }
 
-  public get(id: string | ObjectID): Promise<EntityType | undefined> {
-    return this._repository.findOne(id)
+  public get(id: string | ObjectId): Promise<EntityType | undefined> {
+    return this._repository.findOne(id as TypeOrmObjectId)
   }
 
   public async list(listRequest: ListRequest<EntityType>): Promise<EntityType[]> {
@@ -34,21 +35,31 @@ export abstract class QbRepository<EntityType extends Entity> implements IQbRepo
     return this._repository.create(body)
   }
 
-  public async insert(body: DeepPartial<EntityType>): Promise<EntityType> {
+  public async insert(body: DeepPartial<EntityType>): Promise<InsertOneWriteOpResult> {
     const document = this.create(body)
-    const insertOneResult = await this._repository.insertOne(document)
+    return this._repository.insertOne(document)
+  }
+
+  public async insertAndGet(body: DeepPartial<EntityType>): Promise<EntityType> {
+    const insertOneResult = await this.insert(body)
     return this.get(insertOneResult.insertedId) as Promise<EntityType>
   }
 
-  public async insertMany(body: DeepPartial<EntityType>[]): Promise<EntityType[]> {
+  public async insertMany(body: DeepPartial<EntityType>[]): Promise<InsertWriteOpResult> {
     const documents = body.map((value) => this.create(value))
-    const insertManyResult = await this._repository.insertMany(documents as any[])
+    return this._repository.insertMany(documents as any[])
+  }
+
+  public async insertManyAndList(body: DeepPartial<EntityType>[]): Promise<EntityType[]> {
+    const insertManyResult = await this.insertMany(body)
     return this._repository.find(this._createFindManyOptions(
-      new ListRequest({ ids: insertManyResult.insertedIds })
+      new ListRequest({ ids: Array.from(insertManyResult.insertedIds as ObjectId[]) })
     ))
   }
 
-  public async updateMany(updateManyRequest: UpdateManyRequest<EntityType>): Promise<EntityType[]> {
+  public async updateMany(
+    updateManyRequest: UpdateManyRequest<EntityType>
+  ): Promise<UpdateWriteOpResult> {
     const { ids, update, unsafeArrayUpdates } = updateManyRequest
     const updateManyOperation: { $set: any, $addToSet?: any } = {
       $set: update
@@ -71,17 +82,22 @@ export abstract class QbRepository<EntityType extends Entity> implements IQbRepo
       }
     }
 
-    await this._repository.updateMany(
+    return this._repository.updateMany(
       { id: { $in: ids } },
       updateManyOperation
     )
+  }
 
-    return this.list(new ListRequest({ ids }))
+  public async updateManyAndList(
+    updateManyRequest: UpdateManyRequest<EntityType>
+  ): Promise<EntityType[]> {
+    await this.updateMany(updateManyRequest)
+    return this.list(new ListRequest({ ids: updateManyRequest.ids }))
   }
 
   public async update(
     updateRequest: UpdateRequest<EntityType>
-  ): Promise<EntityType> {
+  ): Promise<UpdateWriteOpResult> {
     const { id, update, unsafeArrayUpdates } = updateRequest
     const updateOperation: { $set: any, $addToSet?: any } = {
       $set: update
@@ -104,17 +120,22 @@ export abstract class QbRepository<EntityType extends Entity> implements IQbRepo
       }
     }
 
-    const { upsertedId } = await this._repository
+    return this._repository
       .updateOne(id, updateOperation)
+  }
 
+  public async updateAndGet(
+    updateRequest: UpdateRequest<EntityType>
+  ): Promise<EntityType> {
+    const { upsertedId } = await this.update(updateRequest)
     return this.get(upsertedId._id) as Promise<EntityType>
   }
 
-  public deleteMany(primaryKeys: ObjectID[]): Promise<DeleteWriteOpResultObject> {
+  public deleteMany(primaryKeys: ObjectId[]): Promise<DeleteWriteOpResultObject> {
     return this._repository.deleteMany({ _id: { $in: primaryKeys } })
   }
 
-  public delete(primaryKey: ObjectID): Promise<DeleteWriteOpResultObject> {
+  public delete(primaryKey: ObjectId): Promise<DeleteWriteOpResultObject> {
     return this._repository.deleteOne(primaryKey)
   }
 
@@ -125,8 +146,8 @@ export abstract class QbRepository<EntityType extends Entity> implements IQbRepo
     if (existingDoc) {
       return existingDoc
     }
-    const newDocs = await this.insert(docOrQuery)
-    return newDocs
+    const newDoc = await this.insertAndGet(docOrQuery)
+    return newDoc
   }
 
   public lookup(key: keyof EntityType, value: any): Promise<EntityType | undefined> {

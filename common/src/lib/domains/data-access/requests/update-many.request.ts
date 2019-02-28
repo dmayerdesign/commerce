@@ -1,8 +1,8 @@
-import { ObjectID } from 'mongodb'
+import { ObjectId } from 'mongodb'
 import { DeepPartial } from 'typeorm'
 
 export class UpdateManyRequest<EntityType> {
-  public ids: (string | ObjectID)[]
+  public ids: (string | ObjectId)[]
   public update: DeepPartial<EntityType>
   public unsafeArrayUpdates?: boolean
 

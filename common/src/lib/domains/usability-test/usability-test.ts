@@ -1,4 +1,4 @@
-import { ObjectID } from 'mongodb'
+import { ObjectId } from 'mongodb'
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToMany, ObjectIdColumn,
     UpdateDateColumn } from 'typeorm'
 import { UsabilityExperience } from '../usability-experience/usability-experience'
@@ -7,7 +7,7 @@ import { UsabilityTest as IUsabilityTest } from './usability-test.interface'
 
 @Entity()
 export class UsabilityTest implements IUsabilityTest {
-    @ObjectIdColumn() public id: ObjectID
+    @ObjectIdColumn() public id: ObjectId
     @Column(() => UsabilityExperience) public usabilityExperience: UsabilityExperience
     @Column() public description: string
 

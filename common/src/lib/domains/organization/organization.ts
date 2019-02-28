@@ -1,4 +1,4 @@
-import { ObjectID } from 'mongodb'
+import { ObjectId } from 'mongodb'
 import { Column, CreateDateColumn, Entity, JoinColumn, ObjectIdColumn, OneToMany,
     UpdateDateColumn } from 'typeorm'
 import { OrganizationType } from '../../constants/enums/organization-type'
@@ -12,7 +12,7 @@ import { Organization as IOrganization } from './organization.interface'
 
 @Entity()
 export class Organization implements IOrganization {
-    @ObjectIdColumn() public id: ObjectID
+    @ObjectIdColumn() public id: ObjectId
     @Column() public name: string
     @Column(() => OrganizationRetailSettings) public retailSettings: OrganizationRetailSettings
     @Column(() => OrganizationBranding) public branding: OrganizationBranding

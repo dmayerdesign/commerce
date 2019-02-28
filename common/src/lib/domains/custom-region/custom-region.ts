@@ -1,10 +1,10 @@
-import { ObjectID } from 'mongodb'
+import { ObjectId } from 'mongodb'
 import { Column, Entity, JoinColumn, ObjectIdColumn, OneToMany } from 'typeorm'
 import { CustomRegion as ICustomRegion } from './custom-region.interface'
 
 @Entity()
 export class CustomRegion implements ICustomRegion {
-  @ObjectIdColumn() public id: ObjectID
+  @ObjectIdColumn() public id: ObjectId
   @Column() public isActive?: boolean
   @Column() public isMetaRegion?: boolean
 

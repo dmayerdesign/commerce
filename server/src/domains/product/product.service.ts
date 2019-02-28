@@ -9,7 +9,7 @@ import { Price } from '@qb/common/domains/price/price'
 import { Product } from '@qb/common/domains/product/product'
 import { ProductListFilterType } from '@qb/common/domains/product/product-list-filter'
 import { getPrice } from '@qb/common/helpers/product.helpers'
-import { ObjectID } from 'mongodb'
+import { ObjectId } from 'mongodb'
 import { OrganizationService } from '../organization/organization.service'
 import { attributeValueFilter, propertyFilter, simpleAttributeValueFilter, taxonomyTermFilter } from '../product/product.helpers'
 import { TaxonomyTermRepository } from '../taxonomy-term/taxonomy-term.repository'
@@ -108,7 +108,7 @@ export class ProductService {
             }
             const newTotalSales = Math.floor((product.totalSales || 0) + qty)
             productPromises.push(
-                this._productRepository.update(
+                this._productRepository.updateAndGet(
                     new UpdateRequest<Product>({
                         id: product.id,
                         update: {
@@ -164,11 +164,11 @@ export class ProductService {
             sortBy,
             sortDirection,
         } = new ProductListRequest(body)
-        let taxonomyTermIdsToSearch: ObjectID[]
+        let taxonomyTermIdsToSearch: ObjectId[]
         const searchRegExp = search ? new RegExp(search, 'gi') : undefined
         const searchOr: {
             $or: {
-                [key: string]: { $regex: RegExp } | { $in: ObjectID[] }
+                [key: string]: { $regex: RegExp } | { $in: ObjectId[] }
             }[]
         } = { $or: [] }
         let allQuery: any

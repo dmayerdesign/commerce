@@ -1,11 +1,11 @@
-import { ObjectID } from 'mongodb'
+import { ObjectId } from 'mongodb'
 import { Column, Entity, JoinColumn, ManyToOne, ObjectIdColumn } from 'typeorm'
 import { Attribute } from '../attribute/attribute'
 import { AttributeValue as IAttributeValue } from './attribute-value.interface'
 
 @Entity()
 export class AttributeValue implements IAttributeValue {
-  @ObjectIdColumn() public id: ObjectID
+  @ObjectIdColumn() public id: ObjectId
 
   @ManyToOne(() => Attribute, attribute => attribute.id)
   @JoinColumn()

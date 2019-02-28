@@ -1,5 +1,5 @@
 import { Crud } from '@qb/common/constants/crud'
-import { ObjectID } from 'mongodb'
+import { ObjectId } from 'mongodb'
 import { ListRequest as IListRequest } from './list.request.interface'
 
 export class ListRequest<EntityType> implements IListRequest<EntityType> {
@@ -8,7 +8,7 @@ export class ListRequest<EntityType> implements IListRequest<EntityType> {
   public sortBy ?= Crud.Sorting.defaultSortField as keyof EntityType
   public sortDirection ?= Crud.Sorting.defaultSortDirection
   public query?: object = {}
-  public ids?: (string | ObjectID)[]
+  public ids?: (string | ObjectId)[]
   public search?: string
   public searchFields?: string[]
 

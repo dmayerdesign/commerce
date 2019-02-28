@@ -1,4 +1,4 @@
-import { ObjectID } from 'mongodb'
+import { ObjectId } from 'mongodb'
 import { Column, CreateDateColumn, Entity, JoinColumn, ObjectIdColumn, OneToMany,
     UpdateDateColumn } from 'typeorm'
 import { UserRole } from '../../constants/enums/user-role'
@@ -11,7 +11,7 @@ import { User as IUser } from './user.interface'
 
 @Entity()
 export class User implements IUser {
-    @ObjectIdColumn() public id: ObjectID
+    @ObjectIdColumn() public id: ObjectId
     @Column() public email: string
     @Column() public emailIsVerified?: boolean
     @Column() public emailVerificationToken?: string

@@ -1,4 +1,4 @@
-import { ObjectID } from 'mongodb'
+import { ObjectId } from 'mongodb'
 import { Column, Entity, JoinColumn, ObjectIdColumn, OneToMany } from 'typeorm'
 import { Price } from '../price/price'
 import { Product } from '../product/product'
@@ -18,7 +18,7 @@ export class DiscountExceptions implements IDiscountExceptions {
 
 @Entity()
 export class Discount implements IDiscount {
-  @ObjectIdColumn() public id: ObjectID
+  @ObjectIdColumn() public id: ObjectId
   @Column() public code: string
   @Column(() => Price) public total: Price
   @Column() public percentage: number // `20` for a 20% discount

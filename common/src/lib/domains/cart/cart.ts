@@ -1,4 +1,4 @@
-import { ObjectID } from 'mongodb'
+import { ObjectId } from 'mongodb'
 import { Column, Entity, JoinColumn, ObjectIdColumn, OneToMany } from 'typeorm'
 import { Discount } from '../discount/discount'
 import { Price } from '../price/price'
@@ -7,7 +7,7 @@ import { Cart as ICart } from './cart'
 
 @Entity()
 export class Cart implements ICart {
-  @ObjectIdColumn() public id: ObjectID
+  @ObjectIdColumn() public id: ObjectId
 
   @OneToMany(() => Product, product => product.id)
   @JoinColumn()

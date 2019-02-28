@@ -1,4 +1,4 @@
-import { ObjectID } from 'mongodb'
+import { ObjectId } from 'mongodb'
 import { Column, CreateDateColumn, Entity, JoinColumn, ObjectIdColumn, OneToMany,
     UpdateDateColumn } from 'typeorm'
 import { OrderStatus } from '../../constants/enums/order-status'
@@ -12,7 +12,7 @@ import { Order as IOrder } from './order.interface'
 
 @Entity()
 export class Order implements IOrder {
-    @ObjectIdColumn() public id: ObjectID
+    @ObjectIdColumn() public id: ObjectId
 
     @OneToMany(() => Product, product => product.id)
     @JoinColumn()

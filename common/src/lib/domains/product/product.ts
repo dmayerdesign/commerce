@@ -1,4 +1,4 @@
-import { ObjectID } from 'mongodb'
+import { ObjectId } from 'mongodb'
 import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, JoinColumn,
     ManyToMany, ManyToOne, ObjectIdColumn, OneToMany, UpdateDateColumn } from 'typeorm'
 import { AttributeValue } from '../attribute-value/attribute-value'
@@ -14,7 +14,7 @@ import { Product as IProduct } from './product.interface'
 
 @Entity()
 export class Product implements IProduct {
-    @ObjectIdColumn() public id: ObjectID
+    @ObjectIdColumn() public id: ObjectId
     // Aesthetic.
     @Column() public name: string
     @Column() public slug: string

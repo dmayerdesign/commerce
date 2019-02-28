@@ -5,7 +5,7 @@ import { ListRequest } from '@qb/common/domains/data-access/requests/list.reques
 import { Order } from '@qb/common/domains/order/order'
 import { StripeSubmitOrderResponse } from '@qb/common/domains/order/stripe/stripe-submit-order.response'
 import { Product } from '@qb/common/domains/product/product'
-import { ObjectID } from 'mongodb'
+import { ObjectId } from 'mongodb'
 import { customers } from 'stripe'
 import { ProductRepository } from '../../product/product.repository'
 import { StripeCustomerService } from './stripe-customer.service'
@@ -37,7 +37,7 @@ export class StripeOrderService {
      */
     public async submitOrder(orderData: Order): Promise<StripeSubmitOrderResponse> {
         const variationAndStandaloneSkus: string[] = []
-        const parentIds: ObjectID[] = []
+        const parentIds: ObjectId[] = []
         orderData.products.forEach((orderProduct: Product) => {
             variationAndStandaloneSkus.push(orderProduct.sku)
         })

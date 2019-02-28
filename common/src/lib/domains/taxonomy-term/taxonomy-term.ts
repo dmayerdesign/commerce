@@ -1,4 +1,4 @@
-import { ObjectID } from 'mongodb'
+import { ObjectId } from 'mongodb'
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToMany, ManyToOne,
     ObjectIdColumn, OneToMany, UpdateDateColumn } from 'typeorm'
 import { AttributeValue } from '../attribute-value/attribute-value'
@@ -9,7 +9,7 @@ import { TaxonomyTerm as ITaxonomyTerm } from './taxonomy-term.interface'
 
 @Entity()
 export class TaxonomyTerm implements ITaxonomyTerm {
-    @ObjectIdColumn() public id: ObjectID
+    @ObjectIdColumn() public id: ObjectId
 
     @ManyToOne(() => Taxonomy, x => x.id)
     @JoinColumn()

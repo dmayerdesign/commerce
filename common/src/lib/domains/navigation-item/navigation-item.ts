@@ -1,5 +1,5 @@
 import { TemplateRef } from '@angular/core'
-import { ObjectID } from 'mongodb'
+import { ObjectId } from 'mongodb'
 import { Column, Entity, JoinColumn, ObjectIdColumn, OneToMany } from 'typeorm'
 import { NavigationItem as INavigationItem } from './navigation-item.interface'
 
@@ -9,7 +9,7 @@ import { NavigationItem as INavigationItem } from './navigation-item.interface'
  */
 @Entity()
 export class NavigationItem implements INavigationItem {
-    @ObjectIdColumn() public id: ObjectID
+    @ObjectIdColumn() public id: ObjectId
     @Column() public text: string
     @Column() public isTopLevel = true
     @Column() public className?: string
