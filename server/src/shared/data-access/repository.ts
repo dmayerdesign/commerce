@@ -3,7 +3,7 @@ import { InclusivePartial, QbRepository as IQbRepository } from '@qb/common/doma
 import { ListRequest } from '@qb/common/domains/data-access/requests/list.request'
 import { UpdateManyRequest } from '@qb/common/domains/data-access/requests/update-many.request'
 import { UpdateRequest } from '@qb/common/domains/data-access/requests/update.request'
-import { isArrayLike, toArray } from '@qb/common/helpers/mongoose.helpers'
+import { toArray } from '@qb/common/helpers/mongoose.helpers'
 import { InsertOneWriteOpResult, InsertWriteOpResult, ObjectId, UpdateWriteOpResult } from 'mongodb'
 import { DeepPartial, DeleteWriteOpResultObject, FindManyOptions, MongoRepository, ObjectID as TypeOrmObjectId } from 'typeorm'
 
@@ -53,38 +53,18 @@ export abstract class QbRepository<EntityType extends Entity> implements IQbRepo
   public async insertManyAndList(body: DeepPartial<EntityType>[]): Promise<EntityType[]> {
     const insertManyResult = await this.insertMany(body)
     return this._repository.find(this._createFindManyOptions(
-      new ListRequest({ ids: Array.from(insertManyResult.insertedIds as ObjectId[]) })
+      new ListRequest({
+        ids: toArray(insertManyResult.insertedIds as ObjectId[])
+      })
     ))
   }
 
   public async updateMany(
-    updateManyRequest: UpdateManyRequest<EntityType>
+    { ids, update }: UpdateManyRequest<EntityType>
   ): Promise<UpdateWriteOpResult> {
-    const { ids, update, unsafeArrayUpdates } = updateManyRequest
-    const updateManyOperation: { $set: any, $addToSet?: any } = {
-      $set: update
-    }
-
-    if (unsafeArrayUpdates) {
-      let includeAddToSet = false
-      const $addToSet: { [key: string]: any[] } = {}
-
-      Object.keys(update).forEach((key) => {
-        if (isArrayLike(update[key])) {
-          includeAddToSet = true
-          $addToSet[key] = toArray(update[key])
-          delete update[key]
-        }
-      })
-
-      if (includeAddToSet) {
-        updateManyOperation.$addToSet = $addToSet
-      }
-    }
-
     return this._repository.updateMany(
       { id: { $in: ids } },
-      updateManyOperation
+      { $set: update }
     )
   }
 
@@ -96,32 +76,9 @@ export abstract class QbRepository<EntityType extends Entity> implements IQbRepo
   }
 
   public async update(
-    updateRequest: UpdateRequest<EntityType>
+    { id, update }: UpdateRequest<EntityType>
   ): Promise<UpdateWriteOpResult> {
-    const { id, update, unsafeArrayUpdates } = updateRequest
-    const updateOperation: { $set: any, $addToSet?: any } = {
-      $set: update
-    }
-
-    if (unsafeArrayUpdates) {
-      let includeAddToSet = false
-      const $addToSet: { [key: string]: any[] } = {}
-
-      Object.keys(update).forEach((key) => {
-        if (isArrayLike(update[key])) {
-          includeAddToSet = true
-          $addToSet[key] = toArray(update[key])
-          delete update[key]
-        }
-      })
-
-      if (includeAddToSet) {
-        updateOperation.$addToSet = $addToSet
-      }
-    }
-
-    return this._repository
-      .updateOne(id, updateOperation)
+    return this._repository.updateOne({ id }, { $set: update })
   }
 
   public async updateAndGet(
