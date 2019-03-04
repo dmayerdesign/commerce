@@ -11,7 +11,7 @@ import {
 import { fromEvent } from 'rxjs'
 import { takeWhile } from 'rxjs/operators'
 
-import { Copy } from '@qb/common/constants/copy'
+import { FormErrors } from '@qb/common/constants/copy'
 import { HeartbeatComponent } from '@qb/common/heartbeat/heartbeat.component'
 import { Heartbeat } from '@qb/common/heartbeat/heartbeat.decorator'
 import { QbFormFieldOptions } from '../../models/form-field-options'
@@ -202,8 +202,8 @@ content child of <qb-form-field>, like so:
     }
 
     private setErrorMessage(): void {
-        if (this.currentError && Object.keys(Copy.FormErrors.fieldError).some(x => x === this.currentError)) {
-            this.errorMessage = Copy.FormErrors.fieldError[this.currentError]
+        if (this.currentError && Object.keys(FormErrors.fieldError).some(x => x === this.currentError)) {
+            this.errorMessage = FormErrors.fieldError[this.currentError]
         }
         else {
             this.errorMessage = this.currentError ? 'Invalid ' + this.currentError : null

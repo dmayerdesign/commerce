@@ -14,7 +14,7 @@
 // import { Product } from '@qb/common/domains/product/product'
 // import { GetProductsFromIdsRequest, GetProductsRequest } from '@qb/common/domains/data-access/requests/get-products.request'
 // import { ApiEndpoints, Types } from '@qb/common/constants'
-// import { HyzershopMigrationService } from '../services/hyzershop-migration.service'
+// import { SeedService } from '../services/seed.service'
 // import { ProductService } from '../services/product.service'
 // import { QbController } from '../../../shared/controller/controller'
 
@@ -24,7 +24,7 @@
 
 //     constructor(
 //         @Inject(ProductService) private productService: ProductService,
-//         @Inject(HyzershopMigrationService) private wms: HyzershopMigrationService,
+//         @Inject(SeedService) private wms: SeedService,
 //     ) { super() }
 
 //     @httpGet('/get-by-slug/:slug')
@@ -67,6 +67,6 @@
 //     public migrateProducts(
 //         @response() res: Response,
 //     ): void {
-//         this.handleApiResponse(this.wms.createProductsFromExportedJSON(), res)
+//         this.handleApiResponse(this.wms.seed(), res)
 //     }
 // }

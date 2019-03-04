@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common'
-import { Copy } from '@qb/common/constants/copy'
+import { ErrorMessages } from '@qb/common/constants/copy'
 import { AttributeValue } from '@qb/common/domains/attribute-value/attribute-value'
 import { Attribute } from '@qb/common/domains/attribute/attribute'
 import { Price } from '@qb/common/domains/price/price'
@@ -39,7 +39,7 @@ export class StripeProductService {
       return []
     }
     if (products.some((product) => product.stockQuantity === 0)) {
-      throw new Error(Copy.ErrorMessages.productOutOfStockError)
+      throw new Error(ErrorMessages.PRODUCT_OUT_OF_STOCK_ERROR)
     }
     const stripeProducts: Stripe.products.IProduct[] = []
     try {
@@ -80,7 +80,7 @@ export class StripeProductService {
       return []
     }
     if (products.some((product) => product.stockQuantity === 0)) {
-      throw new Error(Copy.ErrorMessages.productOutOfStockError)
+      throw new Error(ErrorMessages.PRODUCT_OUT_OF_STOCK_ERROR)
     }
 
     const stripeSkus: Stripe.skus.ISku[] = []

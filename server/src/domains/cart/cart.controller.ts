@@ -1,8 +1,8 @@
 import { Controller, Get, Inject, Query } from '@nestjs/common'
+import { carts } from '@qb/common/constants/api-endpoints'
+import { Params } from '@qb/common/constants/crud'
 import { Cart } from '@qb/common/domains/cart/cart'
 import { Product } from '@qb/common/domains/product/product'
-import { carts } from '@qb/common/constants/api-endpoints'
-import { Crud } from '@qb/common/constants/crud'
 import { QbController } from '../../shared/controller/controller'
 import { ProductListRequest } from '../product/product.list-request'
 import { ProductRepository } from '../product/product.repository'
@@ -17,7 +17,7 @@ export class CartController extends QbController<Cart> {
 
     @Get('refresh')
     public refresh(
-        @Query(Crud.Params.listRequest) query: string,
+        @Query(Params.LIST_REQUEST) query: string,
     ): Promise<Product[]> {
         const request: ProductListRequest = JSON.parse(query)
         return this._productRepository.list(request)

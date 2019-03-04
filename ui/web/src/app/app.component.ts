@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http'
 import { Component, Inject, PLATFORM_ID } from '@angular/core'
 import { FormControl } from '@angular/forms'
 import { BOOT_CONDITIONS } from '@qb/common/constants/angular/injection-tokens'
-import { Crud } from '@qb/common/constants/crud'
+import { Params } from '@qb/common/constants/crud'
 import { ListRequest } from '@qb/common/domains/data-access/requests/list.request.interface'
 import { Preboot } from '@qb/common/models/ui/preboot'
 import { combineLatest, Observable } from 'rxjs'
@@ -64,7 +64,7 @@ export class AppComponent {
     } as ListRequest
 
     const params = new HttpParams()
-      .set(Crud.Params.listRequest, JSON.stringify(request))
+      .set(Params.LIST_REQUEST, JSON.stringify(request))
     this.data = this._httpClient.get('/api/products', { params })
   }
 }

@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common'
-import { Copy } from '@qb/common/constants/copy'
+import { ErrorMessages } from '@qb/common/constants/copy'
 import { OrderStatus } from '@qb/common/constants/enums/order-status'
 import { ListRequest } from '@qb/common/domains/data-access/requests/list.request'
 import { UpdateRequest } from '@qb/common/domains/data-access/requests/update.request'
@@ -48,32 +48,31 @@ export class StripeOrderActionsService {
   public async createOrder(order: Order): Promise<StripeCreateOrderResponse> {
     let orderProducts: Product[]
     let orderDiscounts: Discount[]
+    const organization = await this.organizationService.getOrganization()
 
-    if (!order.total
-      || !order.total.currency
-      || !order.customer
-      || !order.customer.email) {
-      throw new Error(Copy.ErrorMessages.invalidOrder)
+    if (
+      !order.total ||
+      !order.total.currency ||
+      !order.customer ||
+      !order.customer.email
+    ) {
+      throw new Error(ErrorMessages.INVALID_ORDER)
     }
 
     order.subTotal.amount = 0
     order.total.amount = 0
 
-    try {
-      const organization = await this.organizationService.getOrganization()
-      const orderProductsRequest = new ProductListRequest()
-      orderProductsRequest.ids = order.products.map((product) => product.id)
-      orderProducts = await this._productRepository.list(orderProductsRequest)
-      order.subTotal = getSubTotal(orderProducts)
-      order.total = getTotal(
-        order.subTotal,
-        organization.retailSettings.addSalesTax as boolean,
-        organization.retailSettings.salesTaxPercentage
-      )
-    }
-    catch (getProductsError) {
-      throw getProductsError
-    }
+    const orderProductsRequest = new ProductListRequest({
+      ids: order.products.map((product) => product.id)
+    })
+
+    orderProducts = await this._productRepository.list(orderProductsRequest)
+    order.subTotal = getSubTotal(orderProducts)
+    order.total = getTotal(
+      order.subTotal,
+      organization.retailSettings.addSalesTax as boolean,
+      organization.retailSettings.salesTaxPercentage
+    )
 
     if (order.discounts && order.discounts.length) {
       try {
@@ -121,12 +120,15 @@ export class StripeOrderActionsService {
       }
     })
 
-    // The `StripeOrder` prototype needs to be erased, because that's the way `stripe` needs it
-    // (which is absolutely ridiculous).
+    // The `StripeOrder` prototype needs to be erased (i.e. stripe.orders.create *only*
+    // accepts a POJO, which is absolutely ridiculous).
     const stripeOrderData = Object.assign({}, stripeOrder)
     const newStripeOrder = await stripe.orders.create(stripeOrderData)
     dbOrder.stripeOrderId = newStripeOrder.id
-    const newOrder = await this._orderRepository.insert(dbOrder)
+
+    await this._orderRepository.insert(dbOrder)
+    const newOrder = await this._orderRepository.get(dbOrder.id) as Order
+
     return new StripeCreateOrderResponse({
       order: newOrder,
       stripeOrder: newStripeOrder,
@@ -205,7 +207,7 @@ export class StripeOrderActionsService {
       { idempotency_key: order.id.toString() }
     )
     const unpaidDbOrder = await this._orderRepository.get(order.id) as Order
-    const paidOrder = await this._orderRepository.update(
+    await this._orderRepository.update(
       new UpdateRequest<Order>({
         id: unpaidDbOrder.id,
         update: {
@@ -213,6 +215,7 @@ export class StripeOrderActionsService {
         }
       })
     )
+    const paidOrder = await this._orderRepository.get(unpaidDbOrder.id) as Order
     return new StripePayOrderResponse({
       paidOrder,
       paidStripeOrder,

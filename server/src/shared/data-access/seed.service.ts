@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { Currency } from '@qb/common/constants/enums/currency'
 import { RangeLimit } from '@qb/common/constants/enums/range-limit'
+import { UserRole } from '@qb/common/constants/enums/user-role'
 import { WeightUnit } from '@qb/common/constants/enums/weight-unit'
 // import { Attribute } from '@qb/common/domains/attribute/attribute'
 import { AttributeValue } from '@qb/common/domains/attribute-value/attribute-value'
@@ -16,14 +17,17 @@ import { pluralize, singularize, titleize } from 'inflection'
 import { camelCase, cloneDeep, kebabCase } from 'lodash'
 import { ObjectId } from 'mongodb'
 import { getConnection } from 'typeorm'
-import { AttributeValueRepository } from '../attribute-value/attribute-value.repository'
-import { AttributeRepository } from '../attribute/attribute.repository'
-import { ProductRepository } from '../product/product.repository'
-import { TaxonomyTermRepository } from '../taxonomy-term/taxonomy-term.repository'
-import { TaxonomyRepository } from '../taxonomy/taxonomy.repository'
+import { hyzershop } from '../../../../work-files/data/organization_hyzershop'
+import { AttributeValueRepository } from '../../domains/attribute-value/attribute-value.repository'
+import { AttributeRepository } from '../../domains/attribute/attribute.repository'
+import { OrganizationRepository } from '../../domains/organization/organization.repository'
+import { ProductRepository } from '../../domains/product/product.repository'
+import { TaxonomyTermRepository } from '../../domains/taxonomy-term/taxonomy-term.repository'
+import { TaxonomyRepository } from '../../domains/taxonomy/taxonomy.repository'
+import { UserRepository } from '../../domains/user/user.repository'
 
 @Injectable()
-export class HyzershopMigrationService {
+export class SeedService {
 
   constructor(
     @Inject(ProductRepository)
@@ -36,16 +40,42 @@ export class HyzershopMigrationService {
     private readonly _taxonomyRepository: TaxonomyRepository,
     @Inject(TaxonomyTermRepository)
     private readonly _taxonomyTermRepository: TaxonomyTermRepository,
+    @Inject(UserRepository)
+    private readonly _userRepository: UserRepository,
+    @Inject(OrganizationRepository)
+    private readonly _organizationRepository: OrganizationRepository,
   ) { }
 
-  public async createProductsFromExportedJson(): Promise<any[]/*Product[]*/> {
-    const newProducts = [] as Product[]
+  public async seed(): Promise<any> {
+    // await this.dropDatabase()
+    // await this.seedShop()
+    await this.seedUser()
+    await this.seedOrganization()
+  }
 
+  public async dropDatabase(): Promise<void> {
     const dropDatabase = async () => {
       await getConnection().synchronize(true)
     }
-
     await dropDatabase()
+  }
+
+  public async seedUser(): Promise<void> {
+    await this._userRepository.insert({
+      firstName: 'Dev',
+      lastName: 'Eloper',
+      role: UserRole.Owner,
+    })
+  }
+
+  public async seedOrganization(): Promise<void> {
+    await this._organizationRepository.insert(
+      hyzershop
+    )
+  }
+
+  public async seedShop(): Promise<Product[]> {
+    const newProducts = [] as Product[]
 
     const buildProducts = async () => {
       for (const product of productsJSON as any) {

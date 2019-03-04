@@ -4,21 +4,41 @@ import { ListRequest } from '@qb/common/domains/data-access/requests/list.reques
 import { UpdateManyRequest } from '@qb/common/domains/data-access/requests/update-many.request'
 import { UpdateRequest } from '@qb/common/domains/data-access/requests/update.request'
 import { toArray } from '@qb/common/helpers/mongoose.helpers'
-import { InsertOneWriteOpResult, InsertWriteOpResult, ObjectId, UpdateWriteOpResult } from 'mongodb'
-import { DeepPartial, DeleteWriteOpResultObject, FindManyOptions, MongoRepository, ObjectID as TypeOrmObjectId } from 'typeorm'
+import { DeleteWriteOpResultObject, InsertOneWriteOpResult, InsertWriteOpResult, ObjectId,
+  UpdateWriteOpResult } from 'mongodb'
+import { DeepPartial, FindManyOptions, MongoRepository,
+  ObjectID as TypeOrmObjectId } from 'typeorm'
 
 export abstract class QbRepository<EntityType extends Entity> implements IQbRepository<EntityType> {
+
+  // Hooks.
+  private _preGetHooks: ((id?: string | ObjectId) => Promise<void>)[] = []
+  private _postGetHooks: ((doc?: EntityType) => Promise<void>)[] = []
+  private _preListHooks: ((listRequest: ListRequest<EntityType>) => Promise<void>)[] = []
+  private _postListHooks: ((docs?: EntityType[]) => Promise<void>)[] = []
+  private _preInsertHooks: ((preInsertDoc?: EntityType) => Promise<void>)[] = []
+  private _postInsertHooks: ((doc?: EntityType) => Promise<void>)[] = []
+  private _preUpdateHooks: (({ id, update }: UpdateRequest<EntityType>) => Promise<void>)[] = []
+  private _postUpdateHooks: ((doc?: EntityType) => Promise<void>)[] = []
+  private _preUpdateManyHooks: (({ ids, update }: UpdateManyRequest<EntityType>) => Promise<void>)[] = []
+  private _postUpdateManyHooks: ((updatedDocs?: EntityType[]) => Promise<void>)[] = []
 
   constructor(
     protected readonly _repository: MongoRepository<EntityType>
   ) { }
 
-  public get(id: string | ObjectId): Promise<EntityType | undefined> {
-    return this._repository.findOne(id as TypeOrmObjectId)
+  public async get(id: string | ObjectId): Promise<EntityType | undefined> {
+    for (const preGetHook of this._preGetHooks) await preGetHook(id)
+    const doc = await this._repository.findOne(id as TypeOrmObjectId)
+    for (const postGetHook of this._postGetHooks) await postGetHook(doc)
+    return doc
   }
 
   public async list(listRequest: ListRequest<EntityType>): Promise<EntityType[]> {
-    return this._repository.find(this._createFindManyOptions(listRequest))
+    for (const preListHook of this._preListHooks) await preListHook(listRequest)
+    const docs = await this._repository.find(this._createFindManyOptions(listRequest))
+    for (const postListHook of this._postListHooks) await postListHook(docs)
+    return docs
   }
 
   // TODO: Figure out streaming with TypeORM.
@@ -31,13 +51,20 @@ export abstract class QbRepository<EntityType extends Entity> implements IQbRepo
   //     .pipe(JSONStream.stringify())
   //     .pipe(response.contentType('json'))
   // }
+
   public create(body: DeepPartial<EntityType>): EntityType {
     return this._repository.create(body)
   }
 
   public async insert(body: DeepPartial<EntityType>): Promise<InsertOneWriteOpResult> {
     const document = this.create(body)
-    return this._repository.insertOne(document)
+    for (const preInsertHook of this._preInsertHooks) await preInsertHook(document)
+    const insertResult = await this._repository.insertOne(document)
+    if (this._postInsertHooks.length) {
+      const insertedDoc = await this.get(insertResult.insertedId)
+      for (const postInsertHook of this._postInsertHooks) await postInsertHook(insertedDoc)
+    }
+    return insertResult
   }
 
   public async insertAndGet(body: DeepPartial<EntityType>): Promise<EntityType> {
@@ -47,7 +74,7 @@ export abstract class QbRepository<EntityType extends Entity> implements IQbRepo
 
   public async insertMany(body: DeepPartial<EntityType>[]): Promise<InsertWriteOpResult> {
     const documents = body.map((value) => this.create(value))
-    return this._repository.insertMany(documents as any[])
+    return this._repository.insertMany(documents)
   }
 
   public async insertManyAndList(body: DeepPartial<EntityType>[]): Promise<EntityType[]> {
@@ -62,10 +89,20 @@ export abstract class QbRepository<EntityType extends Entity> implements IQbRepo
   public async updateMany(
     { ids, update }: UpdateManyRequest<EntityType>
   ): Promise<UpdateWriteOpResult> {
-    return this._repository.updateMany(
+    for (const preUpdateManyHook of this._preUpdateManyHooks) {
+      await preUpdateManyHook({ ids, update })
+    }
+    const updateManyResult = await this._repository.updateMany(
       { id: { $in: ids } },
-      { $set: update }
+      { $set: update },
     )
+    if (this._postUpdateManyHooks.length) {
+      const updatedDocs = await this.list(new ListRequest({ ids }))
+      for (const postUpdateManyHook of this._postUpdateManyHooks) {
+        await postUpdateManyHook(updatedDocs)
+      }
+    }
+    return updateManyResult
   }
 
   public async updateManyAndList(
@@ -78,7 +115,13 @@ export abstract class QbRepository<EntityType extends Entity> implements IQbRepo
   public async update(
     { id, update }: UpdateRequest<EntityType>
   ): Promise<UpdateWriteOpResult> {
-    return this._repository.updateOne({ id }, { $set: update })
+    for (const preUpdateHook of this._preUpdateHooks) await preUpdateHook({ id, update })
+    const updateResult = await this._repository.updateOne({ id }, { $set: update })
+    if (this._postUpdateHooks.length) {
+      const updatedDoc = await this.get(id)
+      for (const postUpdateHook of this._postUpdateHooks) await postUpdateHook(updatedDoc)
+    }
+    return updateResult
   }
 
   public async updateAndGet(
@@ -146,6 +189,57 @@ export abstract class QbRepository<EntityType extends Entity> implements IQbRepo
     })
 
     return this.list(request)
+  }
+
+  public registerPreGetHook(
+    hookFn: (id?: string | ObjectId) => Promise<void>
+  ): void {
+    this._preGetHooks.push(hookFn)
+  }
+  public registerPostGetHook(
+    hookFn: (doc?: EntityType) => Promise<void>
+  ): void {
+    this._postGetHooks.push(hookFn)
+  }
+  public registerPreListHook(
+    hookFn: (listRequest: ListRequest<EntityType>) => Promise<void>
+  ): void {
+    this._preListHooks.push(hookFn)
+  }
+  public registerPostListHook(
+    hookFn: (docs?: EntityType[]) => Promise<void>
+  ): void {
+    this._postListHooks.push(hookFn)
+  }
+  public registerPreInsertHook(
+    hookFn: (preInsertDoc?: EntityType) => Promise<void>
+  ): void {
+    this._preInsertHooks.push(hookFn)
+  }
+  public registerPostInsertHook(
+    hookFn: (doc?: EntityType) => Promise<void>
+  ): void {
+    this._postInsertHooks.push(hookFn)
+  }
+  public registerPreUpdateHook(
+    hookFn: ({ id, update }: UpdateRequest<EntityType>) => Promise<void>
+  ): void {
+    this._preUpdateHooks.push(hookFn)
+  }
+  public registerPostUpdateHook(
+    hookFn: (doc?: EntityType) => Promise<void>
+  ): void {
+    this._postUpdateHooks.push(hookFn)
+  }
+  public registerPreUpdateManyHook(
+    hookFn: ({ ids, update }: UpdateManyRequest<EntityType>) => Promise<void>
+  ): void {
+    this._preUpdateManyHooks.push(hookFn)
+  }
+  public registerPostUpdateManyHook(
+    hookFn: (updatedDocs?: EntityType[]) => Promise<void>
+  ): void {
+    this._postUpdateManyHooks.push(hookFn)
   }
 
   private _createFindManyOptions(listRequest: ListRequest<EntityType>):

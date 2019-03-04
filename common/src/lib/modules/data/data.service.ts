@@ -1,5 +1,5 @@
 import { HttpClient, HttpParams } from '@angular/common/http'
-import { Crud } from '@qb/common/constants/crud'
+import { Params } from '@qb/common/constants/crud'
 import { ListRequest } from '@qb/common/domains/data-access/requests/list.request.interface'
 import { UpdateManyRequest } from '@qb/common/domains/data-access/requests/update-many.request.interface'
 import { UpdateRequest } from '@qb/common/domains/data-access/requests/update.request.interface'
@@ -16,7 +16,7 @@ export abstract class DataService<EntityType extends any> {
   public list(request: ListRequest<EntityType>): Promise<EntityType[]> {
     return this._httpClient
       .get<EntityType[]>(this.baseEndpoint, {
-        params: new HttpParams().set(Crud.Params.listRequest, JSON.stringify(request))
+        params: new HttpParams().set(Params.LIST_REQUEST, JSON.stringify(request))
       })
       .toPromise()
   }
@@ -25,7 +25,7 @@ export abstract class DataService<EntityType extends any> {
   // public stream(request: ListRequest<EntityType>): Promise<EntityType[]> {
   //   return this._httpClient
   //     .get<EntityType[]>(`${this.baseEndpoint}/stream`, {
-  //       params: new HttpParams().set(Crud.Params.listRequest, JSON.stringify(request))
+  //       params: new HttpParams().set(Params.LIST_REQUEST, JSON.stringify(request))
   //     })
   //     .toPromise()
   // }

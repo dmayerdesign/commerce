@@ -1,18 +1,18 @@
-import { Crud } from '@qb/common/constants/crud'
+import { Pagination, Sorting } from '@qb/common/constants/crud'
 import { ObjectId } from 'mongodb'
 import { ListRequest as IListRequest } from './list.request.interface'
 
 export class ListRequest<EntityType> implements IListRequest<EntityType> {
-  public skip ?= 0
-  public limit ?= Crud.Pagination.productsPerPage
-  public sortBy ?= Crud.Sorting.defaultSortField as keyof EntityType
-  public sortDirection ?= Crud.Sorting.defaultSortDirection
-  public query?: object = {}
-  public ids?: (string | ObjectId)[]
-  public search?: string
-  public searchFields?: string[]
+  public skip = 0
+  public limit = Pagination.PRODUCTS_PER_PAGE
+  public sortBy = Sorting.DEFAULT_SORT_FIELD as keyof EntityType
+  public sortDirection = Sorting.DEFAULT_SORT_DIRECTION
+  public query: object = {}
+  public ids: (string | ObjectId)[]
+  public search: string
+  public searchFields: string[]
 
-  constructor(request?: ListRequest<EntityType>) {
+  constructor(request?: Partial<ListRequest<EntityType>>) {
     if (request) {
       if (typeof request.skip !== 'undefined') this.skip = request.skip
       if (typeof request.limit !== 'undefined') this.limit = request.limit

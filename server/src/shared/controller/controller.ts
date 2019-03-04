@@ -1,10 +1,11 @@
 import { Body, Delete, Get, Param, Post, Put, Query } from '@nestjs/common'
+import { Params } from '@qb/common/constants/crud'
+import { Entity } from '@qb/common/domains/data-access/entity.interface'
+import { QbBaseRepository, QbReadOnlyRepository, QbRepository } from '@qb/common/domains/data-access/repository.interface'
 import { ListRequest } from '@qb/common/domains/data-access/requests/list.request'
 import { UpdateManyRequest } from '@qb/common/domains/data-access/requests/update-many.request'
 import { UpdateRequest } from '@qb/common/domains/data-access/requests/update.request'
-import { Crud } from '@qb/common/constants/crud'
-import { Entity } from '@qb/common/domains/data-access/entity.interface'
-import { QbBaseRepository, QbReadOnlyRepository, QbRepository } from '@qb/common/domains/data-access/repository.interface'
+import { DeleteWriteOpResultObject, InsertWriteOpResult, UpdateWriteOpResult } from 'mongodb'
 
 export abstract class QbBaseController<EntityType extends any> {
 
@@ -19,7 +20,7 @@ export abstract class QbBaseController<EntityType extends any> {
 
   @Get()
   public list(
-    @Query(Crud.Params.listRequest) query: string,
+    @Query(Params.LIST_REQUEST) query: string,
   ): Promise<EntityType[]> {
     const request: ListRequest<EntityType> = query ? JSON.parse(query) : new ListRequest()
     return this._repository.list(request)
@@ -28,7 +29,7 @@ export abstract class QbBaseController<EntityType extends any> {
   // TODO: Figure out streaming with TypeORM.
   // @Get('stream')
   // public stream(
-  //   @Query(Crud.Params.listRequest) query: string,
+  //   @Query(Params.LIST_REQUEST) query: string,
   //   @Response() response: IResponse,
   // ): Promise<void> {
   //   const request: ListRequest<EntityType> = query ? JSON.parse(query) : new ListRequest()
@@ -38,35 +39,35 @@ export abstract class QbBaseController<EntityType extends any> {
   @Post()
   public insertMany(
     @Body() body: EntityType[],
-  ): Promise<EntityType[]> {
+  ): Promise<InsertWriteOpResult> {
     return this._repository.insertMany(body)
   }
 
   @Put()
   public updateMany(
     @Body() body: UpdateManyRequest<EntityType>,
-  ): Promise<EntityType[]> {
+  ): Promise<UpdateWriteOpResult> {
     return this._repository.updateMany(body)
   }
 
   @Put(':id')
   public update(
     @Body() body: UpdateRequest<EntityType>,
-  ): Promise<EntityType> {
+  ): Promise<UpdateWriteOpResult> {
     return this._repository.update(body)
   }
 
   @Delete()
   public deleteMany(
     @Body() { ids }: { ids: string[] },
-  ): Promise<EntityType[]> {
+  ): Promise<DeleteWriteOpResultObject> {
     return this._repository.deleteMany(ids)
   }
 
   @Delete(':id')
   public delete(
     @Param('id') id: string,
-  ): Promise<EntityType> {
+  ): Promise<DeleteWriteOpResultObject> {
     return this._repository.delete(id)
   }
 }
@@ -77,7 +78,7 @@ export abstract class QbReadOnlyController<EntityType extends any> {
 
   @Get()
   public list(
-    @Query(Crud.Params.listRequest) query: string,
+    @Query(Params.LIST_REQUEST) query: string,
   ): Promise<EntityType[]> {
     const request: ListRequest<EntityType> = query ? JSON.parse(query) : new ListRequest()
     return this._repository.list(request)

@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { FormGroup } from '@angular/forms'
 import { AppConfig } from '@qb/app-config'
-import { Copy } from '@qb/common/constants/copy'
+import { Actions } from '@qb/common/constants/copy'
 import { ModalType } from '@qb/common/constants/enums/modal-type'
 import { HeartbeatComponent } from '@qb/common/heartbeat/heartbeat.component'
 import { Heartbeat } from '@qb/common/heartbeat/heartbeat.decorator'
@@ -84,7 +84,7 @@ export class QbModalComponent extends HeartbeatComponent implements OnInit, OnDe
     @ViewChild('modal', { read: ElementRef }) public modal: ElementRef
 
     public data?: ModalData = undefined
-    public defaultCancelText = Copy.Actions.cancel
+    public defaultCancelText = Actions.CANCEL
     public isShowing = false
     public isFadedIn = false
     public appConfig = AppConfig

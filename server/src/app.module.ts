@@ -8,10 +8,10 @@ import { join, resolve } from 'path'
 import { domainModules } from './domain-modules'
 import { AdminController } from './domains/admin/admin.controller'
 import { ErrorFilter } from './domains/error/error.filter'
-import { HyzershopMigrationService } from './domains/hyzershop-migration/hyzershop-migration.service'
 import { InstagramRepository } from './domains/instagram/instagram.repository'
 import { OrganizationService } from './domains/organization/organization.service'
 import { ProductService } from './domains/product/product.service'
+import { SeedService } from './shared/data-access/seed.service'
 
 const BROWSER_DIR = join(process.cwd(), 'dist/web')
 applyDomino(global, join(BROWSER_DIR, 'index.html'))
@@ -42,7 +42,7 @@ applyDomino(global, join(BROWSER_DIR, 'index.html'))
     OrganizationService,
     InstagramRepository,
     ProductService,
-    HyzershopMigrationService,
+    SeedService,
     {
       provide: APP_FILTER,
       useClass: ErrorFilter,

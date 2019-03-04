@@ -1,6 +1,6 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
-import { Cookies } from '@qb/common/constants/cookies'
+import { DEVELOPER_TOKEN, JWT } from '@qb/common/constants/cookies'
 import { UserRole } from '@qb/common/constants/enums/user-role'
 import { User } from '@qb/common/domains/user/user'
 import { cleanUser } from '@qb/common/helpers/user.helpers'
@@ -10,6 +10,7 @@ import * as jwt from 'jsonwebtoken'
 import { UserRepository } from './user.repository'
 
 const jwtSecret = environment().JWT_SECRET
+const developerToken = environment().DEVELOPER_TOKEN
 
 @Injectable()
 export class UserGuard implements CanActivate {
@@ -34,8 +35,16 @@ export class UserGuard implements CanActivate {
   }
 
   private async _isAuthenticated(request: RequestWithUser): Promise<boolean> {
-    const token = request.cookies[Cookies.jwt]
+    const developerTokenCookie = request.cookies[DEVELOPER_TOKEN]
+    const token = request.cookies[JWT]
     let payload: User | undefined
+
+    if (
+      developerTokenCookie &&
+      developerTokenCookie === developerToken
+    ) {
+      return true
+    }
 
     if (!token) {
       return false

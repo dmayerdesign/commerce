@@ -1,5 +1,5 @@
 import { HttpException, Inject, Injectable } from '@nestjs/common'
-import { Copy } from '@qb/common/constants/copy'
+import { ErrorMessages } from '@qb/common/constants/copy'
 import { HttpStatus } from '@qb/common/constants/http-status'
 import { ListRequest } from '@qb/common/domains/data-access/requests/list.request'
 import { Order } from '@qb/common/domains/order/order'
@@ -51,7 +51,7 @@ export class StripeOrderService {
 
         if (!variationsAndStandalones || !variationsAndStandalones.length) {
             throw new HttpException(
-                Copy.ErrorMessages.productsNotFound,
+                ErrorMessages.PRODUCTS_NOT_FOUND,
                 HttpStatus.CLIENT_ERROR_NOT_FOUND,
             )
         }

@@ -5,7 +5,7 @@ import { Product } from '@qb/common/domains/product/product.interface'
 export class ProductListRequest extends ListRequest<Product> {
     public filters?: ProductListFilter[]
 
-    constructor(request?: ProductListRequest) {
+    constructor(request?: Partial<ProductListRequest>) {
         super(request)
         if (request) {
             if (typeof request.filters !== 'undefined') this.filters = request.filters

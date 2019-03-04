@@ -1,7 +1,7 @@
 import { Controller, Get, Inject, Param } from '@nestjs/common'
-import { Product } from '@qb/common/domains/product/product'
-import { Price } from '@qb/common/domains/price/price.interface'
 import { products } from '@qb/common/constants/api-endpoints'
+import { Price } from '@qb/common/domains/price/price.interface'
+import { Product } from '@qb/common/domains/product/product'
 import { QbController } from '../../shared/controller/controller'
 import { ProductRepository } from './product.repository'
 import { ProductService } from './product.service'
@@ -16,7 +16,7 @@ export class ProductController extends QbController<Product> {
   // TODO: Figure out streaming with TypeORM.
   // @Get('stream')
   // public stream(
-  //   @Query(Crud.Params.listRequest) query: string,
+  //   @Query(Params.LIST_REQUEST) query: string,
   //   @Response() response: IResponse,
   // ): Promise<void> {
   //   const request: ListRequest<Product> = JSON.parse(query)
