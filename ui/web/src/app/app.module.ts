@@ -6,13 +6,13 @@ import { BOOT_CONDITIONS } from '@qb/common/constants/angular/injection-tokens'
 import { QbFormsModule } from '@qb/common/modules/forms/forms.module'
 import { QbUiModule } from '@qb/common/modules/ui/ui.module'
 import { AppComponent } from './app.component'
-import { routes } from './app.routes'
+import { appRoutes } from './app.routes'
 import { OrganizationService } from './organization/organization.service'
 
 @NgModule({
   imports: [
     BrowserModule.withServerTransition({ appId: 'web-ssr' }),
-    RouterModule.forRoot(routes),
+    RouterModule.forRoot(appRoutes),
     HttpClientModule,
     QbFormsModule,
     QbUiModule.forRoot(),

@@ -7,27 +7,27 @@ export class WindowRefService {
     private _window ?= typeof window !== 'undefined' ? window : undefined
     public scrollPositionY: number
     public scrollPositionYs: Observable<number>
-    private scrollPositionYPump: BehaviorSubject<number>
+    private scrollPositionYSubject: BehaviorSubject<number>
     public width: number
     public widths: Observable<number>
-    private widthPump: BehaviorSubject<number>
+    private widthSubject: BehaviorSubject<number>
     public height: number
     public heights: Observable<number>
-    private heightPump: BehaviorSubject<number>
+    private heightSubject: BehaviorSubject<number>
     public htmlFontSizePx: number
     public htmlFontSizePxs: Observable<number>
-    private htmlFontSizePxPump: BehaviorSubject<number>
+    private htmlFontSizePxSubject: BehaviorSubject<number>
 
     constructor() {
         if (this._window) {
-            this.scrollPositionYPump = new BehaviorSubject(this._window.scrollY)
-            this.scrollPositionYs = this.scrollPositionYPump.asObservable()
-            this.widthPump = new BehaviorSubject(this._window.innerWidth)
-            this.widths = this.widthPump.asObservable()
-            this.heightPump = new BehaviorSubject(this._window.innerHeight)
-            this.heights = this.heightPump.asObservable()
-            this.htmlFontSizePxPump = new BehaviorSubject(this.getHtmlFontSizeInPx())
-            this.htmlFontSizePxs = this.htmlFontSizePxPump.asObservable()
+            this.scrollPositionYSubject = new BehaviorSubject(this._window.scrollY)
+            this.scrollPositionYs = this.scrollPositionYSubject.asObservable()
+            this.widthSubject = new BehaviorSubject(this._window.innerWidth)
+            this.widths = this.widthSubject.asObservable()
+            this.heightSubject = new BehaviorSubject(this._window.innerHeight)
+            this.heights = this.heightSubject.asObservable()
+            this.htmlFontSizePxSubject = new BehaviorSubject(this.getHtmlFontSizeInPx())
+            this.htmlFontSizePxs = this.htmlFontSizePxSubject.asObservable()
         }
         else {
             this.scrollPositionYs = of(0)
@@ -44,18 +44,18 @@ export class WindowRefService {
         if (typeof this._window !== 'undefined') {
             fromEvent(this._window, 'scroll')
                 .pipe(map(() => (this._window as Window).scrollY))
-                .subscribe((x) => this.scrollPositionYPump.next(x))
+                .subscribe((x) => this.scrollPositionYSubject.next(x))
 
             fromEvent(this._window, 'resize')
                 .pipe(map(() => (this._window as Window).innerWidth))
                 .subscribe((x) => {
-                    this.widthPump.next(x)
-                    this.htmlFontSizePxPump.next(this.getHtmlFontSizeInPx())
+                    this.widthSubject.next(x)
+                    this.htmlFontSizePxSubject.next(this.getHtmlFontSizeInPx())
                 })
 
             fromEvent(this._window, 'resize')
                 .pipe(map(() => (this._window as Window).innerHeight))
-                .subscribe((x) => this.heightPump.next(x))
+                .subscribe((x) => this.heightSubject.next(x))
         }
     }
 

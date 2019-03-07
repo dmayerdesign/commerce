@@ -1,4 +1,3 @@
-import { TemplateRef } from '@angular/core'
 import { ObjectId } from 'mongodb'
 import { Column, Entity, JoinColumn, ObjectIdColumn, OneToMany } from 'typeorm'
 import { NavigationItem as INavigationItem } from './navigation-item.interface'
@@ -18,8 +17,4 @@ export class NavigationItem implements INavigationItem {
     @OneToMany(() => NavigationItem, navigationItem => navigationItem.id)
     @JoinColumn()
     public children: NavigationItem[]
-
-    // Browser-specific
-    public template: TemplateRef<any>
-    public context: any
 }

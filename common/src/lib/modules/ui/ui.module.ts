@@ -64,10 +64,4 @@ export class QbUiModule {
             ]
         }
     }
-
-    public static forChild(): ModuleWithProviders {
-        return {
-            ngModule: QbUiModule
-        }
-    }
 }
