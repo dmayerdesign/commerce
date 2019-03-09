@@ -14,10 +14,20 @@ export class ShopComponent implements OnInit {
       className: 'some-class-name'
     },
     {
-      text: 'About',
+      text: 'Categories',
       onClick: (): void => {
         console.log('hello from ' + this.constructor.name)
-      }
+      },
+      children: [
+        {
+          text: 'Mens',
+          routerLink: ['/'],
+        },
+        {
+          text: 'Womens',
+          routerLink: ['/'],
+        }
+      ] as NavigationItem[],
     }
   ]
 

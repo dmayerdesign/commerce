@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core'
 
 @Component({
-    selector: 'qb:web:tooltip',
+    selector: 'qb-web-tooltip',
     template: `
 <div class="tooltip"
 		*ngIf="isShowing"

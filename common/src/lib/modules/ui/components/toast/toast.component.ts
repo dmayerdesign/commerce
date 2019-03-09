@@ -9,7 +9,7 @@ import { Toast } from '@qb/common/models/ui/toast'
 import { timeout } from '../../utils/timeout'
 
 @Component({
-    selector: 'qb:web:toast',
+    selector: 'qb-web-toast',
     template: `
         <div *ngIf="isShowing"
              class="toast-container toast-type-{{ toast.type }}">

@@ -8,13 +8,13 @@ export function Memoized(
 
   function stringifyArgs(args: any[]): string {
     let stringified = ''
-    args.forEach((arg) => {
+    for (const arg of args) {
       if (typeof arg === 'function') {
         stringified += arg.toString()
-      } else if (typeof arg !== 'undefined') {
+      } else {
         stringified += JSON.stringify(arg)
       }
-    })
+    }
     return stringified
   }
 

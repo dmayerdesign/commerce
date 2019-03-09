@@ -1,8 +1,19 @@
-<qb:web:navigation-list
-  [id]="'shop-navigation'"
-  [items]="navigationItems"
->
-</qb:web:navigation-list>
+<nav class="navbar"
+  role="navigation"
+  aria-label="main navigation"
+  [ngStyle]="{
+    height: '4rem'
+  }">
+  <div class="navbar-brand">
+    <a class="navbar-item" [routerLink]="['/']">
+      <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
+    </a>
+  </div>
+  <qb-web-navigation-list
+    [id]="'shop-navigation'"
+    [items]="navigationItems">
+  </qb-web-navigation-list>
+</nav>
 
 <p>
   shop works!

@@ -44,8 +44,7 @@
               "ui/web/src/assets"
             ],
             "styles": [
-              "node_modules/bulma/bulma.sass",
-              "ui/web/src/styles.scss"
+              "ui/web/src/styles/styles.scss"
             ],
             "scripts": []
           },

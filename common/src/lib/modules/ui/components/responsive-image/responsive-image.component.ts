@@ -4,7 +4,7 @@ import { BootstrapBreakpoint } from '@qb/common/constants/enums/bootstrap-breakp
 import { WindowRefService } from '../../services/window-ref.service'
 
 @Component({
-    selector: 'qb:web:responsive-image',
+    selector: 'qb-web-responsive-image',
     template: `
         <div class="responsive-image noselect"
              [ngStyle]="getStyles()">

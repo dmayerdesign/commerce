@@ -2,7 +2,7 @@ import { Component } from '@angular/core'
 import { platform } from '../../utils/platform'
 
 @Component({
-    selector: 'qb:web:ripple',
+    selector: 'qb-web-ripple',
     template: `
         <div class="ripple" *ngFor="let ripple of ripples"
             [ngStyle]="ripple.style">

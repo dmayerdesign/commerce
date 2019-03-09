@@ -17,6 +17,7 @@
             "dom"
         ],
         "noUnusedLocals": true,
-        "strictNullChecks": true
+        "strictNullChecks": true,
+        "resolveJsonModule": true
     }
 }

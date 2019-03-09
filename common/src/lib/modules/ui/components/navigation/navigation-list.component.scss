@@ -1,0 +1,15 @@
+.navbar-link {
+  &::after,
+  &:not(.is-arrowless)::after {
+    display: none;
+  }
+
+  &:not(.is-arrowless) {
+    padding-right: 0.75rem;
+  }
+
+  &-text {
+    display: inline-block;
+    padding: 0 0.3rem;
+  }
+}

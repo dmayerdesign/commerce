@@ -14,14 +14,14 @@ import { camelCase, kebabCase } from 'lodash'
 
     <!-- Taxonomy term/attribute value checklist -->
     <ng-container *ngIf="isChecklist">
-      <qb:web:form-field
+      <qb-web-form-field
         *ngFor="let controlName of formGroupControlNames"
         [options]="formGroupOptions[controlName]">
         <input #input
           type="checkbox"
           [formControl]="formControl"
         />
-      </qb:web:form-field>
+      </qb-web-form-field>
     </ng-container>
   `
 })

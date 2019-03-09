@@ -48,6 +48,10 @@ function main() {
     start(environment)
   }
 
+  if (action === 'generate') {
+    generate(modifiers[0], environment)
+  }
+
   if (action === 'help' || !action) {
     help()
   }
@@ -80,27 +84,18 @@ function test(stack, modifier, skipTests) {
 
 function generate(fileKey, env) {
   if (fileKey) {
-    if (fileKey === 'app-config') {
+    if (
+      fileKey === 'app-config' ||
+      fileKey === 'environment-vars' ||
+      fileKey === 'angular-data-services' ||
+      fileKey === 'style-variables'
+    ) {
       exec(`
         if [ -f $QB_PATH_TO_SECRETS/.env ]; then
           source $QB_PATH_TO_SECRETS/.env
         fi
         export ENVIRONMENT=${env}
-        ./node_modules/ts-node/dist/bin.js common/src/code-gen/generate-app-config.ts
-      `)
-    }
-    if (fileKey === 'environment-vars') {
-      exec(`
-        ./node_modules/ts-node/dist/bin.js common/src/code-gen/generate-environment-vars.ts
-      `)
-    }
-    if (fileKey === 'angular-data-services') {
-      exec(`
-        if [ -f $QB_PATH_TO_SECRETS/.env ]; then
-          source $QB_PATH_TO_SECRETS/.env
-        fi
-        export ENVIRONMENT=${env}
-        ./node_modules/ts-node/dist/bin.js common/src/code-gen/generate-angular-data-services.ts
+        ./node_modules/ts-node/dist/bin.js common/src/code-gen/generate-${fileKey}.ts
       `)
     }
   }
@@ -108,6 +103,7 @@ function generate(fileKey, env) {
     generate('app-config', env)
     generate('environment-vars')
     generate('angular-data-services', env)
+    generate('style-variables', env)
   }
 }
 
@@ -115,6 +111,7 @@ function prebuild(stack, env, skipTests) {
   if (stack === 'ui') {
     generate('app-config', env)
     generate('angular-data-services', env)
+    generate('style-variables', env)
   }
   if (stack === 'server') {
     generate('app-config', env)

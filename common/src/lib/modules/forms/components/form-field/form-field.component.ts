@@ -17,7 +17,7 @@ import { Heartbeat } from '@qb/common/heartbeat/heartbeat.decorator'
 import { FormFieldOptions } from '../../models/form-field-options'
 
 @Component({
-    selector: 'qb:web:form-field',
+    selector: 'qb-web-form-field',
     template: `
         <div class="form-group">
             <label *ngIf="options?.label"
@@ -85,11 +85,11 @@ export class FormFieldComponent extends HeartbeatComponent implements OnInit, On
         if (!this.input || !nativeElement) {
             throw new Error(`Invalid value provided to @ContentChild: ${this.input}.
 One ControlValueAccessor bound to a template local named 'input' must be passed as a \
-content child of <qb:web:form-field>, like so:
+content child of <qb-web-form-field>, like so:
 
-    <qb:web:form-field [options]="{ label: 'Email' }">
+    <qb-web-form-field [options]="{ label: 'Email' }">
         <input #input formControlName="email">
-    </qb:web:form-field>\n`)
+    </qb-web-form-field>\n`)
         }
 
         if (!this.options || typeof this.options.formControlType === 'undefined') {

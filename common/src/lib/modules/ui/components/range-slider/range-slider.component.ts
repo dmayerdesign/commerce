@@ -8,7 +8,7 @@ import { fromEvent, merge, BehaviorSubject, Observable } from 'rxjs'
 import { delay, filter, map, scan } from 'rxjs/operators'
 
 @Component({
-    selector: 'qb:web:range-slider',
+    selector: 'qb-web-range-slider',
     template: `
         <div class="range-slider-container">
             <div class="range-slider-inputs">

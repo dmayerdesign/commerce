@@ -13,7 +13,7 @@ import { platform } from '../../utils/platform'
 import { timeout } from '../../utils/timeout'
 
 @Component({
-    selector: 'qb:web:modal',
+    selector: 'qb-web-modal',
     template: `
         <div *ngIf="isShowing && data"
              #modal
