@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core'
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms'
-import { QbFormFieldOptions } from '../models/form-field-options'
-import { QbFormGroupOptions } from '../models/form-group-options'
+import { FormFieldOptions } from '../models/form-field-options'
+import { FormGroupOptions } from '../models/form-group-options'
 
 @Injectable()
-export class QbFormBuilderService {
+export class FormBuilderService {
     constructor(public formBuilder: FormBuilder) { }
 
-    public getFormGroup(options: QbFormGroupOptions): FormGroup {
+    public getFormGroup(options: FormGroupOptions): FormGroup {
         const formGroupOptions = {}
 
         for (const optionKey in options) {
@@ -20,7 +20,7 @@ export class QbFormBuilderService {
         return this.formBuilder.group(formGroupOptions)
     }
 
-    public getFormControl(options: QbFormFieldOptions): FormControl {
+    public getFormControl(options: FormFieldOptions): FormControl {
         const defaultValue = options.defaultValue == null ? '' : options.defaultValue
         const validators = options.validators || []
         const formControlArgs = [ defaultValue, validators ]
@@ -28,7 +28,7 @@ export class QbFormBuilderService {
         return new FormControl(...formControlArgs)
     }
 
-    public getFormControlNames(options: QbFormGroupOptions): string[] {
+    public getFormControlNames(options: FormGroupOptions): string[] {
         return Object.keys(options)
     }
 }

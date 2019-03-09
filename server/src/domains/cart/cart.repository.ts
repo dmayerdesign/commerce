@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common'
 import { Cart } from '@qb/common/domains/cart/cart'
 import { Connection } from 'typeorm'
-import { QbRepository } from '../../shared/data-access/repository'
+import { Repository } from '../../shared/data-access/repository'
 
 @Injectable()
-export class CartRepository extends QbRepository<Cart> {
+export class CartRepository extends Repository<Cart> {
   constructor(
     protected readonly _connection: Connection
   ) {

@@ -3,8 +3,8 @@ import { NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
 import { RouterModule } from '@angular/router'
 import { BOOT_CONDITIONS } from '@qb/common/constants/angular/injection-tokens'
-import { QbFormsModule } from '@qb/common/modules/forms/forms.module'
-import { QbUiModule } from '@qb/common/modules/ui/ui.module'
+import { FormsModule } from '@qb/common/modules/forms/forms.module'
+import { UiModule } from '@qb/common/modules/ui/ui.module'
 import { AppComponent } from './app.component'
 import { appRoutes } from './app.routes'
 import { OrganizationService } from './organization/organization.service'
@@ -14,14 +14,14 @@ import { OrganizationService } from './organization/organization.service'
     BrowserModule.withServerTransition({ appId: 'web-ssr' }),
     RouterModule.forRoot(appRoutes),
     HttpClientModule,
-    QbFormsModule,
-    QbUiModule.forRoot(),
+    FormsModule,
+    UiModule.forRoot(),
   ],
   exports: [
     RouterModule,
     HttpClientModule,
-    QbFormsModule,
-    QbUiModule,
+    FormsModule,
+    UiModule,
   ],
   declarations: [
     AppComponent,

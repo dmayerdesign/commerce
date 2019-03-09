@@ -1,15 +1,15 @@
 import { Body, Delete, Get, Param, Post, Put, Query } from '@nestjs/common'
 import { Params } from '@qb/common/constants/crud'
 import { Entity } from '@qb/common/domains/data-access/entity.interface'
-import { QbBaseRepository, QbReadOnlyRepository, QbRepository } from '@qb/common/domains/data-access/repository.interface'
+import { BaseRepository, ReadOnlyRepository, Repository } from '@qb/common/domains/data-access/repository.interface'
 import { ListRequest } from '@qb/common/domains/data-access/requests/list.request'
 import { UpdateManyRequest } from '@qb/common/domains/data-access/requests/update-many.request'
 import { UpdateRequest } from '@qb/common/domains/data-access/requests/update.request'
 import { DeleteWriteOpResultObject, InsertWriteOpResult, UpdateWriteOpResult } from 'mongodb'
 
-export abstract class QbBaseController<EntityType extends any> {
+export abstract class BaseController<EntityType extends any> {
 
-  protected abstract _repository: QbBaseRepository<EntityType>
+  protected abstract _repository: BaseRepository<EntityType>
 
   @Get(':id')
   public get(
@@ -72,9 +72,9 @@ export abstract class QbBaseController<EntityType extends any> {
   }
 }
 
-export abstract class QbReadOnlyController<EntityType extends any> {
+export abstract class ReadOnlyController<EntityType extends any> {
 
-  protected abstract _repository: QbReadOnlyRepository<EntityType>
+  protected abstract _repository: ReadOnlyRepository<EntityType>
 
   @Get()
   public list(
@@ -92,11 +92,11 @@ export abstract class QbReadOnlyController<EntityType extends any> {
   }
 }
 
-export abstract class QbThirdPartyController<EntityType extends any>
-    extends QbBaseController<EntityType> { }
+export abstract class ThirdPartyController<EntityType extends any>
+    extends BaseController<EntityType> { }
 
-export abstract class QbController<EntityType extends Entity>
-    extends QbBaseController<EntityType> {
-  protected abstract _repository: QbRepository<EntityType>
+export abstract class Controller<EntityType extends Entity>
+    extends BaseController<EntityType> {
+  protected abstract _repository: Repository<EntityType>
 }
 

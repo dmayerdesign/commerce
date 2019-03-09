@@ -1,26 +1,26 @@
 import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { FormsModule as NgFormsModule, ReactiveFormsModule } from '@angular/forms'
 
-import { QbFormFieldComponent } from './components/form-field/form-field.component'
-import { QbFormBuilderService } from './services/form-builder.service'
+import { FormFieldComponent } from './components/form-field/form-field.component'
+import { FormBuilderService } from './services/form-builder.service'
 
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
+    NgFormsModule,
     ReactiveFormsModule,
   ],
   declarations: [
-    QbFormFieldComponent,
+    FormFieldComponent,
   ],
   exports: [
-    FormsModule,
+    NgFormsModule,
     ReactiveFormsModule,
-    QbFormFieldComponent,
+    FormFieldComponent,
   ],
   providers: [
-    QbFormBuilderService
+    FormBuilderService
   ]
 })
-export class QbFormsModule {}
+export class FormsModule {}

@@ -11,7 +11,7 @@ async function main(): Promise<void> {
 import { Injectable } from '@nestjs/common'
 `
   const baseImports2 = `import { Connection } from 'typeorm'
-import { QbRepository } from '../../shared/data-access/repository'
+import { Repository } from '../../shared/data-access/repository'
 `
 
   Object.keys(apiEndpoints)
@@ -24,7 +24,7 @@ import { QbRepository } from '../../shared/data-access/repository'
 `import { ${entityName} } from '@qb/common/domains/${entityNameKebab}/${entityNameKebab}'\n`
       const body = `
 @Injectable()
-export class ${entityName}Repository extends QbRepository<${entityName}> {
+export class ${entityName}Repository extends Repository<${entityName}> {
   constructor(
     protected readonly _connection: Connection
   ) {

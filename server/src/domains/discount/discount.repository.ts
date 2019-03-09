@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common'
 import { Discount } from '@qb/common/domains/discount/discount'
 import { Connection } from 'typeorm'
-import { QbRepository } from '../../shared/data-access/repository'
+import { Repository } from '../../shared/data-access/repository'
 
 @Injectable()
-export class DiscountRepository extends QbRepository<Discount> {
+export class DiscountRepository extends Repository<Discount> {
   constructor(
     protected readonly _connection: Connection
   ) {

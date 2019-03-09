@@ -1,11 +1,11 @@
-import { Controller, Inject } from '@nestjs/common'
+import { Controller as NestController, Inject } from '@nestjs/common'
 import { Wishlist } from '@qb/common/domains/wishlist/wishlist'
 import { wishlists } from '@qb/common/constants/api-endpoints'
-import { QbController } from '../../shared/controller/controller'
+import { Controller } from '../../shared/controller/controller'
 import { WishlistRepository } from './wishlist.repository'
 
-@Controller(wishlists)
-export class WishlistController extends QbController<Wishlist> {
+@NestController(wishlists)
+export class WishlistController extends Controller<Wishlist> {
   constructor(
     @Inject(WishlistRepository)
     protected readonly _repository: WishlistRepository

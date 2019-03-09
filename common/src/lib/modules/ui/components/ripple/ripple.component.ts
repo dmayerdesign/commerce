@@ -2,7 +2,7 @@ import { Component } from '@angular/core'
 import { platform } from '../../utils/platform'
 
 @Component({
-    selector: 'qb-ripple',
+    selector: 'qb:web:ripple',
     template: `
         <div class="ripple" *ngFor="let ripple of ripples"
             [ngStyle]="ripple.style">
@@ -12,7 +12,7 @@ import { platform } from '../../utils/platform'
     `,
     styleUrls: [ './ripple.component.scss' ],
 })
-export class QbRippleComponent {
+export class RippleComponent {
     public ripples = [] as { style: object }[]
 
     constructor() {

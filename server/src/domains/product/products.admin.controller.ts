@@ -16,11 +16,11 @@
 // import { ApiEndpoints, Types } from '@qb/common/constants'
 // import { SeedService } from '../services/seed.service'
 // import { ProductService } from '../services/product.service'
-// import { QbController } from '../../../shared/controller/controller'
+// import { Controller } from '../../../shared/controller/controller'
 
 // @injectable()
 // @controller(ProductsAdmin/*, Types.isOwner*/)
-// export class ProductsAdminController extends QbController implements interfaces.Controller {
+// export class ProductsAdminController extends Controller implements interfaces.Controller {
 
 //     constructor(
 //         @Inject(ProductService) private productService: ProductService,

@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common'
 import { User } from '@qb/common/domains/user/user'
 import { Connection } from 'typeorm'
-import { QbRepository } from '../../shared/data-access/repository'
+import { Repository } from '../../shared/data-access/repository'
 
 @Injectable()
-export class UserRepository extends QbRepository<User> {
+export class UserRepository extends Repository<User> {
   constructor(
     protected readonly _connection: Connection
   ) {

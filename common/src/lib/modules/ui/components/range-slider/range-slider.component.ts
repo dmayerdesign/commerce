@@ -8,7 +8,7 @@ import { fromEvent, merge, BehaviorSubject, Observable } from 'rxjs'
 import { delay, filter, map, scan } from 'rxjs/operators'
 
 @Component({
-    selector: 'qb-range-slider',
+    selector: 'qb:web:range-slider',
     template: `
         <div class="range-slider-container">
             <div class="range-slider-inputs">
@@ -78,13 +78,13 @@ import { delay, filter, map, scan } from 'rxjs/operators'
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => QbRangeSliderComponent),
+            useExisting: forwardRef(() => RangeSliderComponent),
             multi: true,
         },
     ],
 })
 @Heartbeat()
-export class QbRangeSliderComponent extends HeartbeatComponent implements ControlValueAccessor, AfterViewInit, OnInit, OnDestroy {
+export class RangeSliderComponent extends HeartbeatComponent implements ControlValueAccessor, AfterViewInit, OnInit, OnDestroy {
     @Input() public step = 5
     @Input() public decimalPlaces: number
     @Input() public minLimit = 0

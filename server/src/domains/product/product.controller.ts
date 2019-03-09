@@ -1,13 +1,13 @@
-import { Controller, Get, Inject, Param } from '@nestjs/common'
+import { Controller as NestController, Get, Inject, Param } from '@nestjs/common'
 import { products } from '@qb/common/constants/api-endpoints'
 import { Price } from '@qb/common/domains/price/price.interface'
 import { Product } from '@qb/common/domains/product/product'
-import { QbController } from '../../shared/controller/controller'
+import { Controller } from '../../shared/controller/controller'
 import { ProductRepository } from './product.repository'
 import { ProductService } from './product.service'
 
-@Controller(products)
-export class ProductController extends QbController<Product> {
+@NestController(products)
+export class ProductController extends Controller<Product> {
   constructor(
     @Inject(ProductRepository) protected readonly _repository: ProductRepository,
     @Inject(ProductService) protected readonly _productService: ProductService,

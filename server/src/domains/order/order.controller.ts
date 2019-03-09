@@ -1,12 +1,12 @@
-import { Body, Controller, Inject, Post } from '@nestjs/common'
+import { Body, Controller as NestController, Inject, Post } from '@nestjs/common'
 import { Order } from '@qb/common/domains/order/order'
 import { orders } from '@qb/common/constants/api-endpoints'
-import { QbController } from '../../shared/controller/controller'
+import { Controller } from '../../shared/controller/controller'
 import { OrderRepository } from './order.repository'
 import { OrderService } from './order.service'
 
-@Controller(orders)
-export class OrderController extends QbController<Order> {
+@NestController(orders)
+export class OrderController extends Controller<Order> {
   constructor(
     @Inject(OrderRepository) protected readonly _repository: OrderRepository,
     @Inject(OrderService) protected readonly _orderService: OrderService,

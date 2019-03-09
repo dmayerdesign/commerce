@@ -1,14 +1,30 @@
-export function Memoize<ArgsType extends any[], ReturnType>(
+export function Memoized(
   _target: any,
   _propertyName: string,
-  descriptor: TypedPropertyDescriptor<(...args: ArgsType) => ReturnType>
+  descriptor: TypedPropertyDescriptor<Function>
 ) {
-  const method = descriptor.value as (...args: ArgsType) => ReturnType
-  const cache = new Map<string, ReturnType>()
-  descriptor.value = function(...args: ArgsType): ReturnType {
-    const argsKey = JSON.stringify(args)
-    return cache.get(argsKey) ||
-      cache.set(argsKey, method.call(this, ...args))
-        .get(argsKey) as ReturnType
+  const cache = {}
+  const originalMethod = descriptor.value as Function
+
+  function stringifyArgs(args: any[]): string {
+    let stringified = ''
+    args.forEach((arg) => {
+      if (typeof arg === 'function') {
+        stringified += arg.toString()
+      } else if (typeof arg !== 'undefined') {
+        stringified += JSON.stringify(arg)
+      }
+    })
+    return stringified
+  }
+
+  descriptor.value = function(...args: any[]): Function {
+    const stringifiedArgs = stringifyArgs(args)
+
+    if (cache[stringifiedArgs]) {
+      return cache[stringifiedArgs]
+    }
+
+    return cache[stringifiedArgs] = originalMethod.call(this, ...args)
   }
 }

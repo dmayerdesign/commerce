@@ -7,11 +7,6 @@
             false,
             "camelCase"
         ],
-        "component-selector": [
-            true,
-            "element",
-            false,
-            "kebab-case"
-        ]
+        "component-selector": false
     }
 }

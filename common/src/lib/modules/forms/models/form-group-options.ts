@@ -1,5 +1,5 @@
-import { QbFormFieldOptions } from './form-field-options'
+import { FormFieldOptions } from './form-field-options'
 
-export interface QbFormGroupOptions {
-  [key: string]: QbFormFieldOptions
+export interface FormGroupOptions {
+  [key: string]: FormFieldOptions
 }

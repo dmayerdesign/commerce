@@ -3,14 +3,14 @@ import { ModuleWithProviders, NgModule } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
 import { ClickOutsideModule } from 'ng-click-outside'
-import { QbInstagramFeedComponent } from './components/instagram-feed/instagram-feed.component'
-import { QbModalComponent } from './components/modal/modal.component'
-import { QbNavigationListComponent } from './components/navigation/navigation-list.component'
-import { QbRangeSliderComponent } from './components/range-slider/range-slider.component'
-import { QbResponsiveImageComponent } from './components/responsive-image/responsive-image.component'
-import { QbRippleComponent } from './components/ripple/ripple.component'
-import { QbToastComponent } from './components/toast/toast.component'
-import { QbTooltipComponent } from './components/tooltip/tooltip.component'
+import { InstagramFeedComponent } from './components/instagram-feed/instagram-feed.component'
+import { ModalComponent } from './components/modal/modal.component'
+import { NavigationListComponent } from './components/navigation/navigation-list.component'
+import { RangeSliderComponent } from './components/range-slider/range-slider.component'
+import { ResponsiveImageComponent } from './components/responsive-image/responsive-image.component'
+import { RippleComponent } from './components/ripple/ripple.component'
+import { ToastComponent } from './components/toast/toast.component'
+import { TooltipComponent } from './components/tooltip/tooltip.component'
 import { FocusOnDirective } from './directives/focus-on.directive'
 import { TruncatePipe } from './pipes/truncate.pipe'
 import { WindowRefService } from './services/window-ref.service'
@@ -25,14 +25,14 @@ import { WindowRefService } from './services/window-ref.service'
     ],
     declarations: [
         // Components.
-        QbInstagramFeedComponent,
-        QbModalComponent,
-        QbNavigationListComponent,
-        QbRangeSliderComponent,
-        QbResponsiveImageComponent,
-        QbRippleComponent,
-        QbToastComponent,
-        QbTooltipComponent,
+        InstagramFeedComponent,
+        ModalComponent,
+        NavigationListComponent,
+        RangeSliderComponent,
+        ResponsiveImageComponent,
+        RippleComponent,
+        ToastComponent,
+        TooltipComponent,
         // Directives.
         FocusOnDirective,
         TruncatePipe,
@@ -42,23 +42,23 @@ import { WindowRefService } from './services/window-ref.service'
         CommonModule,
         ClickOutsideModule,
         // Components.
-        QbInstagramFeedComponent,
-        QbModalComponent,
-        QbNavigationListComponent,
-        QbRangeSliderComponent,
-        QbResponsiveImageComponent,
-        QbRippleComponent,
-        QbToastComponent,
-        QbTooltipComponent,
+        InstagramFeedComponent,
+        ModalComponent,
+        NavigationListComponent,
+        RangeSliderComponent,
+        ResponsiveImageComponent,
+        RippleComponent,
+        ToastComponent,
+        TooltipComponent,
         // Directives.
         FocusOnDirective,
         TruncatePipe,
     ],
 })
-export class QbUiModule {
+export class UiModule {
     public static forRoot(): ModuleWithProviders {
         return {
-            ngModule: QbUiModule,
+            ngModule: UiModule,
             providers: [
                 WindowRefService
             ]

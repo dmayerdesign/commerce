@@ -1,13 +1,13 @@
-import { Controller, Get, Inject, Param, Post, Request, Response } from '@nestjs/common'
+import { Controller as NestController, Get, Inject, Param, Post, Request, Response } from '@nestjs/common'
 import { User } from '@qb/common/domains/user/user'
 import { users } from '@qb/common/constants/api-endpoints'
 import { Request as IRequest, Response as IResponse } from 'express'
-import { QbController } from '../../shared/controller/controller'
+import { Controller } from '../../shared/controller/controller'
 import { UserRepository } from './user.repository'
 import { UserService } from './user.service'
 
-@Controller(users)
-export class UserController extends QbController<User> {
+@NestController(users)
+export class UserController extends Controller<User> {
     constructor(
         @Inject(UserRepository) protected _repository: UserRepository,
         @Inject(UserService) private _userService: UserService,

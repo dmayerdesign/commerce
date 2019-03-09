@@ -1,8 +1,8 @@
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'
 import { ModuleWithProviders, NgModule } from '@angular/core'
-import { QbHttpRequestInterceptor } from './http-request.interceptor'
-import { QbHttpResponseInterceptor } from './http-response.interceptor'
-import { QbHttpService } from './http.service'
+import { HttpRequestInterceptor } from './http-request.interceptor'
+import { HttpResponseInterceptor } from './http-response.interceptor'
+import { HttpService } from './http.service'
 
 @NgModule({
     imports: [
@@ -12,20 +12,20 @@ import { QbHttpService } from './http.service'
         HttpClientModule,
     ],
 })
-export class QbHttpModule {
+export class HttpModule {
     public static forRoot(): ModuleWithProviders {
         return {
-            ngModule: QbHttpModule,
+            ngModule: HttpModule,
             providers: [
-                QbHttpService,
+                HttpService,
                 {
                     provide: HTTP_INTERCEPTORS,
-                    useClass: QbHttpRequestInterceptor,
+                    useClass: HttpRequestInterceptor,
                     multi: true,
                 },
                 {
                     provide: HTTP_INTERCEPTORS,
-                    useClass: QbHttpResponseInterceptor,
+                    useClass: HttpResponseInterceptor,
                     multi: true,
                 },
             ],
@@ -34,7 +34,7 @@ export class QbHttpModule {
 
     public static forChild(): ModuleWithProviders {
         return {
-            ngModule: QbHttpModule
+            ngModule: HttpModule
         }
     }
 }

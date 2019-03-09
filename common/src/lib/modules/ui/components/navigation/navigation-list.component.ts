@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core'
 import { BootstrapBreakpointKey } from '@qb/common/constants/enums/bootstrap-breakpoint-key'
 import { NavigationItem } from '@qb/common/domains/navigation-item/navigation-item.interface'
 import { pullFrom, pushTo } from '@qb/common/helpers/array.helpers'
-import { Memoize } from '@qb/common/helpers/function.helpers'
+import { Memoized } from '@qb/common/helpers/function.helpers'
 import { hasChildren } from '@qb/common/helpers/tree.helpers'
 import { BehaviorSubject, Observable } from 'rxjs'
 import { first, map } from 'rxjs/operators'
@@ -10,22 +10,20 @@ import { WindowRefService } from '../../services/window-ref.service'
 
 export interface NavigationListContext {
   isParent: boolean
-  isChild: boolean
   items: NavigationItem[]
 }
 
 @Component({
-  selector: 'qb-navigation-list',
+  selector: 'qb:web:navigation-list',
   template: `
-    <ng-template #navigationList let-ctx>
+    <ng-template #navigationList let-items="items" let-isParent="isParent">
       <ul [ngClass]="{
-          'navbar-nav': ctx.isParent,
-          'dropdown-menu': ctx.isChild,
-          'dropdown-submenu': !ctx.isParent && !ctx.isChild
+          'navbar': isParent,
+          'navbar-dropdown': !isParent
         }"
-        [id]="getId(ctx)">
+        [id]="id + (isParent ? '-navbar' : '-navbar-dropdown')">
 
-        <li *ngFor="let item of ctx.items"
+        <li *ngFor="let item of items"
           class="nav-item"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
@@ -75,10 +73,7 @@ export interface NavigationListContext {
           <ng-container *ngIf="(isShowingChildren$(item) | async)">
 
             <ng-container *ngTemplateOutlet="navigationList; context: {
-              $implicit: {
-                items: item.children,
-                isChild: ctx.isParent
-              }
+              items: item.children
             }"></ng-container>
 
           </ng-container>
@@ -89,16 +84,14 @@ export interface NavigationListContext {
     <ng-container *ngTemplateOutlet="
       navigationList;
       context: {
-        $implicit: {
-          items: items,
-          isParent: true
-        }
+        items: items,
+        isParent: true
       }
     ">
     </ng-container>
   `,
 })
-export class QbNavigationListComponent {
+export class NavigationListComponent {
   @Input() public items: NavigationItem[]
   @Input() public id: string
 
@@ -109,7 +102,7 @@ export class QbNavigationListComponent {
     private windowRefService: WindowRefService
   ) { }
 
-  @Memoize
+  @Memoized
   public isShowingChildren$(item: NavigationItem): Observable<boolean> {
     return this.navItemsShowingChildren$.pipe(
       map((navItems) => hasChildren(item)
@@ -117,14 +110,14 @@ export class QbNavigationListComponent {
     )
   }
 
-  @Memoize
+  @Memoized
   public shouldShowDownArrow$(item: NavigationItem): Observable<boolean> {
     return this.windowRefService.mediaBreakpointAboves(BootstrapBreakpointKey.Sm).pipe(
       map((isAboveSm) => isAboveSm && hasChildren(item))
     )
   }
 
-  @Memoize
+  @Memoized
   public shouldShowPlus$(item: NavigationItem): Observable<boolean> {
     return this.windowRefService.mediaBreakpointBelows(BootstrapBreakpointKey.Md).pipe(
       map((isBelowMd) => isBelowMd && hasChildren(item))
@@ -160,15 +153,5 @@ export class QbNavigationListComponent {
         )
       }
     })
-  }
-
-  public getId(ctx: NavigationListContext): string {
-    if (ctx.isParent) {
-      return this.id
-    }
-    else if (ctx.isChild) {
-      return this.id + '-dropdown-menu'
-    }
-    return ''
   }
 }

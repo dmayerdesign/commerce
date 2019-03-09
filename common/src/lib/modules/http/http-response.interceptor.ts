@@ -10,13 +10,13 @@ import { catchError, switchMap } from 'rxjs/operators'
 import { HttpStatus } from '../../constants/http-status'
 import { HttpInjectionTokens } from './http.injection-tokens'
 import { IHttpSettings, SimpleError } from './http.models'
-import { QbHttpService } from './http.service'
+import { HttpService } from './http.service'
 
 @Injectable()
-export class QbHttpResponseInterceptor implements HttpInterceptor {
+export class HttpResponseInterceptor implements HttpInterceptor {
 
     constructor(
-        private _httpService: QbHttpService,
+        private _httpService: HttpService,
         // @Inject(HttpInjectionTokens.HttpSettings) private _httpSettings: typeof IHttpSettings,
     ) { }
 

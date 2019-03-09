@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core'
 
 @Component({
-    selector: 'qb-tooltip',
+    selector: 'qb:web:tooltip',
     template: `
 <div class="tooltip"
 		*ngIf="isShowing"
@@ -11,7 +11,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 </div>`,
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class QbTooltipComponent {
+export class TooltipComponent {
     public isShowing: boolean
     public fadeIn: boolean
     @Output() public showChange = new EventEmitter<boolean>()

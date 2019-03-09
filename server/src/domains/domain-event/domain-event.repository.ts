@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common'
 import { DomainEvent } from '@qb/common/domains/domain-event/domain-event'
 import { Connection } from 'typeorm'
-import { QbRepository } from '../../shared/data-access/repository'
+import { Repository } from '../../shared/data-access/repository'
 
 @Injectable()
-export class DomainEventRepository extends QbRepository<DomainEvent> {
+export class DomainEventRepository extends Repository<DomainEvent> {
   constructor(
     protected readonly _connection: Connection
   ) {

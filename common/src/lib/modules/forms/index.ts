@@ -1,1 +1,1 @@
-export { QbFormsModule } from './forms.module'
+export { FormsModule as FormsModule } from './forms.module'

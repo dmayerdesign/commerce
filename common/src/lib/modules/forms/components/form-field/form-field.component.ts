@@ -14,10 +14,10 @@ import { takeWhile } from 'rxjs/operators'
 import { FormErrors } from '@qb/common/constants/copy'
 import { HeartbeatComponent } from '@qb/common/heartbeat/heartbeat.component'
 import { Heartbeat } from '@qb/common/heartbeat/heartbeat.decorator'
-import { QbFormFieldOptions } from '../../models/form-field-options'
+import { FormFieldOptions } from '../../models/form-field-options'
 
 @Component({
-    selector: 'qb-form-field',
+    selector: 'qb:web:form-field',
     template: `
         <div class="form-group">
             <label *ngIf="options?.label"
@@ -41,8 +41,8 @@ import { QbFormFieldOptions } from '../../models/form-field-options'
     `,
 })
 @Heartbeat()
-export class QbFormFieldComponent extends HeartbeatComponent implements OnInit, OnDestroy, AfterContentInit {
-    @Input() public options: QbFormFieldOptions = {
+export class FormFieldComponent extends HeartbeatComponent implements OnInit, OnDestroy, AfterContentInit {
+    @Input() public options: FormFieldOptions = {
         label: ''
     }
     @Input() public customErrorMessage: TemplateRef<any>
@@ -85,11 +85,11 @@ export class QbFormFieldComponent extends HeartbeatComponent implements OnInit, 
         if (!this.input || !nativeElement) {
             throw new Error(`Invalid value provided to @ContentChild: ${this.input}.
 One ControlValueAccessor bound to a template local named 'input' must be passed as a \
-content child of <qb-form-field>, like so:
+content child of <qb:web:form-field>, like so:
 
-    <qb-form-field [options]="{ label: 'Email' }">
+    <qb:web:form-field [options]="{ label: 'Email' }">
         <input #input formControlName="email">
-    </qb-form-field>\n`)
+    </qb:web:form-field>\n`)
         }
 
         if (!this.options || typeof this.options.formControlType === 'undefined') {

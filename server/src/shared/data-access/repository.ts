@@ -1,5 +1,5 @@
 import { Entity } from '@qb/common/domains/data-access/entity.interface'
-import { InclusivePartial, QbRepository as IQbRepository } from '@qb/common/domains/data-access/repository.interface'
+import { InclusivePartial, Repository as IRepository } from '@qb/common/domains/data-access/repository.interface'
 import { ListRequest } from '@qb/common/domains/data-access/requests/list.request'
 import { UpdateManyRequest } from '@qb/common/domains/data-access/requests/update-many.request'
 import { UpdateRequest } from '@qb/common/domains/data-access/requests/update.request'
@@ -9,7 +9,7 @@ import { DeleteWriteOpResultObject, InsertOneWriteOpResult, InsertWriteOpResult,
 import { DeepPartial, FindManyOptions, MongoRepository,
   ObjectID as TypeOrmObjectId } from 'typeorm'
 
-export abstract class QbRepository<EntityType extends Entity> implements IQbRepository<EntityType> {
+export abstract class Repository<EntityType extends Entity> implements IRepository<EntityType> {
 
   // Hooks.
   private _preGetHooks: ((id?: string | ObjectId) => Promise<void>)[] = []

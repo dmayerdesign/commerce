@@ -9,7 +9,7 @@ import { AppConfig } from '@qb/app-config'
 import { Observable } from 'rxjs'
 
 @Injectable()
-export class QbHttpRequestInterceptor implements HttpInterceptor {
+export class HttpRequestInterceptor implements HttpInterceptor {
 
     public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         let newRequest = request

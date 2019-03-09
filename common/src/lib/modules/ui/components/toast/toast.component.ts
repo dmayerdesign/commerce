@@ -9,7 +9,7 @@ import { Toast } from '@qb/common/models/ui/toast'
 import { timeout } from '../../utils/timeout'
 
 @Component({
-    selector: 'qb-toast',
+    selector: 'qb:web:toast',
     template: `
         <div *ngIf="isShowing"
              class="toast-container toast-type-{{ toast.type }}">
@@ -31,7 +31,7 @@ import { timeout } from '../../utils/timeout'
     styleUrls: [ './toast.component.scss' ],
 })
 @Heartbeat()
-export class QbToastComponent extends HeartbeatComponent implements OnInit, OnDestroy {
+export class ToastComponent extends HeartbeatComponent implements OnInit, OnDestroy {
     @Input() public toasts: Observable<Toast>
 
     public queue: Toast[] = []

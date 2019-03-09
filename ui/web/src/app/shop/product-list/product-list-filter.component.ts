@@ -3,8 +3,8 @@ import { FormControl, FormGroup } from '@angular/forms'
 import { ProductListFilterUi } from '@qb/common/domains/product-list-filter-ui/product-list-filter-ui.interface'
 import { ProductListFilter, ProductListFilterType } from '@qb/common/domains/product/product-list-filter'
 import { TaxonomyTerm } from '@qb/common/domains/taxonomy-term/taxonomy-term.interface'
-import { QbFormGroupOptions } from '@qb/common/modules/forms/models/form-group-options'
-import { QbFormBuilderService } from '@qb/common/modules/forms/services/form-builder.service'
+import { FormGroupOptions } from '@qb/common/modules/forms/models/form-group-options'
+import { FormBuilderService } from '@qb/common/modules/forms/services/form-builder.service'
 import { camelCase, kebabCase } from 'lodash'
 
 @Component({
@@ -14,14 +14,14 @@ import { camelCase, kebabCase } from 'lodash'
 
     <!-- Taxonomy term/attribute value checklist -->
     <ng-container *ngIf="isChecklist">
-      <qb-form-field
+      <qb:web:form-field
         *ngFor="let controlName of formGroupControlNames"
         [options]="formGroupOptions[controlName]">
         <input #input
           type="checkbox"
           [formControl]="formControl"
         />
-      </qb-form-field>
+      </qb:web:form-field>
     </ng-container>
   `
 })
@@ -31,11 +31,11 @@ export class ProductListFilterComponent implements OnInit {
   public formControl: FormControl
   public formGroup: FormGroup
   public formGroupControlNames: string[]
-  public formGroupOptions: QbFormGroupOptions = {}
+  public formGroupOptions: FormGroupOptions = {}
   public isChecklist: boolean
 
   constructor(
-    private _formBuilderService: QbFormBuilderService
+    private _formBuilderService: FormBuilderService
   ) { }
 
   public ngOnInit(): void {

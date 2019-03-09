@@ -1,11 +1,11 @@
-import { Controller, Inject } from '@nestjs/common'
-import { AttributeValue } from '@qb/common/domains/attribute-value/attribute-value'
+import { Controller as NestController, Inject } from '@nestjs/common'
 import { attributeValues } from '@qb/common/constants/api-endpoints'
-import { QbController } from '../../shared/controller/controller'
+import { AttributeValue } from '@qb/common/domains/attribute-value/attribute-value'
+import { Controller } from '../../shared/controller/controller'
 import { AttributeValueRepository } from './attribute-value.repository'
 
-@Controller(attributeValues)
-export class AttributeValueController extends QbController<AttributeValue> {
+@NestController(attributeValues)
+export class AttributeValueController extends Controller<AttributeValue> {
   constructor(
     @Inject(AttributeValueRepository)
     protected readonly _repository: AttributeValueRepository

@@ -13,7 +13,7 @@ import { platform } from '../../utils/platform'
 import { timeout } from '../../utils/timeout'
 
 @Component({
-    selector: 'qb-modal',
+    selector: 'qb:web:modal',
     template: `
         <div *ngIf="isShowing && data"
              #modal
@@ -77,7 +77,7 @@ import { timeout } from '../../utils/timeout'
     styleUrls: [ './modal.component.scss' ]
 })
 @Heartbeat()
-export class QbModalComponent extends HeartbeatComponent implements OnInit, OnDestroy {
+export class ModalComponent extends HeartbeatComponent implements OnInit, OnDestroy {
     @Input() public datas: Observable<ModalData>
     @Input() public closeCallback?: () => void
 
