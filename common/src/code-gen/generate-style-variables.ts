@@ -24,7 +24,8 @@ export default function main(): void {
   writeFileSync(
     destPath,
     `// tslint:disable
-export const styles = ${JSON.stringify(variables, null, 2)}
+const $styles = ${JSON.stringify(variables, null, 2)}
+export const styles = $styles.global
 `
   )
 }

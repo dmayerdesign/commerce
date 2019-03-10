@@ -1,1 +1,16 @@
-$blue: #0000ff;
+// Custom variables.
+// Colors.
+$white: #fff;
+// Theme colors.
+$color-primary: #00b0ff;
+$color-accent: #ff3c7c;
+$color-bg: #fafefe;
+$color-bg-dark: darken($color-bg, 1%);
+$color-text: #3f464a;
+$size-jumbo: 4rem;
+
+// Bulma overrides.
+$navbar-background-color: transparent;
+$navbar-item-color: $color-text;
+$navbar-height: 5rem;
+$navbar-item-img-max-height: 2.5rem;

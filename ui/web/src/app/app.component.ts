@@ -7,9 +7,11 @@ import { filter, map } from 'rxjs/operators'
 @Component({
   selector: 'web-root',
   template: `
-    <ng-container *ngIf="ready$ | async; else loading">
+    <div *ngIf="ready$ | async; else loading"
+      class="app-routes">
       <router-outlet></router-outlet>
-    </ng-container>
+    </div>
+
     <ng-template #loading>
       <p>Loading...</p>
     </ng-template>

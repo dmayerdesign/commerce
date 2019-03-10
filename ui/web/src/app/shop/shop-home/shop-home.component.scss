@@ -1,0 +1,18 @@
+@import "../../../styles/variables";
+
+.hero {
+  padding-top: $navbar-height;
+  margin-top: -$navbar-height;
+
+  &-body {
+    margin-top: -9rem;
+    padding-top: 3rem;
+  }
+
+  &.is-fullheight,
+  &.is-large {
+    .title {
+      font-size: $size-jumbo;
+    }
+  }
+}

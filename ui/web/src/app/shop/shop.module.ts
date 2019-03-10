@@ -7,7 +7,8 @@ import { ProductListFilterComponent } from './product-list/product-list-filter.c
 import { ProductListFiltersComponent } from './product-list/product-list-filters.component'
 import { ProductListComponent } from './product-list/product-list.component'
 import { ShopComponent } from './shop.component'
-import { shopRoutes } from './shop.routes'
+import { shopRoutes } from './shop.routes';
+import { ShopHomeComponent } from './shop-home/shop-home.component'
 
 @NgModule({
   imports: [
@@ -21,6 +22,7 @@ import { shopRoutes } from './shop.routes'
     ProductListFilterComponent,
     ProductListFiltersComponent,
     ShopComponent,
+    ShopHomeComponent,
   ],
 })
 export class ShopModule { }

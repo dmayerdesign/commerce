@@ -1,22 +1,19 @@
-<nav class="navbar"
+<nav class="navbar is-transparent is-fixed"
   role="navigation"
-  aria-label="main navigation"
-  [ngStyle]="{
-    height: '4rem'
-  }">
-  <div class="navbar-brand">
-    <a class="navbar-item" [routerLink]="['/']">
-      <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
-    </a>
+  aria-label="main navigation">
+  <div class="container">
+    <div class="navbar-brand">
+      <a class="navbar-item" [routerLink]="['/']">
+        <img src="https://nestjs.com/logo-small.126c921d.svg">
+      </a>
+    </div>
+    <qb-web-navigation-list
+      [id]="'shop-navigation'"
+      [items]="navigationItems">
+    </qb-web-navigation-list>
   </div>
-  <qb-web-navigation-list
-    [id]="'shop-navigation'"
-    [items]="navigationItems">
-  </qb-web-navigation-list>
 </nav>
 
-<p>
-  shop works!
-</p>
-
-<router-outlet></router-outlet>
+<div class="shop-routes">
+  <router-outlet></router-outlet>
+</div>
