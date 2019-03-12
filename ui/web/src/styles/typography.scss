@@ -1,0 +1,18 @@
+@import "./variables";
+
+.qb-highlight-accent {
+  background: $color-accent;
+  display: inline-block;
+  padding: 0.1rem 0.6rem 0.4rem;
+}
+
+.qb-jumbo {
+  .title {
+    font-size: $size-jumbo;
+    font-weight: bold;
+  }
+
+  .subtitle {
+    margin-top: -0.5rem;
+  }
+}

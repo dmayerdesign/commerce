@@ -1,17 +1,18 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, ViewEncapsulation } from '@angular/core'
 import { NavigationItem } from '@qb/common/domains/navigation-item/navigation-item.interface'
 
 @Component({
   selector: 'web-shop',
   templateUrl: './shop.component.html',
-  styleUrls: ['./shop.component.scss']
+  styleUrls: ['./shop.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class ShopComponent implements OnInit {
   public navigationItems: Partial<NavigationItem>[] = [
     {
       text: 'Shop',
       routerLink: ['/'],
-      className: 'some-class-name'
+      className: 'some-class-name',
     },
     {
       text: 'Categories',

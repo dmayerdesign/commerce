@@ -1,64 +1,83 @@
 <ng-template #navigationList let-items="items" let-isParent="isParent">
-  <div [ngClass]="{
-      'navbar': isParent,
-      'navbar-dropdown': !isParent
+  <ng-container *ngIf="isParent">
+    <ng-container *ngTemplateOutlet="
+      navigationItems;
+      context: {
+        items: items
+      }
+    ">
+    </ng-container>
+  </ng-container>
+
+  <ng-container *ngIf="!isParent">
+      <div class="navbar-dropdown"
+        [id]="id + '-navbar-dropdown'">
+        <ng-container *ngTemplateOutlet="
+          navigationItems;
+          context: {
+            items: items
+          }
+        ">
+        </ng-container>
+      </div>
+    </ng-container>
+</ng-template>
+
+<ng-template #navigationItems let-items="items">
+  <div *ngFor="let item of items"
+    class="navbar-item"
+    [ngClass]="{
+      'has-dropdown is-hoverable': hasChildren(item)
     }"
-    [id]="id + (isParent ? '-navbar' : '-navbar-dropdown')">
+    (mouseenter)="handleNavLinkMouseEnter(item)"
+    (mouseleave)="handleNavLinkMouseLeave(item)">
 
-    <div *ngFor="let item of items"
-      class="navbar-item"
-      [ngClass]="{
-        'has-dropdown is-hoverable': hasChildren(item)
-      }"
-      (mouseenter)="handleNavLinkMouseEnter(item)"
-      (mouseleave)="handleNavLinkMouseLeave(item)">
+    <a #routerLink
+      *ngIf="item.routerLink"
+      class="navbar-link {{ item?.className }}"
+      [routerLink]="item.routerLink"
+      [routerLinkActive]="'active'"
+      [routerLinkActiveOptions]="{ exact: true }"
+      [ngStyle]="navbarLinkStyles">
+      <span class="nav-link-text">{{ item.text }}</span>
+      <span *ngIf="routerLink.isActive" class="sr-only">(current)</span>
+      <ng-container *ngTemplateOutlet="iconLast"></ng-container>
+    </a>
 
-      <a #routerLink
-        *ngIf="item.routerLink"
-        class="navbar-link {{ item?.className }}"
-        [routerLink]="item.routerLink"
-        [routerLinkActive]="'active'"
-        [routerLinkActiveOptions]="{ exact: true }"
-        [ngStyle]="navbarLinkStyles">
-        <span class="nav-link-text">{{ item.text }}</span>
-        <span *ngIf="routerLink.isActive" class="sr-only">(current)</span>
-        <ng-container *ngTemplateOutlet="iconLast"></ng-container>
-      </a>
+    <a *ngIf="!item.routerLink"
+      class="navbar-link {{ item?.className }}"
+      href="javascript:void(0)"
+      [ngStyle]="navbarLinkStyles"
+      (click)="item.onClick($event, item)">
+      <span class="navbar-link-text">{{ item.text }}</span>
+      <ng-container *ngTemplateOutlet="iconLast"></ng-container>
+    </a>
 
-      <a *ngIf="!item.routerLink"
-        class="navbar-link {{ item?.className }}"
-        href="javascript:void(0)"
-        [ngStyle]="navbarLinkStyles"
-        (click)="item.onClick($event, item)">
-        <span class="navbar-link-text">{{ item.text }}</span>
-        <ng-container *ngTemplateOutlet="iconLast"></ng-container>
-      </a>
+    <ng-container *ngIf="(isShowingChildren$(item) | async)">
+      <ng-container *ngTemplateOutlet="navigationList; context: {
+        items: item.children,
+        isParent: false
+      }"></ng-container>
+    </ng-container>
+
+    <ng-template #iconLast>
+      <i *ngIf="shouldShowDownArrow$(item) | async"
+          class="material-icons">
+          expand_more
+      </i>
   
-      <ng-container *ngIf="(isShowingChildren$(item) | async)">
-        <ng-container *ngTemplateOutlet="navigationList; context: {
-          items: item.children
-        }"></ng-container>
-      </ng-container>
-
-      <ng-template #iconLast>
-        <i *ngIf="shouldShowDownArrow$(item) | async"
-            class="material-icons">
-            expand_more
-        </i>
-    
-        <i *ngIf="(shouldShowPlus$(item) | async) && !(isShowingChildren$(item) | async)"
-            class="material-icons"
-            (click)="handleDropdownExpandClick(item)">
-            add
-        </i>
-    
-        <i *ngIf="(shouldShowPlus$(item) | async) && (isShowingChildren$(item) | async)"
-            class="material-icons"
-            (click)="handleDropdownExpandClick(item)">
-            close
-        </i>
-      </ng-template>
-    </div>
+      <i *ngIf="(shouldShowPlus$(item) | async) && !(isShowingChildren$(item) | async)"
+          class="material-icons"
+          (click)="handleDropdownExpandClick(item)">
+          add
+      </i>
+  
+      <i *ngIf="(shouldShowPlus$(item) | async) && (isShowingChildren$(item) | async)"
+          class="material-icons"
+          (click)="handleDropdownExpandClick(item)">
+          close
+      </i>
+    </ng-template>
   </div>
 </ng-template>
 

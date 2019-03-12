@@ -1,4 +1,4 @@
-<nav class="navbar is-transparent is-fixed"
+<nav class="navbar is-transparent qb-transparent-dark is-fixed"
   role="navigation"
   aria-label="main navigation">
   <div class="container">
@@ -7,10 +7,13 @@
         <img src="https://nestjs.com/logo-small.126c921d.svg">
       </a>
     </div>
-    <qb-web-navigation-list
-      [id]="'shop-navigation'"
-      [items]="navigationItems">
-    </qb-web-navigation-list>
+    <div class="navbar-menu">
+      <qb-web-navigation-list
+        class="navbar-start"
+        [id]="'shop-navigation'"
+        [items]="navigationItems">
+      </qb-web-navigation-list>
+    </div>
   </div>
 </nav>
 

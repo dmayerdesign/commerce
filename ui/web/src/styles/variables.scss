@@ -1,16 +1,29 @@
 // Custom variables.
-// Colors.
+// Base colors.
 $white: #fff;
+$gray-lightest: #fafdff;
+$gray-lighter: #dbeaee;
+$gray-light: #a5aeaf;
+$gray-medium: #808a8d;
+$gray-dark: #606a6d;
+$gray-darker: #40484b;
+$gray-darkest: #201e22;
+$off-white: $gray-lightest;
+$gray: $gray-medium;
+
 // Theme colors.
 $color-primary: #00b0ff;
-$color-accent: #ff3c7c;
-$color-bg: #fafefe;
+$color-accent: #DD2751; // #ff3c7c;
+$color-bg: $gray-lightest;
 $color-bg-dark: darken($color-bg, 1%);
 $color-text: #3f464a;
-$size-jumbo: 4rem;
+$size-jumbo: 7rem;
 
 // Bulma overrides.
 $navbar-background-color: transparent;
-$navbar-item-color: $color-text;
+$navbar-item-color: inherit;
 $navbar-height: 5rem;
 $navbar-item-img-max-height: 2.5rem;
+$button-color: $white;
+$button-background-color: $color-primary;
+$button-border-width: 0;
