@@ -1,6 +1,7 @@
 import { HttpClientModule } from '@angular/common/http'
 import { NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { RouterModule } from '@angular/router'
 import { BOOT_CONDITIONS } from '@qb/common/constants/angular/injection-tokens'
 import { FormsModule } from '@qb/common/modules/forms/forms.module'
@@ -12,6 +13,7 @@ import { OrganizationService } from './organization/organization.service'
 @NgModule({
   imports: [
     BrowserModule.withServerTransition({ appId: 'web-ssr' }),
+    BrowserAnimationsModule,
     RouterModule.forRoot(appRoutes),
     HttpClientModule,
     FormsModule,

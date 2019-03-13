@@ -6,7 +6,7 @@ $gray-lighter: #dbeaee;
 $gray-light: #a5aeaf;
 $gray-medium: #808a8d;
 $gray-dark: #606a6d;
-$gray-darker: #40484b;
+$gray-darker: #3f464a;
 $gray-darkest: #201e22;
 $off-white: $gray-lightest;
 $gray: $gray-medium;
@@ -16,7 +16,7 @@ $color-primary: #00b0ff;
 $color-accent: #DD2751; // #ff3c7c;
 $color-bg: $gray-lightest;
 $color-bg-dark: darken($color-bg, 1%);
-$color-text: #3f464a;
+$color-text: $gray-darker;
 $size-jumbo: 7rem;
 
 // Bulma overrides.
