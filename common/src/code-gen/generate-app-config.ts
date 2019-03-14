@@ -1,8 +1,9 @@
 import { readdirSync, writeFileSync } from 'fs'
 import { mkdirpSync } from 'fs-extra'
 import { resolve } from 'path'
+import { destExistsOrUserAcceptsMkdirp } from './pre-generate'
 
-export default function main(): void {
+export default async function main(): Promise<void> {
   const buildEnv = process.env.ENVIRONMENT as string
   const appConfig = require(`../../../app-config.${buildEnv.toLowerCase()}.json`)
   const destPath = resolve(__dirname, '../generated/config/app-config.generated.ts')
@@ -37,7 +38,9 @@ export class AppConfig {${
     ').js')
   }
 
-  mkdirpSync(resolve(__dirname, '../generated/config'))
-  writeFileSync(destPath, appConfigClass)
+  if (await destExistsOrUserAcceptsMkdirp(destPath)) {
+    mkdirpSync(resolve(__dirname, '../generated/config'))
+    writeFileSync(destPath, appConfigClass)
+  }
 }
 main()

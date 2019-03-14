@@ -1,8 +1,9 @@
 import { parse } from 'dotenv'
 import { readFileSync, writeFileSync } from 'fs-extra'
 import { resolve } from 'path'
+import { destExistsOrUserAcceptsMkdirp } from './pre-generate'
 
-export default function main(): void {
+export default async function main(): Promise<void> {
   let envString = `ENVIRONMENT_VARS=`
   const destPath = resolve(process.env.QB_PATH_TO_SECRETS as string, '.env')
   const variablesBuffer = readFileSync(
@@ -13,6 +14,8 @@ export default function main(): void {
   envString += encodeURIComponent(JSON.stringify(variablesObj))
   envString += '\n'
 
-  writeFileSync(destPath, envString)
+  if (await destExistsOrUserAcceptsMkdirp(destPath)) {
+    writeFileSync(destPath, envString)
+  }
 }
 main()

@@ -6,8 +6,7 @@ import { UiModule } from '@qb/common/modules/ui/ui.module'
 import { ProductListFilterComponent } from './product-list/product-list-filter.component'
 import { ProductListFiltersComponent } from './product-list/product-list-filters.component'
 import { ProductListComponent } from './product-list/product-list.component'
-import { ShopHomeCarouselComponent,
-  ShopHomeCarouselItemDirective } from './shop-home/shop-home-carousel.component'
+import { ShopHomeCarouselComponent } from './shop-home/shop-home-carousel.component'
 import { ShopHomeComponent } from './shop-home/shop-home.component'
 import { ShopComponent } from './shop.component'
 import { shopRoutes } from './shop.routes'
@@ -25,7 +24,6 @@ import { shopRoutes } from './shop.routes'
     ProductListFiltersComponent,
     ShopComponent,
     ShopHomeComponent,
-    ShopHomeCarouselItemDirective,
     ShopHomeCarouselComponent,
   ],
 })

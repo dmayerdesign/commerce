@@ -2,8 +2,9 @@ import { writeFileSync } from 'fs'
 import { mkdirpSync } from 'fs-extra'
 import { resolve } from 'path'
 import * as sassExtract from 'sass-extract'
+import { destExistsOrUserAcceptsMkdirp } from './pre-generate'
 
-export default function main(): void {
+export default async function main(): Promise<void> {
   const resolvedRoot = resolve(__dirname, '../../../')
   const resolvedSrcFilePaths = [
     'ui/web/src/styles/variables.scss'
@@ -20,13 +21,15 @@ export default function main(): void {
     variables = { ...variables, ...vars }
   })
 
-  mkdirpSync(destDir)
-  writeFileSync(
-    destPath,
-    `// tslint:disable
-const $styles = ${JSON.stringify(variables, null, 2)}
-export const styles = $styles.global
-`
-  )
+  if (await destExistsOrUserAcceptsMkdirp(destDir)) {
+    mkdirpSync(destDir)
+    writeFileSync(
+      destPath,
+      `// tslint:disable
+  const $styles = ${JSON.stringify(variables, null, 2)}
+  export const styles = $styles.global
+  `
+    )
+  }
 }
 main()
