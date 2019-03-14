@@ -8,7 +8,9 @@ import { FormsModule } from '@qb/common/modules/forms/forms.module'
 import { UiModule } from '@qb/common/modules/ui/ui.module'
 import { AppComponent } from './app.component'
 import { appRoutes } from './app.routes'
-import { OrganizationService } from './organization/organization.service'
+import { OrganizationService } from './organization/organization.service';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment'
 
 @NgModule({
   imports: [
@@ -18,6 +20,7 @@ import { OrganizationService } from './organization/organization.service'
     HttpClientModule,
     FormsModule,
     UiModule.forRoot(),
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],
   exports: [
     RouterModule,
