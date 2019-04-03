@@ -1,5 +1,5 @@
-import { AfterViewInit, Component, Input, NgZone, ViewEncapsulation } from '@angular/core'
-import { initCarousel, Hero } from './shop-home-carousel'
+import { AfterViewInit, Component, Input, NgZone, OnDestroy, ViewEncapsulation } from '@angular/core'
+import { Carousel, Hero } from './shop-home-carousel'
 
 @Component({
   selector: 'shop-home-carousel',
@@ -8,7 +8,7 @@ import { initCarousel, Hero } from './shop-home-carousel'
       <ul class="slider">
         <ng-container *ngFor="let hero of heroes; let i = index">
           <li [attr.data-target]="i + 1" class="slide slide--{{ i + 1 }}">
-            <div class="slide-darkbg slide--{{ i + 1 }}-darkbg"></div>
+            <!-- div class="slide-darkbg slide--{{ i + 1 }}-darkbg"></div -->
             <div class="slide-text-wrapper slide--{{ i + 1 }}-text-wrapper">
               <section class="hero qb-jumbo"
                 [ngStyle]="{
@@ -79,14 +79,22 @@ import { initCarousel, Hero } from './shop-home-carousel'
   `,
   encapsulation: ViewEncapsulation.None,
   styleUrls: [ './shop-home-carousel.component.scss' ],
+  providers: [ Carousel ]
 })
-export class ShopHomeCarouselComponent implements AfterViewInit {
+export class ShopHomeCarouselComponent implements AfterViewInit, OnDestroy {
   @Input() public heroes: Hero[]
   @Input() public interval: Hero[]
 
-  constructor(public ngZone: NgZone) { }
+  constructor(
+    public ngZone: NgZone,
+    public carousel: Carousel,
+  ) { }
 
   public ngAfterViewInit(): void {
-    this.ngZone.runOutsideAngular(() => initCarousel(this.heroes))
+    this.ngZone.runOutsideAngular(() => this.carousel.init(this.heroes))
+  }
+
+  public ngOnDestroy(): void {
+    this.carousel.destroy()
   }
 }

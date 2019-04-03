@@ -19,5 +19,6 @@
         "noUnusedLocals": true,
         "strictNullChecks": true,
         "resolveJsonModule": true
-    }
+    },
+    "exclude": [ "./qb" ]
 }
