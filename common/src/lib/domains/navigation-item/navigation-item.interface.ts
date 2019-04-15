@@ -5,6 +5,6 @@ export interface NavigationItem extends Entity {
   routerLink: string[]
   isTopLevel?: boolean
   className?: string
-  children: NavigationItem[]
+  children?: NavigationItem[]
   onClick?: (event: Event, self: NavigationItem) => void
 }

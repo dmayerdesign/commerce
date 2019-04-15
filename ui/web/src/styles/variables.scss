@@ -16,13 +16,23 @@ $color-primary: #00b0ff;
 $color-accent: #DD2751; // #ff3c7c;
 $color-bg: $gray-lightest;
 $color-bg-dark: darken($color-bg, 1%);
+$color-bg-reverse: $gray-darkest;
 $color-text: $gray-darker;
+$color-text-reverse: $white;
+
+// Theme typography.
 $size-jumbo: 7rem;
+
+// Misc.
+$above-navbar-height: 1.8rem;
+$above-navbar-bg-color: $color-bg-reverse;
+$above-navbar-color: $color-text-reverse;
+$navbar-height-base: 5rem;
 
 // Bulma overrides.
 $navbar-background-color: transparent;
 $navbar-item-color: inherit;
-$navbar-height: 5rem;
+$navbar-height: $navbar-height-base;
 $navbar-item-img-max-height: 2.5rem;
 $button-color: $white;
 $button-background-color: $color-primary;

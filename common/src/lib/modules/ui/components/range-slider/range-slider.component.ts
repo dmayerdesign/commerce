@@ -1,8 +1,6 @@
-import { forwardRef, AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, Renderer2, ViewChild } from '@angular/core'
+import { forwardRef, AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, Renderer2, ViewChild } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { RangeLimit } from '@qb/common/constants/enums/range-limit'
-import { HeartbeatComponent } from '@qb/common/heartbeat/heartbeat.component'
-import { Heartbeat } from '@qb/common/heartbeat/heartbeat.decorator'
 import { cloneDeep } from 'lodash'
 import { fromEvent, merge, BehaviorSubject, Observable } from 'rxjs'
 import { delay, filter, map, scan } from 'rxjs/operators'
@@ -83,8 +81,7 @@ import { delay, filter, map, scan } from 'rxjs/operators'
         },
     ],
 })
-@Heartbeat()
-export class RangeSliderComponent extends HeartbeatComponent implements ControlValueAccessor, AfterViewInit, OnInit, OnDestroy {
+export class RangeSliderComponent implements ControlValueAccessor, AfterViewInit, OnInit {
     @Input() public step = 5
     @Input() public decimalPlaces: number
     @Input() public minLimit = 0
@@ -114,7 +111,7 @@ export class RangeSliderComponent extends HeartbeatComponent implements ControlV
 
     constructor(
         private _renderer: Renderer2
-    ) { super() }
+    ) { }
 
     public ngOnInit(): void {
         this._value = [ this.getMinLimit(), this.getMaxLimit() ]
@@ -206,8 +203,6 @@ export class RangeSliderComponent extends HeartbeatComponent implements ControlV
                 this.handleViewUpdate(newValue)
             })
     }
-
-    public ngOnDestroy(): void { }
 
     public ngAfterViewInit(): void {
         fromEvent<MouseEvent>(document, 'mousedown')
@@ -420,7 +415,7 @@ export class RangeSliderComponent extends HeartbeatComponent implements ControlV
     private _getAllowedValues(): number[] {
         const self = this
         return Array.from(
-            (function*() {
+            (function*(): IterableIterator<number> {
                 for (let x = self.getMinLimit(); x <= self.getMaxLimit(); x++) {
                     if (x % self.step === 0) {
                         yield x

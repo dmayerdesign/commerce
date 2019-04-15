@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core'
 import { NavigationItem } from '@qb/common/domains/navigation-item/navigation-item.interface'
+import { styles } from '@qb/generated/ui/style-variables.generated'
 
 @Component({
   selector: 'web-shop',
@@ -8,6 +9,10 @@ import { NavigationItem } from '@qb/common/domains/navigation-item/navigation-it
   encapsulation: ViewEncapsulation.None,
 })
 export class ShopComponent implements OnInit {
+  public hasAboveNavbar = true
+  public aboveNavbarHeight = styles.aboveNavbarHeight.declarations[0].expression
+  public aboveNavbarBgColor = styles.aboveNavbarBgColor.value.hex
+  public aboveNavbarColor = styles.aboveNavbarColor.value.hex
   public navigationItems: Partial<NavigationItem>[] = [
     {
       text: 'Shop',
@@ -16,7 +21,7 @@ export class ShopComponent implements OnInit {
     },
     {
       text: 'Categories',
-      onClick: (): void => {
+      onClick: () => {
         console.log('hello from ' + this.constructor.name)
       },
       children: [
@@ -28,11 +33,13 @@ export class ShopComponent implements OnInit {
           text: 'Womens',
           routerLink: ['/'],
         }
-      ] as NavigationItem[],
+      ],
     }
   ]
 
   public ngOnInit(): void {
+    // Bulma.
+    document.body.classList.add('has-navbar-fixed-top')
   }
 
 }

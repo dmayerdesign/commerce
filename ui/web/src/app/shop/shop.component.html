@@ -1,6 +1,21 @@
-<nav class="navbar is-transparent qb-transparent-dark is-fixed"
+
+<nav class="navbar is-transparent qb-transparent-dark is-fixed-top"
   role="navigation"
-  aria-label="main navigation">
+  aria-label="main navigation"
+  [ngStyle]="{
+    display: 'flex',
+    flexFlow: 'column'
+  }">
+  <div class="above-navbar"
+    [ngStyle]="{
+      height: aboveNavbarHeight,
+      minHeight: aboveNavbarHeight,
+      backgroundColor: aboveNavbarBgColor,
+      color: aboveNavbarColor
+    }">
+    <div class="container">
+    </div>
+  </div>
   <div class="container">
     <div class="navbar-brand">
       <a class="navbar-item" [routerLink]="['/']">

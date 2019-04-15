@@ -1,5 +1,3 @@
-import { Tree } from '../models/common/tree'
-
-export function hasChildren<T extends Tree>(item: T): boolean {
+export function hasChildren<T extends { children?: T[] }>(item: T): boolean {
     return !!item.children && !!item.children.length
 }

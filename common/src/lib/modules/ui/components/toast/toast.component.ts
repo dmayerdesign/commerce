@@ -1,11 +1,8 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core'
-import { Observable, Subscription } from 'rxjs'
-import { takeWhile } from 'rxjs/operators'
-
+import { Component, Input, OnInit } from '@angular/core'
 import { AppConfig } from '@qb/app-config'
-import { HeartbeatComponent } from '@qb/common/heartbeat/heartbeat.component'
-import { Heartbeat } from '@qb/common/heartbeat/heartbeat.decorator'
+import { forLifeOf } from '@qb/common/domains/ui-component/ui-component.helpers'
 import { Toast } from '@qb/common/models/ui/toast'
+import { Observable, Subscription } from 'rxjs'
 import { timeout } from '../../utils/timeout'
 
 @Component({
@@ -30,8 +27,7 @@ import { timeout } from '../../utils/timeout'
     `,
     styleUrls: [ './toast.component.scss' ],
 })
-@Heartbeat()
-export class ToastComponent extends HeartbeatComponent implements OnInit, OnDestroy {
+export class ToastComponent implements OnInit {
     @Input() public toasts: Observable<Toast>
 
     public queue: Toast[] = []
@@ -49,7 +45,7 @@ export class ToastComponent extends HeartbeatComponent implements OnInit, OnDest
     public ngOnInit(): void {
         if (this.toasts) {
             this.toasts
-                .pipe(takeWhile(() => this.isAlive))
+                .pipe(forLifeOf(this))
                 .subscribe(toast => {
                     this.queueToast(toast)
                     this.showToast()
@@ -57,13 +53,11 @@ export class ToastComponent extends HeartbeatComponent implements OnInit, OnDest
         }
     }
 
-    public ngOnDestroy() { }
-
-    private queueToast(toast: Toast) {
+    private queueToast(toast: Toast): void {
         this.queue.push(toast)
     }
 
-    private showToast(wasQueued?: boolean) {
+    private showToast(wasQueued?: boolean): void {
         const delay = wasQueued ? 200 : 0
 
         if (this.subscriptions.showToastDelay) {
@@ -91,7 +85,7 @@ export class ToastComponent extends HeartbeatComponent implements OnInit, OnDest
         })
     }
 
-    private endToast() {
+    private endToast(): void {
         this.isShowing = false
         this.isFadedIn = false
         this.queue.shift()
@@ -104,7 +98,7 @@ export class ToastComponent extends HeartbeatComponent implements OnInit, OnDest
         }
     }
 
-    public close() {
+    public close(): void {
         this.endToast()
     }
 }

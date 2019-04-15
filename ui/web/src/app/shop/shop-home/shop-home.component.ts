@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, ElementRef, ViewChild } from '@angular/core'
 import { styles } from '@qb/generated/ui/style-variables.generated'
 import { BehaviorSubject } from 'rxjs'
 import { Hero } from './shop-home-carousel'
@@ -6,15 +6,21 @@ import { Hero } from './shop-home-carousel'
 @Component({
   selector: 'web-shop-home',
   template: `
-    <shop-home-carousel class="hero-carousel"
-      [heroes]="heroes$ | async"
-      [interval]="10000">
-    </shop-home-carousel>
-    <div [ngStyle]="{ height: '500px' }"></div>
+    <div #shopHomeAbove class='shop-home-above'>
+      <shop-home-carousel class='hero-carousel'
+        [heroes]='heroes$ | async'
+        [interval]='10000'>
+      </shop-home-carousel>
+    </div>
+    <div #shopHomeBelow class='shop-home-below'>
+      <div [ngStyle]="{ height: '1500px', background: 'white' }"></div>
+    </div>
   `,
-  styleUrls: ['./shop-home.component.scss']
 })
-export class ShopHomeComponent implements OnInit {
+export class ShopHomeComponent {
+  @ViewChild('shopHomeBelow') public shopHomeBelow: ElementRef
+  @ViewChild('shopHomeAbove') public shopHomeAbove: ElementRef
+
   public heroes$ = new BehaviorSubject<Hero[]>([
     {
       title: 'Shop Hot Summer Styles.',
@@ -28,7 +34,7 @@ export class ShopHomeComponent implements OnInit {
       bodyMaxWidth: '100%',
     },
     {
-      title: 'Shop Hot Summer Styles.',
+      title: 'Bundle Up.',
       callToAction: 'Shop Now',
       image: 'https://images.pexels.com/photos/1020315/pexels-photo-1020315.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
       height: '100vh',
@@ -39,7 +45,7 @@ export class ShopHomeComponent implements OnInit {
       bodyMaxWidth: '100%',
     },
     {
-      title: 'Shop Hot Summer Styles.',
+      title: 'Fall In Love.',
       callToAction: 'Shop Now',
       image: 'https://images.pexels.com/photos/2067659/pexels-photo-2067659.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
       height: '100vh',
@@ -51,9 +57,6 @@ export class ShopHomeComponent implements OnInit {
     },
   ])
 
-  public colorWhite = styles['$white'].value.hex
-  public colorAccent = styles['$color-accent'].value.hex
-
-  public ngOnInit(): void {
-  }
+  public colorWhite = styles.white.value.hex
+  public colorAccent = styles.colorAccent.value.hex
 }

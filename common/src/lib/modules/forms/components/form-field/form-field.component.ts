@@ -4,18 +4,15 @@ import {
     ContentChild,
     ElementRef,
     Input,
-    OnDestroy,
     OnInit,
     TemplateRef,
 } from '@angular/core'
-import { fromEvent } from 'rxjs'
-import { takeWhile } from 'rxjs/operators'
-
 import { FormErrors } from '@qb/common/constants/copy'
-import { HeartbeatComponent } from '@qb/common/heartbeat/heartbeat.component'
-import { Heartbeat } from '@qb/common/heartbeat/heartbeat.decorator'
+import { forLifeOf, MortalityAware } from '@qb/common/domains/ui-component/ui-component.helpers'
+import { fromEvent } from 'rxjs'
 import { FormFieldOptions } from '../../models/form-field-options'
 
+@MortalityAware()
 @Component({
     selector: 'qb-web-form-field',
     template: `
@@ -40,8 +37,7 @@ import { FormFieldOptions } from '../../models/form-field-options'
         </div>
     `,
 })
-@Heartbeat()
-export class FormFieldComponent extends HeartbeatComponent implements OnInit, OnDestroy, AfterContentInit {
+export class FormFieldComponent implements OnInit, AfterContentInit {
     @Input() public options: FormFieldOptions = {
         label: ''
     }
@@ -66,13 +62,13 @@ export class FormFieldComponent extends HeartbeatComponent implements OnInit, On
         }
 
         if (control) {
-            control.statusChanges.pipe(takeWhile(() => this.isAlive))
+            control.statusChanges.pipe(forLifeOf(this))
                 .subscribe(() => {
                     this.setErrorMessage()
                 })
 
             if (control.parent) {
-                control.parent.statusChanges.pipe(takeWhile(() => this.isAlive))
+                control.parent.statusChanges.pipe(forLifeOf(this))
                     .subscribe(() => {
                         this.setErrorMessage()
                     })
@@ -93,7 +89,7 @@ content child of <qb-web-form-field>, like so:
         }
 
         if (!this.options || typeof this.options.formControlType === 'undefined') {
-            this.options.formControlType = (function() {
+            this.options.formControlType = (function(): 'input'|'select'|'checkbox' {
                 const firstNativeElement = nativeElement
                 const nodeName = firstNativeElement.nodeName.toLowerCase()
                 const inputType = firstNativeElement.getAttribute('type')
@@ -110,20 +106,18 @@ content child of <qb-web-form-field>, like so:
         }
 
         fromEvent(nativeElement, 'blur')
-            .pipe(takeWhile(() => this.isAlive))
+            .pipe(forLifeOf(this))
             .subscribe(() => {
                 this.isFocused = false
                 this.hasBlurred = true
             })
 
         fromEvent(nativeElement, 'focus')
-            .pipe(takeWhile(() => this.isAlive))
+            .pipe(forLifeOf(this))
             .subscribe(() => {
                 this.isFocused = true
             })
     }
-
-    public ngOnDestroy(): void { }
 
     public getLabelClassName(): string {
         const classNames: string[] = []

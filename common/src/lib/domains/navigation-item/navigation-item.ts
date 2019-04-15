@@ -16,5 +16,5 @@ export class NavigationItem implements INavigationItem {
 
     @OneToMany(() => NavigationItem, navigationItem => navigationItem.id)
     @JoinColumn()
-    public children: NavigationItem[]
+    public children?: NavigationItem[]
 }

@@ -16,6 +16,12 @@ $bgPics: (
   }
 }
 
+.hero {
+  &-body {
+    padding-top: 12rem;
+  }
+}
+
 .slider-container {
 	position: relative;
 	overflow: hidden;

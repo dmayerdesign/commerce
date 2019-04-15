@@ -13,7 +13,7 @@ import { ToastComponent } from './components/toast/toast.component'
 import { TooltipComponent } from './components/tooltip/tooltip.component'
 import { FocusOnDirective } from './directives/focus-on.directive'
 import { TruncatePipe } from './pipes/truncate.pipe'
-import { WindowRefService } from './services/window-ref.service'
+import { WindowService } from './services/window.service'
 
 @NgModule({
     imports: [
@@ -60,7 +60,7 @@ export class UiModule {
         return {
             ngModule: UiModule,
             providers: [
-                WindowRefService
+                WindowService
             ]
         }
     }

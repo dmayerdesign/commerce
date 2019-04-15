@@ -61,8 +61,6 @@ export class Carousel {
       animation = true
       diff = 0
 
-      console.log(`direction: ${direction}  curSlide: ${curSlide}`)
-
       $slider.classList.add('animation')
       $slider.style.transform = 'translate3d(-' + ((curSlide - direction) * 100) + '%, 0, 0)'
 
@@ -76,10 +74,8 @@ export class Carousel {
     }
 
     function navigateRight(): void {
-      console.log('will navigate right')
       if (!autoScrollVar) return
       if (curSlide >= numOfHeroes) return
-      console.log('did navigate right')
       pagination(PagingDirection.Next)
       setTimeout(timeout, animSpd)
       bullets(curSlide + 1)
@@ -87,9 +83,7 @@ export class Carousel {
     }
 
     function navigateLeft(): void {
-      console.log('will navigate left')
       if (curSlide <= 1) return
-      console.log('did navigate left')
       pagination(PagingDirection.Previous)
       setTimeout(timeout, animSpd)
       bullets(curSlide - 1)
@@ -111,7 +105,6 @@ export class Carousel {
     function createMouseDownHandler(slide: HTMLElement): (event: MouseEvent) => void {
       return function(event: MouseEvent): void {
         if (animation) return
-        console.log('mouse down', event)
         const target = +(slide.getAttribute('data-target') as string)
         const startX = event.pageX != null
           ? event.pageX
@@ -134,7 +127,6 @@ export class Carousel {
 
     function createMouseMoveHandler(target: number, startX: number): (event: MouseEvent) => void {
       return function(event: MouseEvent): void {
-        console.log('mouse move', event)
         const x = event.pageX != null
           ? event.pageX
           : (event as any).originalEvent.touches[0].pageX
@@ -195,7 +187,6 @@ export class Carousel {
 
     navSlides.forEach((navSlide) => {
       const listener = (e) => {
-        console.log('navSlide clicked', navSlide, e)
         const target = +(navSlide.getAttribute('data-target') as string)
         bullets(target)
         curSlide = target

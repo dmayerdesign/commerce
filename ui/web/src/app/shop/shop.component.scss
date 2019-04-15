@@ -25,5 +25,5 @@ $navbar-extra-height: 1rem;
 .shop-routes {
   position: relative;
   z-index: 1;
-  margin-top: -($navbar-height + $navbar-extra-height);
+  margin-top: -$navbar-height;
 }

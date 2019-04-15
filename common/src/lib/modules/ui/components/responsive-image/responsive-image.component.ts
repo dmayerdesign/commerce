@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core'
 import { bootstrapBreakpointKeys } from '@qb/common/constants/bootstrap/bootstrap-breakpoint-keys'
 import { BootstrapBreakpoint } from '@qb/common/constants/enums/bootstrap-breakpoint'
-import { WindowRefService } from '../../services/window-ref.service'
+import { WindowService } from '../../services/window.service'
 
 @Component({
     selector: 'qb-web-responsive-image',
@@ -35,13 +35,13 @@ export class ResponsiveImageComponent {
     @Input() public background = false
 
     constructor(
-        public windowRefService: WindowRefService
+        public windowService: WindowService
     ) { }
 
     public getStyles(): { [key: string]: string|number } {
         const getBackgroundSize = (): string => {
             const nextHighestBreakpointKey = bootstrapBreakpointKeys
-                .find((key) => this.windowRefService.mediaBreakpointBelow(key))
+                .find((key) => this.windowService.mediaBreakpointBelow(key))
 
             return this.background
                 ? BootstrapBreakpoint[`${nextHighestBreakpointKey}Max`] + 'px auto'

@@ -1,6 +1,6 @@
 import { HttpClientModule } from '@angular/common/http'
 import { NgModule } from '@angular/core'
-import { FlexLayoutModule } from '@angular/flex-layout'
+// import { FlexLayoutModule } from '@angular/flex-layout'
 import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { RouterModule } from '@angular/router'
@@ -22,7 +22,7 @@ import { OrganizationService } from './organization/organization.service'
     FormsModule,
     UiModule.forRoot(),
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
-    FlexLayoutModule,
+    // FlexLayoutModule,
   ],
   exports: [
     RouterModule,

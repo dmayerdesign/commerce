@@ -1,17 +1,16 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core'
 import { FormGroup } from '@angular/forms'
 import { AppConfig } from '@qb/app-config'
 import { Actions } from '@qb/common/constants/copy'
 import { ModalType } from '@qb/common/constants/enums/modal-type'
-import { HeartbeatComponent } from '@qb/common/heartbeat/heartbeat.component'
-import { Heartbeat } from '@qb/common/heartbeat/heartbeat.decorator'
+import { forLifeOf, MortalityAware } from '@qb/common/domains/ui-component/ui-component.helpers'
 import { ModalData } from '@qb/common/models/ui/modal-data'
 import { Observable } from 'rxjs'
-import { takeWhile } from 'rxjs/operators'
-import { WindowRefService } from '../../services/window-ref.service'
+import { WindowService } from '../../services/window.service'
 import { platform } from '../../utils/platform'
 import { timeout } from '../../utils/timeout'
 
+@MortalityAware()
 @Component({
     selector: 'qb-web-modal',
     template: `
@@ -76,8 +75,7 @@ import { timeout } from '../../utils/timeout'
     `,
     styleUrls: [ './modal.component.scss' ]
 })
-@Heartbeat()
-export class ModalComponent extends HeartbeatComponent implements OnInit, OnDestroy {
+export class ModalComponent implements OnInit {
     @Input() public datas: Observable<ModalData>
     @Input() public closeCallback?: () => void
 
@@ -95,18 +93,16 @@ export class ModalComponent extends HeartbeatComponent implements OnInit, OnDest
     private modalInner: HTMLElement
 
     constructor(
-        private windowRef: WindowRefService,
-    ) { super() }
+        private windowRef: WindowService,
+    ) { }
 
     public ngOnInit(): void {
         this.datas
-            .pipe(takeWhile(() => this.isAlive))
+            .pipe(forLifeOf(this))
             .subscribe((data) => {
                 this.next(data)
             })
     }
-
-    public ngOnDestroy(): void { }
 
     private next(data?: ModalData): void {
         if (this.isTransitioning) return
@@ -117,7 +113,7 @@ export class ModalComponent extends HeartbeatComponent implements OnInit, OnDest
             this.isShowing = true
             this.scrollYWhenOpened = this.windowRef.scrollPositionY
             timeout(10)
-                .pipe(takeWhile(() => this.isAlive))
+                .pipe(forLifeOf(this))
                 .subscribe(() => {
                     if (platform.isBrowser()) {
                         this.updateYPos(window.scrollY)
@@ -127,7 +123,7 @@ export class ModalComponent extends HeartbeatComponent implements OnInit, OnDest
                     (this.modal.nativeElement as HTMLElement).focus()
                 })
             timeout(400)
-                .pipe(takeWhile(() => this.isAlive))
+                .pipe(forLifeOf(this))
                 .subscribe(() => {
                     this.isTransitioning = false
                 })
@@ -135,7 +131,7 @@ export class ModalComponent extends HeartbeatComponent implements OnInit, OnDest
         else {
             this.isFadedIn = false
             timeout(400)
-                .pipe(takeWhile(() => this.isAlive))
+                .pipe(forLifeOf(this))
                 .subscribe(() => {
                     this.isShowing = false
                     this.isTransitioning = false
