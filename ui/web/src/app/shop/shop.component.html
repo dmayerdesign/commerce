@@ -1,10 +1,15 @@
 
-<nav class="navbar is-transparent qb-transparent-dark is-fixed-top"
+<nav class="navbar is-transparent qb-navbar-dark is-fixed-top"
   role="navigation"
   aria-label="main navigation"
+  [ngClass]="{
+    'is-transparent': isHomeCarouselVisible$ | async
+  }"
   [ngStyle]="{
     display: 'flex',
-    flexFlow: 'column'
+    flexFlow: 'column',
+    transition: 'all 300ms',
+    paddingBottom: navbarPaddingBottom$ | async
   }">
   <div class="above-navbar"
     [ngStyle]="{

@@ -5,9 +5,7 @@
   "author": "dmayerdesign",
   "license": "MIT",
   "scripts": {
-    "dev": "./qb dev ui & ./qb dev server",
     "start": "node -r ./tsconfig-paths-bootstrap.js ./dist/server/server/src/main.js",
-    "start:dev": "./qb start",
     "test": "./qb test ui && ./qb test server",
     "lint": "tslint -p tsconfig.json -c tslint.json",
     "format": "prettier \"src/**/*.ts\"",

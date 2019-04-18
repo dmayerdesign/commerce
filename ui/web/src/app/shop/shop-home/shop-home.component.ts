@@ -1,7 +1,8 @@
-import { Component, ElementRef, ViewChild } from '@angular/core'
+import { Component, ElementRef, ViewChild, OnInit } from '@angular/core'
 import { styles } from '@qb/generated/ui/style-variables.generated'
 import { BehaviorSubject } from 'rxjs'
 import { Hero } from './shop-home-carousel'
+import { ShopStore } from '../shop.store';
 
 @Component({
   selector: 'web-shop-home',
@@ -17,7 +18,7 @@ import { Hero } from './shop-home-carousel'
     </div>
   `,
 })
-export class ShopHomeComponent {
+export class ShopHomeComponent implements OnInit {
   @ViewChild('shopHomeBelow') public shopHomeBelow: ElementRef
   @ViewChild('shopHomeAbove') public shopHomeAbove: ElementRef
 
@@ -59,4 +60,12 @@ export class ShopHomeComponent {
 
   public colorWhite = styles.white.value.hex
   public colorAccent = styles.colorAccent.value.hex
+
+  constructor(
+    private _shopStore: ShopStore
+  ) { }
+
+  public ngOnInit(): void {
+    this._shopStore.setState({ isHomeCarouselVisible: true })
+  }
 }

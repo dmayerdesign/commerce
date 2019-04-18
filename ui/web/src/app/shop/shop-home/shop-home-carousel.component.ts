@@ -2,7 +2,8 @@ import { AfterViewInit, Component, Input, NgZone, OnDestroy, ViewEncapsulation }
 import { animateElement, forLifeOf, Animation, MortalityAware } from '@qb/common/domains/ui-component/ui-component.helpers'
 import { styles } from '@qb/generated/ui/style-variables.generated'
 import { fromEvent, timer, Subject } from 'rxjs'
-import { debounceTime, delay, filter, map, scan, switchMap, takeUntil, tap } from 'rxjs/operators'
+import { delay, filter, map, scan, switchMap, takeUntil, tap } from 'rxjs/operators'
+import { ShopStore } from '../shop.store'
 import { Carousel, Hero } from './shop-home-carousel'
 
 interface Changes {
@@ -99,6 +100,7 @@ function getScrollTop(): number {
 export class ShopHomeCarouselComponent implements AfterViewInit, OnDestroy {
   @Input() public heroes: Hero[]
   @Input() public interval: Hero[]
+  @Input() public feauxScroll = true
 
   private _isFullyInView = true
   private _isFullyOutOfView = true
@@ -106,18 +108,23 @@ export class ShopHomeCarouselComponent implements AfterViewInit, OnDestroy {
   constructor(
     public ngZone: NgZone,
     public carousel: Carousel,
+    private _shopStore: ShopStore,
   ) { }
 
   public ngAfterViewInit(): void {
     this.ngZone.runOutsideAngular(() => {
       this.carousel.init(this.heroes)
+      this._maybeInitFeauxScroll()
+    })
+  }
 
+  private _maybeInitFeauxScroll(): void {
+    if (this.feauxScroll) {
       let currentBodyMarginAnimation: Animation
       const cancelCurrentAnimation$ = new Subject<void>()
 
       fromEvent(document, 'scroll')
         .pipe(
-          debounceTime(10),
           filter(() => this._isFullyInView),
           map(() => getScrollTop()),
           scan<number, Changes>((changes: Changes, currentPos) => {
@@ -134,6 +141,7 @@ export class ShopHomeCarouselComponent implements AfterViewInit, OnDestroy {
             this._isFullyOutOfView = false
             document.body.style.height = '100vh'
             document.body.style.overflowY = 'hidden'
+            this._shopStore.setState({ isHomeCarouselVisible: false })
             // TODO: implement more Rx-y way.
             if (currentBodyMarginAnimation) {
               currentBodyMarginAnimation.stop()
@@ -142,7 +150,9 @@ export class ShopHomeCarouselComponent implements AfterViewInit, OnDestroy {
             const _timer = timer(1000).pipe(takeUntil(cancelCurrentAnimation$))
             currentBodyMarginAnimation = animateElement(
               document.body, 'marginTop', styles.navbarHeight.unit,
-              0, -((window.innerHeight / 10) - styles.navbarHeight.value - styles.aboveNavbarHeight.value),
+              getScrollTop(), -((window.innerHeight / parseFloat(
+                getComputedStyle(document.getElementsByTagName('html')[0]).fontSize as string
+              ))),
               1000, [0.2, 0, 0.1, 1],
             )
             return _timer
@@ -152,7 +162,7 @@ export class ShopHomeCarouselComponent implements AfterViewInit, OnDestroy {
             document.body.style.overflowY = 'scroll'
           }),
           delay(1),
-          tap(() => window.scrollTo(0, 1)),
+          tap(() => window.scrollTo(0, 2)),
           delay(1),
           forLifeOf(this),
         )
@@ -164,7 +174,6 @@ export class ShopHomeCarouselComponent implements AfterViewInit, OnDestroy {
 
       fromEvent(document, 'scroll')
         .pipe(
-          debounceTime(10),
           filter(() => this._isFullyOutOfView && getScrollTop() < 10),
           map(() => getScrollTop()),
           scan<number, Changes>((changes: Changes, currentPos) => {
@@ -178,7 +187,7 @@ export class ShopHomeCarouselComponent implements AfterViewInit, OnDestroy {
           }),
           switchMap(() => {
             this._isFullyOutOfView = false
-            window.scrollTo(0, 0)
+            window.scrollTo(0, 2)
             document.body.style.height = 'auto'
             document.body.style.overflowY = 'scroll'
             // TODO: implement more Rx-y way.
@@ -189,17 +198,21 @@ export class ShopHomeCarouselComponent implements AfterViewInit, OnDestroy {
             const _timer = timer(1000).pipe(takeUntil(cancelCurrentAnimation$))
             currentBodyMarginAnimation = animateElement(
               document.body, 'marginTop', styles.navbarHeight.unit,
-              -((window.innerHeight / 10) - styles.navbarHeight.value - styles.aboveNavbarHeight.value), 0,
+              -((window.innerHeight / parseFloat(
+                getComputedStyle(document.getElementsByTagName('html')[0]).fontSize as string
+              ))) - getScrollTop(), 0,
               1000, [0.2, 0, 0.1, 1],
             )
             return _timer
           }),
           forLifeOf(this),
+          delay(1),
         )
         .subscribe(() => {
+          this._shopStore.setState({ isHomeCarouselVisible: true })
           this._isFullyInView = true
         })
-    })
+    }
   }
 
   public ngOnDestroy(): void {

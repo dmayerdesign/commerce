@@ -1,24 +1,39 @@
 @import "../../styles/variables";
 
-$navbar-extra-height: 1rem;
-
 .navbar {
-  padding-bottom: $navbar-extra-height;
+  &.qb-navbar-dark {
+    color: $white;
+  }
+
+  &.qb-navbar-light {
+    color: $gray-darkest;
+  }
 
   &.is-transparent {
-    &.qb-transparent-dark {
-      color: $white;
-      background: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%,rgba(0,0,0,0) 100%);
+    &.qb-navbar-dark {
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 100%);
     }
 
-    &.qb-transparent-light {
-      color: $white;
-      background: linear-gradient(to bottom, rgba(255,255,255,0.6) 0%,rgba(255,255,255,0) 100%);
+    &.qb-navbar-light {
+      background: linear-gradient(to bottom, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 100%);
     }
+  }
+
+  &:not(.is-transparent) {
+    background: $color-primary !important;
   }
 
   > &-item {
     text-shadow: 0 1px 2px #000;
+  }
+
+  &-brand, &-tabs {
+    min-height: $navbar-height-base;
+  }
+
+  > .container {
+    height: $navbar-height-base;
+    min-height: $navbar-height-base;
   }
 }
 

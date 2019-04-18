@@ -103,12 +103,14 @@ export class Carousel {
     })
 
     function createMouseDownHandler(slide: HTMLElement): (event: MouseEvent) => void {
-      return function(event: MouseEvent): void {
+      return function(event: MouseEvent | TouchEvent): void {
         if (animation) return
         const target = +(slide.getAttribute('data-target') as string)
-        const startX = event.pageX != null
-          ? event.pageX
-          : (event as any).originalEvent.touches[0].pageX
+        const startX = (event as MouseEvent).pageX != null
+          ? (event as MouseEvent).pageX
+          : (event as any).originalEvent
+          ? (event as any).originalEvent.touches[0].pageX
+          : (event as TouchEvent).touches[0].pageX
         $slider.classList.remove('animation')
 
         if (mouseMoveHandler) {
@@ -126,10 +128,12 @@ export class Carousel {
     }
 
     function createMouseMoveHandler(target: number, startX: number): (event: MouseEvent) => void {
-      return function(event: MouseEvent): void {
-        const x = event.pageX != null
-          ? event.pageX
-          : (event as any).originalEvent.touches[0].pageX
+      return function(event: MouseEvent | TouchEvent): void {
+        const x = (event as MouseEvent).pageX != null
+          ? (event as MouseEvent).pageX
+          : (event as any).originalEvent
+          ? (event as any).originalEvent.touches[0].pageX
+          : (event as TouchEvent).touches[0].pageX
         diff = startX - x
         if (target === 1 && diff < 0 || target === numOfHeroes && diff > 0) return
 

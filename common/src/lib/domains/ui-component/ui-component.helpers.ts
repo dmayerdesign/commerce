@@ -72,7 +72,6 @@ export class Animation {
   ) { }
 
   public start(): void {
-    console.log('start')
     const { easing, draw, duration } = this._animateOptions
     const start = (performance && performance.now) ? performance.now() : Date.now()
     this._canAnimate = true
@@ -91,7 +90,6 @@ export class Animation {
   }
 
   public stop(): void {
-    console.log('stop')
     this._canAnimate = false
   }
 }
