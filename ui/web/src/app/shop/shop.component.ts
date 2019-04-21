@@ -1,9 +1,9 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core'
+import { ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { NavigationItem } from '@qb/common/domains/navigation-item/navigation-item.interface'
 import { styles } from '@qb/generated/ui/style-variables.generated'
-import { Observable } from 'rxjs'
-import { map } from 'rxjs/operators'
+import { merge, Observable } from 'rxjs'
+import { delay, map } from 'rxjs/operators'
 import { ShopStore } from './shop.store'
 
 @Component({
@@ -20,6 +20,8 @@ export class ShopComponent implements OnInit {
   public navbarExtraHeight = styles.navbarExtraHeight.declarations[0].expression
   public navbarBgColor = styles.colorPrimary.value.hex
   public isHomeCarouselVisible$: Observable<boolean>
+  public willHomeCarouselBeVisible$: Observable<boolean>
+  public isNavbarTransparent$: Observable<boolean>
   public navbarPaddingBottom$: Observable<string>
 
   public navigationItems: Partial<NavigationItem>[] = [
@@ -30,9 +32,7 @@ export class ShopComponent implements OnInit {
     },
     {
       text: 'Categories',
-      onClick: () => {
-        console.log('hello from ' + this.constructor.name)
-      },
+      onClick: () => { },
       children: [
         {
           text: 'Mens',
@@ -49,11 +49,26 @@ export class ShopComponent implements OnInit {
   constructor(
     private _shopStore: ShopStore,
     private _activatedRoute: ActivatedRoute,
+    private _changeDetectorRef: ChangeDetectorRef
   ) {
-    this.isHomeCarouselVisible$ = this._shopStore.select('isHomeCarouselVisible')
-    this.navbarPaddingBottom$ = this.isHomeCarouselVisible$.pipe(
-      map((isHomeCarouselVisible) => isHomeCarouselVisible ? this.navbarExtraHeight : '0')
+    this.isHomeCarouselVisible$ = this._shopStore.selectState('isHomeCarouselVisible')
+    this.willHomeCarouselBeVisible$ = this._shopStore.selectState('willHomeCarouselBeVisible')
+    this.isNavbarTransparent$ = merge(
+      this.isHomeCarouselVisible$,
+      this.willHomeCarouselBeVisible$,
     )
+
+    this.navbarPaddingBottom$ = this.isNavbarTransparent$.pipe(
+      map((isNavbarTransparent) => isNavbarTransparent ? this.navbarExtraHeight : '0')
+    )
+
+    merge(
+      this.isHomeCarouselVisible$,
+      this.willHomeCarouselBeVisible$,
+      )
+      .pipe(delay(0)).subscribe(() => {
+        this._changeDetectorRef.detectChanges()
+      })
   }
 
   public ngOnInit(): void {
@@ -62,7 +77,10 @@ export class ShopComponent implements OnInit {
 
     // Prevent ExpressionChanged error.
     if (this._activatedRoute.snapshot.pathFromRoot.length <= 3) {
-      this._shopStore.setState({ isHomeCarouselVisible: true })
+      this._shopStore.setState({
+        isHomeCarouselVisible: true,
+        willHomeCarouselBeVisible: true,
+      })
     }
   }
 

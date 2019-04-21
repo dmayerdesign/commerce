@@ -3,7 +3,7 @@
   role="navigation"
   aria-label="main navigation"
   [ngClass]="{
-    'is-transparent': isHomeCarouselVisible$ | async
+    'is-transparent': isNavbarTransparent$ | async
   }"
   [ngStyle]="{
     display: 'flex',
@@ -36,6 +36,7 @@
     </div>
   </div>
 </nav>
+
 
 <div class="shop-routes">
   <router-outlet></router-outlet>

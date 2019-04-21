@@ -1,14 +1,28 @@
-import { AfterViewInit, Component, Input, NgZone, OnDestroy, ViewEncapsulation } from '@angular/core'
+import { AfterViewInit, Component, EventEmitter, Input, NgZone, OnDestroy, Output, ViewEncapsulation } from '@angular/core'
 import { animateElement, forLifeOf, Animation, MortalityAware } from '@qb/common/domains/ui-component/ui-component.helpers'
 import { styles } from '@qb/generated/ui/style-variables.generated'
 import { fromEvent, timer, Subject } from 'rxjs'
 import { delay, filter, map, scan, switchMap, takeUntil, tap } from 'rxjs/operators'
-import { ShopStore } from '../shop.store'
 import { Carousel, Hero } from './shop-home-carousel'
 
 interface Changes {
   oldValue: number
   newValue: number
+}
+
+export abstract class AnimationProgressEvent {
+  public abstract progress: 'start' | 'end'
+  constructor(
+    public toState: 'carousel-in-view' | 'carousel-out-of-view'
+  ) { }
+}
+
+export class AnimationStartEvent extends AnimationProgressEvent {
+  public progress = 'start' as 'start'
+}
+
+export class AnimationEndEvent extends AnimationProgressEvent {
+  public progress = 'end' as 'end'
 }
 
 function getScrollTop(): number {
@@ -101,6 +115,8 @@ export class ShopHomeCarouselComponent implements AfterViewInit, OnDestroy {
   @Input() public heroes: Hero[]
   @Input() public interval: Hero[]
   @Input() public feauxScroll = true
+  @Output() public animationStart = new EventEmitter<AnimationStartEvent>()
+  @Output() public animationEnd = new EventEmitter<AnimationEndEvent>()
 
   private _isFullyInView = true
   private _isFullyOutOfView = true
@@ -108,7 +124,6 @@ export class ShopHomeCarouselComponent implements AfterViewInit, OnDestroy {
   constructor(
     public ngZone: NgZone,
     public carousel: Carousel,
-    private _shopStore: ShopStore,
   ) { }
 
   public ngAfterViewInit(): void {
@@ -123,6 +138,7 @@ export class ShopHomeCarouselComponent implements AfterViewInit, OnDestroy {
       let currentBodyMarginAnimation: Animation
       const cancelCurrentAnimation$ = new Subject<void>()
 
+      // Scroll down.
       fromEvent(document, 'scroll')
         .pipe(
           filter(() => this._isFullyInView),
@@ -141,7 +157,6 @@ export class ShopHomeCarouselComponent implements AfterViewInit, OnDestroy {
             this._isFullyOutOfView = false
             document.body.style.height = '100vh'
             document.body.style.overflowY = 'hidden'
-            this._shopStore.setState({ isHomeCarouselVisible: false })
             // TODO: implement more Rx-y way.
             if (currentBodyMarginAnimation) {
               currentBodyMarginAnimation.stop()
@@ -155,6 +170,7 @@ export class ShopHomeCarouselComponent implements AfterViewInit, OnDestroy {
               ))),
               1000, [0.2, 0, 0.1, 1],
             )
+            this.animationStart.emit(new AnimationStartEvent('carousel-out-of-view'))
             return _timer
           }),
           tap(() => {
@@ -168,10 +184,11 @@ export class ShopHomeCarouselComponent implements AfterViewInit, OnDestroy {
         )
         .subscribe(() => {
           this._isFullyInView = false
-          this._isFullyOutOfView = false
           this._isFullyOutOfView = true
+          this.animationEnd.emit(new AnimationEndEvent('carousel-out-of-view'))
         })
 
+      // Scroll up.
       fromEvent(document, 'scroll')
         .pipe(
           filter(() => this._isFullyOutOfView && getScrollTop() < 10),
@@ -203,14 +220,15 @@ export class ShopHomeCarouselComponent implements AfterViewInit, OnDestroy {
               ))) - getScrollTop(), 0,
               1000, [0.2, 0, 0.1, 1],
             )
+            this.animationStart.emit(new AnimationStartEvent('carousel-in-view'))
             return _timer
           }),
           forLifeOf(this),
           delay(1),
         )
         .subscribe(() => {
-          this._shopStore.setState({ isHomeCarouselVisible: true })
           this._isFullyInView = true
+          this.animationEnd.emit(new AnimationEndEvent('carousel-in-view'))
         })
     }
   }

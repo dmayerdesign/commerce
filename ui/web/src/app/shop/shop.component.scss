@@ -3,6 +3,10 @@
 .navbar {
   &.qb-navbar-dark {
     color: $white;
+
+    .navbar-dropdown {
+      background: $color-primary;
+    }
   }
 
   &.qb-navbar-light {

@@ -1,8 +1,9 @@
-import { Component, ElementRef, ViewChild, OnInit } from '@angular/core'
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
 import { styles } from '@qb/generated/ui/style-variables.generated'
 import { BehaviorSubject } from 'rxjs'
+import { ShopStore } from '../shop.store'
 import { Hero } from './shop-home-carousel'
-import { ShopStore } from '../shop.store';
+import { AnimationEndEvent, AnimationStartEvent } from './shop-home-carousel.component'
 
 @Component({
   selector: 'web-shop-home',
@@ -10,7 +11,9 @@ import { ShopStore } from '../shop.store';
     <div #shopHomeAbove class='shop-home-above'>
       <shop-home-carousel class='hero-carousel'
         [heroes]='heroes$ | async'
-        [interval]='10000'>
+        [interval]='10000'
+        (animationStart)="handleAnimationStart($event)"
+        (animationEnd)="handleAnimationEnd($event)">
       </shop-home-carousel>
     </div>
     <div #shopHomeBelow class='shop-home-below'>
@@ -66,6 +69,29 @@ export class ShopHomeComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
-    this._shopStore.setState({ isHomeCarouselVisible: true })
+    this._shopStore.setState({
+      isHomeCarouselVisible: true,
+      willHomeCarouselBeVisible: true,
+    })
   }
+
+  public handleAnimationStart({ toState }: AnimationStartEvent): void {
+    console.log('animation start', toState)
+    this._shopStore.setState({
+      willHomeCarouselBeVisible: toState === 'carousel-in-view',
+    })
+
+    if (toState === 'carousel-in-view') {
+      console.log('set 2')
+      this._shopStore.setState({ isHomeCarouselVisible: true })
+    }
+  }
+
+  public handleAnimationEnd({ toState }: AnimationEndEvent): void {
+    console.log('animation end', toState)
+    this._shopStore.setState({
+      isHomeCarouselVisible: toState === 'carousel-in-view'
+    })
+  }
+
 }
