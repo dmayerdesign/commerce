@@ -15,15 +15,14 @@ export function propertyFilter(filter: ProductListFilter, query: typeof queryWit
     newQuery.$and.push({ $or: propertyVOs })
   }
   if (filter.range) {
-    let lowerLimit, upperLimit
-    lowerLimit = {
+    let lowerLimitQuery: any, upperLimitQuery: any
+    lowerLimitQuery = {
       [`${filter.key}.amount`]: { $gte: filter.range[RangeLimit.Min] },
     }
-    upperLimit = {
+    upperLimitQuery = {
       [`${filter.key}.amount`]: { $lte: filter.range[RangeLimit.Max] },
     }
-
-    newQuery.$and = newQuery.$and.concat([lowerLimit, upperLimit])
+    newQuery.$and = newQuery.$and.concat([lowerLimitQuery, upperLimitQuery])
   }
 
   return newQuery

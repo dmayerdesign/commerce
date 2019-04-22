@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, EventEmitter, Input, NgZone, OnDestroy, Output, ViewEncapsulation } from '@angular/core'
-import { animateElement, forLifeOf, Animation, MortalityAware } from '@qb/common/domains/ui-component/ui-component.helpers'
+import { animateTo, forLifeOf, Animation, MortalityAware } from '@qb/common/domains/ui-component/ui-component.helpers'
 import { styles } from '@qb/generated/ui/style-variables.generated'
+import { Expo } from 'gsap'
 import { fromEvent, timer, Subject } from 'rxjs'
 import { delay, filter, map, scan, switchMap, takeUntil, tap } from 'rxjs/operators'
 import { Carousel, Hero } from './shop-home-carousel'
@@ -38,7 +39,6 @@ function getScrollTop(): number {
       <ul class="slider">
         <ng-container *ngFor="let hero of heroes; let i = index">
           <li [attr.data-target]="i + 1" class="slide slide--{{ i + 1 }}">
-            <!-- div class="slide-darkbg slide--{{ i + 1 }}-darkbg"></div -->
             <div class="slide-text-wrapper slide--{{ i + 1 }}-text-wrapper">
               <section class="hero qb-jumbo"
                 [ngStyle]="{
@@ -56,11 +56,8 @@ function getScrollTop(): number {
                       <h1 class="title has-text-white"
                         [ngStyle]="{
                           display: 'inline',
-                          marginRight: '1rem',
                           textShadow: '0 0.1rem 1rem rgba(0,0,0,0.4)'
-                        }">
-                        {{ hero.title }}
-                      </h1>
+                        }">{{ hero.title }}</h1>
                       <h2 *ngIf="hero.subTitle"
                         class="subtitle"
                         [ngStyle]="{
@@ -71,10 +68,9 @@ function getScrollTop(): number {
                         }">
                         {{ hero.subTitle }}
                       </h2>
-                      <button class="button"
+                      <br>
+                      <button class="button qb-button-focus-animation-1"
                         [ngStyle]="{
-                          color: colorWhite,
-                          backgroundColor: colorAccent,
                           fontSize: '0.9rem',
                           marginTop: '2.55rem',
                           padding: '1rem 5rem',
@@ -84,7 +80,9 @@ function getScrollTop(): number {
                           textTransform: 'uppercase',
                           letterSpacing: '0.58rem'
                         }">
-                        {{ hero.callToAction }}
+                        <span class="button-content">
+                          {{ hero.callToAction }}
+                        </span>
                       </button>
                     </div>
                   </div>
@@ -163,13 +161,18 @@ export class ShopHomeCarouselComponent implements AfterViewInit, OnDestroy {
               cancelCurrentAnimation$.next()
             }
             const _timer = timer(1000).pipe(takeUntil(cancelCurrentAnimation$))
-            currentBodyMarginAnimation = animateElement(
-              document.body, 'marginTop', styles.navbarHeight.unit,
-              getScrollTop(), -((window.innerHeight / parseFloat(
-                getComputedStyle(document.getElementsByTagName('html')[0]).fontSize as string
-              ))),
-              1000, [0.2, 0, 0.1, 1],
-            )
+
+            currentBodyMarginAnimation = animateTo({
+              element: document.body,
+              durationMs: 1000,
+              gsapEasingFn: Expo.easeOut,
+              toCss: {
+                marginTop: `${-((window.innerHeight / parseFloat(
+                  getComputedStyle(document.getElementsByTagName('html')[0]).fontSize as string
+                )))}${styles.navbarHeight.unit}`
+              }
+            })
+
             this.animationStart.emit(new AnimationStartEvent('carousel-out-of-view'))
             return _timer
           }),
@@ -195,8 +198,8 @@ export class ShopHomeCarouselComponent implements AfterViewInit, OnDestroy {
           map(() => getScrollTop()),
           scan<number, Changes>((changes: Changes, currentPos) => {
             return {
+              oldValue: changes.newValue,
               newValue: currentPos,
-              oldValue: changes.newValue
             }
           }, { oldValue: getScrollTop(), newValue: getScrollTop() }),
           filter(({ oldValue, newValue }) => {
@@ -213,13 +216,16 @@ export class ShopHomeCarouselComponent implements AfterViewInit, OnDestroy {
               cancelCurrentAnimation$.next()
             }
             const _timer = timer(1000).pipe(takeUntil(cancelCurrentAnimation$))
-            currentBodyMarginAnimation = animateElement(
-              document.body, 'marginTop', styles.navbarHeight.unit,
-              -((window.innerHeight / parseFloat(
-                getComputedStyle(document.getElementsByTagName('html')[0]).fontSize as string
-              ))) - getScrollTop(), 0,
-              1000, [0.2, 0, 0.1, 1],
-            )
+
+            currentBodyMarginAnimation = animateTo({
+              element: document.body,
+              durationMs: 1000,
+              gsapEasingFn: Expo.easeOut,
+              toCss: {
+                marginTop: '0'
+              }
+            })
+
             this.animationStart.emit(new AnimationStartEvent('carousel-in-view'))
             return _timer
           }),

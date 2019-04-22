@@ -16,7 +16,8 @@ function _mapVariablesToCamelCase(sassVarsObject: any): any {
 export default async function main(): Promise<void> {
   const resolvedRoot = resolve(__dirname, '../../../')
   const resolvedSrcFilePaths = [
-      'ui/web/src/styles/variables.scss'
+      'ui/web/src/styles/theme-variables.scss',
+      'ui/web/src/styles/theme-overrides.scss',
     ]
     .map((filePath) => resolve(resolvedRoot, filePath))
 

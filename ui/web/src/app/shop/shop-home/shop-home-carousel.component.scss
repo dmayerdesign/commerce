@@ -5,7 +5,8 @@ $animSpd: 750 * 1ms; // Change also in JS
 $maxNumberOfSlides: 5;
 $bgPics: (
 	url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/537051/city--1-min-min.jpg') center center no-repeat,
-	url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/537051/city--2-min-min.jpg') center center no-repeat,	url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/537051/city--3-min-min.jpg') center center no-repeat,
+	url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/537051/city--2-min-min.jpg') center center no-repeat,
+	url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/537051/city--3-min-min.jpg') center center no-repeat,
 	url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/537051/city--4-min-min.jpg') center center no-repeat,
 	url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/537051/city--5-min-min.jpg') center center no-repeat
 );
@@ -18,7 +19,18 @@ $bgPics: (
 
 .hero {
   &-body {
-    padding-top: 12rem;
+		padding-top: 12rem;
+		text-align: center;
+
+		@media screen and (min-width: 1088px) {
+			text-align: left;
+		}
+
+		h1 {
+			@media screen and (min-width: 1088px) {
+				margin-right: 1rem;
+			}
+		}
   }
 }
 
@@ -41,10 +53,6 @@ $bgPics: (
 
 	&.animation {
 		transition: transform $animSpd ease-in-out;
-
-		.slide-darkbg {
-			transition: transform $animSpd ease-in-out;
-		}
 	}
 }
 
@@ -61,17 +69,6 @@ $bgPics: (
 		}
 	}
 	
-	&-darkbg {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		top: 0;
-		left: 0;
-		transform: translate3d(0, 0, 0);
-		will-change: transform;
-		z-index: 10;
-	}
-	
 	&-text-wrapper {
 		position: absolute;
 		display: flex;
@@ -80,29 +77,6 @@ $bgPics: (
 		width: 100%;
 		height: 100%;
 		z-index: 15;
-	}
-		
-	@each $item in $bgPics {
-		$i: index($bgPics, $item);
-		&--#{$i} {
-			&-darkbg {
-				left: -50% * ($i - 1);
-				background: $item;
-				background-size: cover;
-				background-position: 0px center, 0px center;
-				transform: translate3d(0, 0, 0);
-				will-change: transform;
-				&:after {
-					content: '';
-					position: absolute;
-					top: 0;
-					left: 0;
-					width: 100%;
-					height: 100%;
-					background-color: $bgClr;
-				}
-			}
-		}
 	}
 }
 
@@ -161,7 +135,7 @@ $bgPics: (
 
 .side-nav {
 	position: absolute;
-	width: 10%;
+	width: 5rem;
 	height: 100%;
 	top: 0;
 	z-index: 20;

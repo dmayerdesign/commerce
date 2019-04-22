@@ -1,4 +1,4 @@
-@import "./variables";
+@import "./theme-variables";
 
 .qb-highlight-accent {
   background: $color-accent;
@@ -12,6 +12,10 @@
   .title {
     font-size: $size-jumbo;
     font-weight: bold;
+
+    @media screen and (max-width: 1087px) {
+      font-size: $size-jumbo-mobile;
+    }
   }
 
   .subtitle {

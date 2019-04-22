@@ -1,0 +1,41 @@
+$button-focus-animation-duration: 500ms;
+
+@mixin button-focus-animation {
+  position: relative;
+
+  .button-content {
+    position: relative;
+    z-index: 1;
+  }
+
+  &::after {
+    content: '';
+    pointer-events: none;
+    background-color: inherit;
+    opacity: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+  }
+
+  &:focus {
+    &,
+    &::after {
+      -webkit-transition: all $button-focus-animation-duration;
+      -moz-transition: all $button-focus-animation-duration;
+      -o-transition: all $button-focus-animation-duration;
+      transition: all $button-focus-animation-duration;
+    }
+
+    &::after {
+      opacity: 0;
+      top: -14px;
+      left: -14px;
+      right: -14px;
+      bottom: -14px;
+    }
+  }
+}

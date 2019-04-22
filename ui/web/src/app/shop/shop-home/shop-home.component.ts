@@ -8,15 +8,16 @@ import { AnimationEndEvent, AnimationStartEvent } from './shop-home-carousel.com
 @Component({
   selector: 'web-shop-home',
   template: `
-    <div #shopHomeAbove class='shop-home-above'>
-      <shop-home-carousel class='hero-carousel'
-        [heroes]='heroes$ | async'
-        [interval]='10000'
+    <div #shopHomeAbove class="shop-home-above">
+      <shop-home-carousel class="hero-carousel"
+        [heroes]="heroes$ | async"
+        [interval]="10000"
+        [feauxScroll]="feauxScroll"
         (animationStart)="handleAnimationStart($event)"
         (animationEnd)="handleAnimationEnd($event)">
       </shop-home-carousel>
     </div>
-    <div #shopHomeBelow class='shop-home-below'>
+    <div #shopHomeBelow class="shop-home-below">
       <div [ngStyle]="{ height: '1500px', background: 'white' }"></div>
     </div>
   `,
@@ -24,6 +25,7 @@ import { AnimationEndEvent, AnimationStartEvent } from './shop-home-carousel.com
 export class ShopHomeComponent implements OnInit {
   @ViewChild('shopHomeBelow') public shopHomeBelow: ElementRef
   @ViewChild('shopHomeAbove') public shopHomeAbove: ElementRef
+  public feauxScroll = styles.shopHomeCarouselFeauxScroll.value
 
   public heroes$ = new BehaviorSubject<Hero[]>([
     {

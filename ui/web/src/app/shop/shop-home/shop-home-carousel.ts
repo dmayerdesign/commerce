@@ -43,7 +43,6 @@ export class Carousel {
 
     const slides = document.querySelectorAll('.slide') as NodeListOf<HTMLElement>
     const firstSlideNav = document.querySelector('.nav-slide--1') as HTMLElement
-    // const slideDarkBgs = $slider.querySelectorAll('.slide-darkbg') as NodeListOf<HTMLElement>
     const slideTexts = $slider.querySelectorAll('.slide-text') as NodeListOf<HTMLElement>
 
     // Navigation
@@ -63,10 +62,6 @@ export class Carousel {
 
       $slider.classList.add('animation')
       $slider.style.transform = 'translate3d(-' + ((curSlide - direction) * 100) + '%, 0, 0)'
-
-      // slideDarkBgs.forEach((slideDarkBg) => {
-      //   slideDarkBg.style.transform = 'translate3d(' + ((curSlide - direction) * 50) + '%, 0, 0)'
-      // })
 
       slideTexts.forEach((slideText) => {
         slideText.style.transform = 'translate3d(0, 0, 0)'
@@ -139,9 +134,6 @@ export class Carousel {
 
         $slider.style.transform = 'translate3d(-' + ((curSlide - 1) * 100 + (diff / 30)) + '%, 0, 0)'
 
-        // slideDarkBgs.forEach((slideDarkBg) => {
-        //   slideDarkBg.style.transform = 'translate3d(' + ((curSlide - 1) * 50 + (diff / 60)) + '%, 0, 0)'
-        // })
         slideTexts.forEach((slideText) => {
           slideText.style.transform = 'translate3d(' + (diff / 15) + 'px, 0, 0)'
         })
@@ -151,16 +143,6 @@ export class Carousel {
     document.addEventListener('mouseup', mouseUpHandler)
     document.addEventListener('touchend', mouseUpHandler)
     document.addEventListener('keydown', keyDownHandler)
-    // document.addEventListener('mousewheel', scrollHandler)
-    // document.addEventListener('DOMMouseScroll', scrollHandler)
-
-    // function scrollHandler(event: WheelEvent): void {
-    //   if (animation) return
-    //   const delta = (event as any).wheelDelta || 0
-
-    //   if (delta > 0 || event.detail < 0) navigateLeft()
-    //   if (delta < 0 || event.detail > 0) navigateRight()
-    // }
 
     function mouseUpHandler(): void {
       if (mouseMoveHandler) {

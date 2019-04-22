@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router'
+import { NotFoundComponent } from './not-found/not-found.component'
 
 export const appRoutes: Routes = [
   {
@@ -8,11 +9,10 @@ export const appRoutes: Routes = [
   {
     path: '',
     redirectTo: '/shop',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   {
     path: '**',
-    redirectTo: '/', // TODO: Create 404 route.
-    pathMatch: 'full',
+    component: NotFoundComponent,
   },
 ]

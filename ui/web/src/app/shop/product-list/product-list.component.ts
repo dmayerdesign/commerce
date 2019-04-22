@@ -37,5 +37,6 @@ export class ProductListComponent {
   public async handleListRequestChange(listRequest: ListRequest<Product>): Promise<void> {
     this.listRequest = listRequest
     this.products = await this._productDataService.list(listRequest)
+    console.log('products changed', this.products)
   }
 }

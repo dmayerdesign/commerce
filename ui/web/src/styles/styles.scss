@@ -1,6 +1,12 @@
 @import url("https://fonts.googleapis.com/icon?family=Material+Icons");
-@import './variables.scss';
-@import './typography.scss';
+@import './theme-variables.scss';
+@import './theme-overrides.scss';
+
 @import "~bulma/bulma.sass";
 
-body { margin: 0; font-family: Roboto, 'Helvetica Neue', sans-serif; }
+@import './typography.scss';
+@import './buttons.scss';
+@import './navbar.scss';
+
+body { margin: 0; }
+html { font-size: $html-font-size; }

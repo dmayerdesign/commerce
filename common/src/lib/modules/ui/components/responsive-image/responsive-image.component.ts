@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core'
-import { bootstrapBreakpointKeys } from '@qb/common/constants/bootstrap/bootstrap-breakpoint-keys'
-import { BootstrapBreakpoint } from '@qb/common/constants/enums/bootstrap-breakpoint'
+import { bulmaBreakpointKeys } from '@qb/common/constants/bulma/bulma-breakpoint-keys'
+import { BulmaBreakpoint } from '@qb/common/constants/enums/bulma-breakpoint'
 import { WindowService } from '../../services/window.service'
 
 @Component({
@@ -40,11 +40,11 @@ export class ResponsiveImageComponent {
 
     public getStyles(): { [key: string]: string|number } {
         const getBackgroundSize = (): string => {
-            const nextHighestBreakpointKey = bootstrapBreakpointKeys
-                .find((key) => this.windowService.mediaBreakpointBelow(key))
+            const nextHighestBreakpointKey = bulmaBreakpointKeys
+                .find((key) => this.windowService.bulmaBreakpointBelow(key))
 
             return this.background
-                ? BootstrapBreakpoint[`${nextHighestBreakpointKey}Max`] + 'px auto'
+                ? BulmaBreakpoint[`${nextHighestBreakpointKey}Max`] + 'px auto'
                 : 'cover'
         }
 

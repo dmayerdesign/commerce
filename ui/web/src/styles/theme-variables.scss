@@ -1,4 +1,3 @@
-// Custom variables.
 // Base colors.
 $white: #fff;
 $gray-lightest: #fafdff;
@@ -22,19 +21,14 @@ $color-text-reverse: $white;
 
 // Theme typography.
 $size-jumbo: 7rem;
+$size-jumbo-mobile: 4.5rem;
 
 // Misc.
 $above-navbar-height: 1.8rem;
 $above-navbar-bg-color: $color-bg-reverse;
 $above-navbar-color: $color-text-reverse;
+$html-font-size: 16px;
 $navbar-height-base: 5rem;
-$navbar-extra-height: 1rem; // Used only for padding to make transparent gradient appear fuller.
-
-// Bulma overrides.
-$navbar-background-color: transparent;
-$navbar-item-color: inherit;
-$navbar-height: $navbar-height-base + $above-navbar-height;
-$navbar-item-img-max-height: 2.5rem;
-$button-color: $white;
-$button-background-color: $color-primary;
-$button-border-width: 0;
+$navbar-extra-height: 1.5rem; // Used only for padding to make transparent gradient appear fuller.
+$z-index-backdrop: 100;
+$shop-home-carousel-feaux-scroll: false;

@@ -1,5 +1,5 @@
 
-<nav class="navbar is-transparent qb-navbar-dark is-fixed-top"
+<nav class="navbar qb-navbar-dark is-fixed-top"
   role="navigation"
   aria-label="main navigation"
   [ngClass]="{
@@ -23,11 +23,23 @@
   </div>
   <div class="container">
     <div class="navbar-brand">
-      <a class="navbar-item" [routerLink]="['/']">
-        <img src="assets/brand/logo.svg">
+      <div class="navbar-item">
+        <a class="navbar-link" [routerLink]="['/']">
+          <img src="assets/brand/logo.svg">
+        </a>
+      </div>
+      <a role="button"
+        class="navbar-burger"
+        [ngClass]="{ 'is-active': mobileNavIsActive }"
+        [attr.aria-expanded]="mobileNavIsActive"
+        (click)="toggleMobileNav()">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
       </a>
     </div>
-    <div class="navbar-menu">
+    <div class="navbar-menu"
+      [ngClass]="{ 'is-active': mobileNavIsActive }">
       <qb-web-navigation-list
         class="navbar-start"
         [id]="'shop-navigation'"
@@ -36,7 +48,6 @@
     </div>
   </div>
 </nav>
-
 
 <div class="shop-routes">
   <router-outlet></router-outlet>

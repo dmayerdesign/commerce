@@ -1,3 +1,13 @@
+@import './button-focus-animation.scss';
+
 button {
   border-radius: 0;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.qb-button-focus-animation-1 {
+  @include button-focus-animation;
 }

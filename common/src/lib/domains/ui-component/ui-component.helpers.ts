@@ -1,4 +1,4 @@
-import * as BezierEasing from 'bezier-easing'
+import { Ease, TweenLite } from 'gsap'
 import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
 
@@ -35,61 +35,41 @@ export const forLifeOf = <ValueType>(instance: any) => {
 
 // https://javascript.info/js-animation
 export interface AnimateOptions {
-  easing: (timeFraction: number) => number
-  draw: (progress: number) => void
-  duration: number
+  element: HTMLElement
+  durationMs: number
+  gsapEasingFn: Ease
+  fromCss?: Partial<CSSStyleDeclaration>
+  toCss?: Partial<CSSStyleDeclaration>
 }
 
-export function animateElement(
-  element: HTMLElement,
-  styleProperty: string,
-  stylePropertyUnit: string,
-  fromPx: number,
-  toPx: number,
-  durationMs: number,
-  cubicBezierArgs: [number, number, number, number],
-): Animation {
-  const easing = BezierEasing(...cubicBezierArgs)
-  const fromToDelta = toPx - fromPx
-  const getValueFromProgress = (progress: number) => fromPx + (fromToDelta * progress)
-  const draw = (progress: number) => {
-    element.style[styleProperty] = getValueFromProgress(progress) + stylePropertyUnit
-  }
-  return animate({ easing, draw, duration: durationMs })
-}
-
-export function animate(options: AnimateOptions): Animation {
+export function animateTo(options: AnimateOptions): Animation {
   const animation = new Animation(options)
   animation.start()
   return animation
 }
 
 export class Animation {
-  private _canAnimate: boolean
+  private _tween: TweenLite
 
   constructor (
     private _animateOptions: AnimateOptions
   ) { }
 
   public start(): void {
-    const { easing, draw, duration } = this._animateOptions
-    const start = (performance && performance.now) ? performance.now() : Date.now()
-    this._canAnimate = true
-    const _animate = (time: number): void => {
-      // timeFraction goes from 0 to 1
-      let timeFraction = (time - start) / duration
-      if (timeFraction > 1) timeFraction = 1
-
-      draw(easing(timeFraction))
-
-      if (timeFraction < 1 && this._canAnimate) {
-        requestAnimationFrame(_animate)
-      }
-    }
-    requestAnimationFrame(_animate)
+    const { durationMs, element, gsapEasingFn, toCss } = this._animateOptions
+    this._tween = TweenLite.to(element, durationMs / 1000, {
+      easing: gsapEasingFn,
+      ...toCss
+    })
+    console.log({
+      easing: gsapEasingFn,
+      ...toCss
+    })
   }
 
   public stop(): void {
-    this._canAnimate = false
+    if (this._tween) {
+      this._tween.kill()
+    }
   }
 }

@@ -1,11 +1,14 @@
 import { ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { NavigationItem } from '@qb/common/domains/navigation-item/navigation-item.interface'
+import { forLifeOf, MortalityAware } from '@qb/common/domains/ui-component/ui-component.helpers'
+import { WindowService } from '@qb/common/modules/ui/services/window.service'
 import { styles } from '@qb/generated/ui/style-variables.generated'
 import { merge, Observable } from 'rxjs'
-import { delay, map } from 'rxjs/operators'
+import { delay, map, withLatestFrom } from 'rxjs/operators'
 import { ShopStore } from './shop.store'
 
+@MortalityAware()
 @Component({
   selector: 'web-shop',
   templateUrl: './shop.component.html',
@@ -23,7 +26,7 @@ export class ShopComponent implements OnInit {
   public willHomeCarouselBeVisible$: Observable<boolean>
   public isNavbarTransparent$: Observable<boolean>
   public navbarPaddingBottom$: Observable<string>
-
+  public mobileNavIsActive = false
   public navigationItems: Partial<NavigationItem>[] = [
     {
       text: 'Shop',
@@ -49,6 +52,7 @@ export class ShopComponent implements OnInit {
   constructor(
     private _shopStore: ShopStore,
     private _activatedRoute: ActivatedRoute,
+    private _windowService: WindowService,
     private _changeDetectorRef: ChangeDetectorRef
   ) {
     this.isHomeCarouselVisible$ = this._shopStore.selectState('isHomeCarouselVisible')
@@ -82,6 +86,34 @@ export class ShopComponent implements OnInit {
         willHomeCarouselBeVisible: true,
       })
     }
+
+    if (!styles.shopHomeCarouselFeauxScroll.value) {
+      // const getPxFromNavbarHeightStyle = (style: typeof styles.navbarHeight) => {
+      //   if (style.unit === 'rem') {
+      //     return style.value * styles.htmlFontSize.value
+      //   }
+      //   return style.value
+      // }
+      this._windowService.scrollPositionY$
+        .pipe(
+          forLifeOf(this),
+          withLatestFrom(this._windowService.height$),
+          map(([scrollPositionY]) =>
+            // scrollPositionY < (windowHeight - getPxFromNavbarHeightStyle(styles.navbarHeight))
+            scrollPositionY < 50
+          )
+        )
+        .subscribe(
+          (isHomeCarouselVisible) => this._shopStore.setState({
+            isHomeCarouselVisible,
+            willHomeCarouselBeVisible: isHomeCarouselVisible
+          })
+        )
+    }
+  }
+
+  public toggleMobileNav(): void {
+    this.mobileNavIsActive = !this.mobileNavIsActive
   }
 
 }

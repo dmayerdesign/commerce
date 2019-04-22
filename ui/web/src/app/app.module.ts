@@ -11,7 +11,8 @@ import { UiModule } from '@qb/common/modules/ui/ui.module'
 import { environment } from '../environments/environment'
 import { AppComponent } from './app.component'
 import { appRoutes } from './app.routes'
-import { OrganizationService } from './organization/organization.service'
+import { OrganizationService } from './organization/organization.service';
+import { NotFoundComponent } from './not-found/not-found.component'
 
 @NgModule({
   imports: [
@@ -32,6 +33,7 @@ import { OrganizationService } from './organization/organization.service'
   ],
   declarations: [
     AppComponent,
+    NotFoundComponent,
   ],
   providers: [
     {

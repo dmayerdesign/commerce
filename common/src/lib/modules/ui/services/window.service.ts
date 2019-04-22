@@ -1,5 +1,7 @@
 import { BootstrapBreakpoint } from '@qb/common/constants/enums/bootstrap-breakpoint'
 import { BootstrapBreakpointKey } from '@qb/common/constants/enums/bootstrap-breakpoint-key'
+import { BulmaBreakpoint } from '@qb/common/constants/enums/bulma-breakpoint'
+import { BulmaBreakpointKey } from '@qb/common/constants/enums/bulma-breakpoint-key'
 import { fromEvent, of, BehaviorSubject, Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 
@@ -66,7 +68,6 @@ export class WindowService {
     return this.htmlFontSizePxß.value
   }
 
-
   private getHtmlFontSizeInPx(): number {
     if (
       this._window &&
@@ -84,7 +85,7 @@ export class WindowService {
     else return 10
   }
 
-  private mediaBreakpoint(
+  private bootstrapBreakpoint(
     breakpoint: BootstrapBreakpointKey,
     dir: 'above'|'below'
   ): boolean {
@@ -93,17 +94,17 @@ export class WindowService {
       : this.width < BootstrapBreakpoint[breakpoint + 'Min']
   }
 
-  public mediaBreakpointBelow(breakpoint: BootstrapBreakpointKey): boolean {
-    return this.mediaBreakpoint(breakpoint, 'below')
+  public bootstrapBreakpointBelow(breakpoint: BootstrapBreakpointKey): boolean {
+    return this.bootstrapBreakpoint(breakpoint, 'below')
   }
 
-  public mediaBreakpointAbove(breakpoint: BootstrapBreakpointKey): boolean {
-    return this.mediaBreakpoint(breakpoint, 'above')
+  public bootstrapBreakpointAbove(breakpoint: BootstrapBreakpointKey): boolean {
+    return this.bootstrapBreakpoint(breakpoint, 'above')
   }
 
-  public mediaBreakpoints(
+  public bootstrapBreakpoint$(
     breakpoint: BootstrapBreakpointKey,
-    dir: 'above'|'below'
+    dir: 'above'|'below',
   ): Observable<boolean> {
     return this.width$.pipe(
       map((width) => dir === 'above'
@@ -113,15 +114,56 @@ export class WindowService {
     )
   }
 
-  public mediaBreakpointBelows(
+  public bootstrapBreakpointBelow$(
     breakpoint: BootstrapBreakpointKey
   ): Observable<boolean> {
-    return this.mediaBreakpoints(breakpoint, 'below')
+    return this.bootstrapBreakpoint$(breakpoint, 'below')
   }
 
-  public mediaBreakpointAboves(
+  public bootstrapBreakpointAbove$(
     breakpoint: BootstrapBreakpointKey
   ): Observable<boolean> {
-    return this.mediaBreakpoints(breakpoint, 'above')
+    return this.bootstrapBreakpoint$(breakpoint, 'above')
+  }
+
+  private bulmaBreakpoint(
+    breakpoint: BulmaBreakpointKey,
+    dir: 'above'|'below'
+  ): boolean {
+    return dir === 'above'
+      ? this.width >= BulmaBreakpoint[breakpoint + 'Max']
+      : this.width < BulmaBreakpoint[breakpoint + 'Min']
+  }
+
+  public bulmaBreakpointBelow(breakpoint: BulmaBreakpointKey): boolean {
+    return this.bulmaBreakpoint(breakpoint, 'below')
+  }
+
+  public bulmaBreakpointAbove(breakpoint: BulmaBreakpointKey): boolean {
+    return this.bulmaBreakpoint(breakpoint, 'above')
+  }
+
+  public bulmaBreakpoint$(
+    breakpoint: BulmaBreakpointKey,
+    dir: 'above'|'below',
+  ): Observable<boolean> {
+    return this.width$.pipe(
+      map((width) => dir === 'above'
+        ? width >= BulmaBreakpoint[breakpoint + 'Max']
+        : width < BulmaBreakpoint[breakpoint + 'Min']
+      )
+    )
+  }
+
+  public bulmaBreakpointBelow$(
+    breakpoint: BulmaBreakpointKey
+  ): Observable<boolean> {
+    return this.bulmaBreakpoint$(breakpoint, 'below')
+  }
+
+  public bulmaBreakpointAbove$(
+    breakpoint: BulmaBreakpointKey
+  ): Observable<boolean> {
+    return this.bulmaBreakpoint$(breakpoint, 'above')
   }
 }

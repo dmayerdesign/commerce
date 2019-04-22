@@ -1,0 +1,22 @@
+@import './theme-variables.scss';
+
+// Bulma overrides.
+$primary: $color-primary;
+$navbar-background-color: transparent; // Meant to be overriden at the component level.
+$navbar-dropdown-border-top: none;
+$navbar-height: $navbar-height-base + $above-navbar-height;
+$navbar-item-color: inherit;
+$navbar-item-hover-color: inherit;
+$navbar-item-background-color: $color-primary;
+$navbar-item-hover-background-color: darken($color-primary, 3%);
+$navbar-item-img-max-height: 2.5rem;
+$button-color: $white;
+$button-hover-color: $white;
+$button-active-color: $white;
+$button-focus-color: $white;
+$button-text-color: $white;
+$button-text-hover-color: $white;
+$button-background-color: $color-primary;
+$button-border-width: 0em;
+$family-sans-serif: 'Roboto', Helvetica, sans-serif;
+$family-primary: $family-sans-serif;

@@ -1,8 +1,8 @@
 export const platform = {
-    isServer() {
+    isServer(): boolean {
         return typeof window === 'undefined'
     },
-    isBrowser() {
+    isBrowser(): boolean {
         return typeof window !== 'undefined'
     }
 }
