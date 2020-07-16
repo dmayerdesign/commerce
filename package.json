@@ -99,7 +99,7 @@
     "jasmine-spec-reporter": "4.2.1",
     "jest": "23.6.0",
     "jest-preset-angular": "6.0.1",
-    "lodash": "4.17.11",
+    "lodash": "4.17.19",
     "ng-packagr": "^4.2.0",
     "nodemon": "1.18.9",
     "prettier": "^1.14.2",
