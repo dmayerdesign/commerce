@@ -45,7 +45,7 @@
     "classlist.js": "1.1.20150312",
     "cookie-parser": "1.4.3",
     "core-js": "^2.5.4",
-    "gsap": "2.1.2",
+    "gsap": "3.6.0",
     "helmet": "3.15.0",
     "inflection": "1.12.0",
     "jsonwebtoken": "8.4.0",
