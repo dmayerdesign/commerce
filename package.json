@@ -58,7 +58,7 @@
     "ng-click-outside": "4.0.0",
     "passport": "0.4.0",
     "passport-http-bearer": "1.0.1",
-    "pug": "2.0.3",
+    "pug": "3.0.1",
     "reflect-metadata": "^0.1.12",
     "rxjs": "~6.3.3",
     "sharp": "0.21.2",
