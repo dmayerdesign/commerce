@@ -64,7 +64,7 @@
     "sharp": "0.21.2",
     "shelljs": "0.8.3",
     "stripe": "6.13.0",
-    "typeorm": "0.2.11",
+    "typeorm": "0.2.25",
     "zone.js": "~0.8.26"
   },
   "devDependencies": {
