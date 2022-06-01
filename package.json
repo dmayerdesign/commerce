@@ -61,7 +61,7 @@
     "pug": "2.0.3",
     "reflect-metadata": "^0.1.12",
     "rxjs": "~6.3.3",
-    "sharp": "0.21.2",
+    "sharp": "0.30.5",
     "shelljs": "0.8.3",
     "stripe": "6.13.0",
     "typeorm": "0.2.11",
