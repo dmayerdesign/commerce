@@ -68,7 +68,7 @@
     "zone.js": "~0.8.26"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "0.12.1",
+    "@angular-devkit/build-angular": "14.2.9",
     "@angular-devkit/build-ng-packagr": "~0.10.0",
     "@angular/cli": "~7.0.3",
     "@angular/compiler-cli": "~7.0.0",
@@ -106,7 +106,7 @@
     "prompt": "1.0.0",
     "protractor": "~5.4.0",
     "raw-loader": "1.0.0",
-    "recursive-readdir": "2.2.2",
+    "recursive-readdir": "2.2.3",
     "rimraf": "^2.6.2",
     "sass-extract": "2.1.0",
     "supertest": "^3.1.0",
